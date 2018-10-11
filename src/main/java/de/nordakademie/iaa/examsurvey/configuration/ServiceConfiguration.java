@@ -16,7 +16,7 @@ public class ServiceConfiguration {
     @Scope(value = "singleton")
     public UserService userService(UserRepository userRepository, PasswordEncoder passwordEncoder){
         UserService userService = new UserServiceImpl(userRepository);
-        User user = new User("admin", passwordEncoder.encode("admin"));
+        User user = new User("admin@admin.de", passwordEncoder.encode("admin"));
         userService.save(user);
         return userService;
     }
