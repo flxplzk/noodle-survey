@@ -1,21 +1,47 @@
-<section ng-controller="loginController as crtl">
-    <form name="loginForm" class="form-signin">
-        <h2 class="form-signin-heading">Please Sign in</h2>
+<div ng-controller="loginController as crtl" ng-cloak>
+    <div layout="row" layout-align="center center" layout-fill class="outer">
+        <div layout="column" class="wrapper" flex>
+            <br/>
+            <md-content class="md-no-momentum">
+                <form name="loginForm">
+                    <h2>Please Sign in</h2>
+                    <md-input-container class="md-block">
+                        <label for="inputEmail">Email adress</label>
+                        <input type="email" id="inputEmail" name="inputEmail"
+                               placeholder="Email" ng-model="username" autofocus required>
+                    </md-input-container>
 
-        <div class="form-group">
-            <label for="inputEmail" class="sr-only">Email adress</label>
-            <input type="email" id="inputEmail" name="inputEmail"
-                   class="form-control" placeholder="Email" ng-model="model.username" autofocus required>
-            <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" name="inputPassword"
-                   class="form-control" ng-model="model.password" placeholder="Password">
-        </div>
+                    <md-input-container class="md-block">
+                        <label for="inputPassword">Password</label>
+                        <input type="password" id="inputPassword" name="inputPassword"
+                               ng-model="password" placeholder="Password">
+                    </md-input-container>
 
-        <div class="form-group">
-            <md-button class="btn btn-lg btn-primary btn-block"
-                    ng-click="crtl.login()"
-                    ng-disabled="loginForm.inputEmail.$invalid && loginForm.inputPassword.$invalid">Sign in</md-button>
-            <a class="text-center" ui-sref="register">No Account yet? Register!</a>
+                    <md-button class="md-raised"
+                               ui-sref="register">No Account yet? Register!
+                    </md-button>
+
+                    <md-button class="md-raised md-primary"
+                               ng-click="crtl.login()"
+                               ng-disabled="!loginForm.$valid">Sign in
+                    </md-button>
+                </form>
+            </md-content>
         </div>
-    </form>
-</section>
+    </div>
+</div>
+<style>
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+    }
+
+    .wrapper {
+        max-width: 500px;
+    }
+
+    .outer {
+        padding: 12px;
+    }
+</style>

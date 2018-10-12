@@ -1,8 +1,5 @@
 (function() {
     var app = angular.module("de.nordakademie.iaa.survey", [
-        "ui.router",
-        "rx",
-        "de.nordakademie.iaa.survey.core",
         "de.nordakademie.iaa.survey.authentication"
     ]);
 

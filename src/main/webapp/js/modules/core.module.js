@@ -1,7 +1,8 @@
 (function () {
     var core = angular.module("de.nordakademie.iaa.survey.core", [
         "rx",
-        "base64"
+        "base64",
+        "ui.router"
     ]);
     core.constant("ACTION_TYPES", {
         LOAD: 'LOAD',
