@@ -8,21 +8,43 @@
     <script type="application/javascript" src="bower_components/angular/angular.js"></script>
     <script type="application/javascript" src="bower_components/rxjs/dist/rx.all.js"></script>
     <script type="application/javascript" src="bower_components/rx.angular/dist/rx.angular.js"></script>
-    <script type="application/javascript" src="bower_components/angular-route/angular-route.js"></script>
-    <script type="application/javascript" src="bower_components/angular-route/angular-route.js"></script>
     <script type="application/javascript" src="bower_components/angular-base64/angular-base64.js"></script>
+
+    <!-- i18n -->
+    <script type="application/javascript" src="bower_components/angular-translate/angular-translate.js"></script>
+
+    <!-- routing -->
+    <script type="application/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+
+    <!-- angular material -->
+    <script type="application/javascript" src="bower_components/angular-animate/angular-animate.js"></script>
+    <script type="application/javascript" src="bower_components/angular-aria/angular-aria.js"></script>
+    <script type="application/javascript" src="bower_components/angular-messages/angular-messages.js"></script>
+    <script type="application/javascript" src="bower_components/angular-material/angular-material.js"></script>
+
+    <!-- bootstrap -->
     <script type="application/javascript" src="bower_components/jquery/dist/jquery.js"></script>
-    <script type="application/javascript" src="bower_components/bootstrap-css/js/bootstrap.js"></script>
     <script type="application/javascript" src="bower_components/bootstrap-css/js/bootstrap.js"></script>
     <link rel="stylesheet" href="bower_components/bootstrap-css/css/bootstrap.css">
     <link rel="stylesheet" href="bower_components/bootstrap-css/css/bootstrap-theme.css">
 
+    <style>
+        .form-signin {
+            max-width: 330px;
+            padding: 15px;
+            margin: 0 auto;
+        }
+
+        .form-signin-heading, .form-signin {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body ng-controller="mainController">
 
 <div class="container">
     <!-- display screens -->
-    <ng-view></ng-view>
+    <ui-view></ui-view>
 </div>
 
 <!-- modules -->

@@ -1,7 +1,6 @@
 (function () {
     var core = angular.module("de.nordakademie.iaa.survey.core", [
         "rx",
-        "ngRoute",
         "base64"
     ]);
     core.constant("ACTION_TYPES", {
@@ -16,29 +15,33 @@
     core.service("resourceStoreService", ["rx", "ACTION_TYPES", ResourceStoreService]);
 
     function AppService($location, authService, errorService, rx) {
-        this.authenticated = new rx.BehaviorSubject(false);
+        var isAuthenticated = false;
+        this.$authenticated = new rx.BehaviorSubject(isAuthenticated);
 
-        this.authenticated.subscribeOnNext(function (isAuthenticated) {
-            if (!isAuthenticated) $location.path("/login");
+        this.$authenticated.subscribeOnNext(function (authenticationStatus) {
+            isAuthenticated = authenticationStatus;
         });
 
         this.login = function (username, password) {
-            var authenticationStatus = this.authenticated;
+            var authenticationStatus = this.$authenticated;
             authService.authenticate(username, password).then(
                 function (success) {
                     $location.path("/dashboard");
                     authenticationStatus.onNext(true);
                 },
                 function (error) {
-                    authenticationStatus.authenticated
+                    authenticationStatus
                         .onNext(authService.removeAuthorization());
                     errorService.showErrorNotification("login.wrong-data");
                 }
             );
         };
         this.logout = function () {
-            this.authenticated
+            this.$authenticated
                 .onNext(authService.removeAuthorization());
+        };
+        this.isAuthenticated = function () {
+            return isAuthenticated;
         }
     }
 
@@ -55,7 +58,7 @@
             // Try to log in
             var encodedCredentials = encoder.encode(username + ":" + password);
             setAuthorizationHeaders("Basic " + encodedCredentials);
-            return $http.get("./login");
+            return $http.get("./user");
         };
         this.removeAuthorization = function () {
             setAuthorizationHeaders(null);
