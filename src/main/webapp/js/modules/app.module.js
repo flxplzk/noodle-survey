@@ -2,13 +2,13 @@
     var app = angular.module("de.nordakademie.iaa.survey", [
         "ui.router",
         "rx",
-        "de.nordakademie.iaa.survey.core"
+        "de.nordakademie.iaa.survey.core",
+        "de.nordakademie.iaa.survey.authentication"
     ]);
 
     app.controller("mainController", ["$rootScope", function ($rootScope) {
        $rootScope.greeting = "Hallo Welt";
     }]);
-    app.controller("loginController", ["$scope", "appService", LoginController]);
 
     app.config(function ($stateProvider) {
         var enteringGuard = function ($transition$, $state$) {
@@ -47,14 +47,4 @@
         $stateProvider.state(dashboardState);
         $stateProvider.state(defaultState);
     });
-
-    function LoginController($scope, appService) {
-        $scope.username = "";
-        $scope.password = "";
-
-        this.login = function () {
-            console.log("invoked login!");
-            appService.login($scope.username, $scope.password);
-        }
-    }
 }());
