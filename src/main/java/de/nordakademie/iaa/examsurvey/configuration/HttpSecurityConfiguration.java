@@ -1,39 +1,39 @@
 package de.nordakademie.iaa.examsurvey.configuration;
 
-import de.nordakademie.iaa.examsurvey.SurveyBasicAuthenticationEntryPoint;
+import de.nordakademie.iaa.examsurvey.secrurity.SurveyBasicAuthenticationEntryPoint;
+import de.nordakademie.iaa.examsurvey.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
 public class HttpSecurityConfiguration extends WebSecurityConfigurerAdapter {
-
     public static final String REALM = "SURVEY_REALM";
 
-    @Bean
-    @Override
-    protected UserDetailsService userDetailsService() {
-        UserDetails user =
-                User.withDefaultPasswordEncoder()
-                        .username("test")
-                        .password("test")
-                        .roles("USER")
-                        .build();
-
-        return new InMemoryUserDetailsManager(user);
-    }
+    @Autowired
+    private UserService userService;
 
     @Bean
     public BasicAuthenticationEntryPoint basicAuthenticationEntryPoint() {
         return new SurveyBasicAuthenticationEntryPoint(REALM);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -46,7 +46,8 @@ public class HttpSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/css/**",
                 "/js/**",
                 "/bower_components/**")
-                .permitAll().anyRequest().authenticated();
+                .permitAll().anyRequest().authenticated()
+                .and().userDetailsService(userService);
         ;
     }
 }
