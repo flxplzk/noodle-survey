@@ -4,6 +4,11 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.util.Date;
+/**
+ * Base Entity for notifications.
+ *
+ * @author Bengt-Lasse Arndt, Robert Peters
+ */
 
 @Entity
 public class Notification {

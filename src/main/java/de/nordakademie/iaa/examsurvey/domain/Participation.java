@@ -5,7 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.ArrayList;
-
+/**
+ * Base Entity for User Answers to a survey.
+ *
+ * @author Bengt-Lasse Arndt, Robert Peters
+ */
 @Entity
 public class Participation {
     private long id;

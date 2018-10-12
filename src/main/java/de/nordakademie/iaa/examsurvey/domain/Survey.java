@@ -4,7 +4,11 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
-
+/**
+ * Base Entity for Survey, containing basic information.
+ *
+ * @author Bengt-Lasse Arndt, Robert Peters
+ */
 @Entity
 public class Survey {
     private long id;

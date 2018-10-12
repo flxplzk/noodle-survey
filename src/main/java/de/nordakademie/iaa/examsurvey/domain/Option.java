@@ -5,7 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.Date;
-
+/**
+ * Base Entity for Date-Options to choose from within a Survey.
+ *
+ * @author Bengt-Lasse Arndt, Robert Peters
+ */
 @Entity
 public class Option {
     private long id;
