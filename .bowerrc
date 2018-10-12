@@ -1,5 +1,4 @@
 {
     "directory": "src/main/webapp/bower_components/",
-    "analytics": false,
-    "proxy":"http://U556094:@prx-fraint-v01.inet.cns.fra.dlh.de:8080"
+    "analytics": false
 }
