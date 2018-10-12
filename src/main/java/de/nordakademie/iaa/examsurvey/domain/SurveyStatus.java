@@ -1,4 +1,5 @@
 package de.nordakademie.iaa.examsurvey.domain;
+
 /**
  * Enum for Survey Status.
  *

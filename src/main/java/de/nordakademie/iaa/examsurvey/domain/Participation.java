@@ -1,55 +1,59 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Base Entity for User Answers to a survey.
  *
  * @author Bengt-Lasse Arndt, Robert Peters
  */
 @Entity
+@Table(name = "Participation")
 public class Participation {
-    private long id;
+    private Long id;
     private User user;
     private Survey survey;
-    private ArrayList<Option> options;
+    private List<Option> options;
 
     @Id
     @GeneratedValue
-    public long getId() {
+    public Long getId() {
         return id;
     }
-
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    @Column(nullable = false)
+    @ManyToOne
     public User getUser() {
         return user;
     }
-
     public void setUser(User user) {
         this.user = user;
     }
 
-    @Column(nullable = false)
+    @ManyToOne
     public Survey getSurvey() {
         return survey;
     }
-
     public void setSurvey(Survey survey) {
         this.survey = survey;
     }
 
-    public ArrayList<Option> getOptions() {
+    @OneToMany
+    @JoinColumn(name = "option")
+    public List<Option> getOptions() {
         return options;
     }
-
-    public void setOptions(ArrayList<Option> options) {
+    public void setOptions(List<Option> options) {
         this.options = options;
     }
 }

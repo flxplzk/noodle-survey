@@ -1,20 +1,22 @@
 package de.nordakademie.iaa.examsurvey.domain;
+
 /**
  * Enum for Notifications.
  *
  * @author Bengt-Lasse Arndt, Robert Peters
  */
 public enum NotificationType {
-    SC("Survey Changed"),
-    MP("Meeting Planned");
+    SURVEY_CHANGE("Survey Changed"),
+    EVENT_PLANNED("Event Planned"),
+    NEW_SURVEY("New Survey");
 
     private String name;
 
-    private NotificationType(String name){
+    NotificationType(String name) {
         this.name = name;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
