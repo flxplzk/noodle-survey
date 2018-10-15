@@ -16,15 +16,18 @@
                         <input type="password" id="inputPassword" name="inputPassword"
                                ng-model="password" placeholder="Password">
                     </md-input-container>
+                    <div layout="row">
+                        <md-button layout="column"
+                                class="md-raised"
+                                   ui-sref="register">No Account yet? Register!
+                        </md-button>
 
-                    <md-button class="md-raised"
-                               ui-sref="register">No Account yet? Register!
-                    </md-button>
-
-                    <md-button class="md-raised md-primary"
-                               ng-click="crtl.login()"
-                               ng-disabled="!loginForm.$valid">Sign in
-                    </md-button>
+                        <md-button layout="column" flex
+                                   class="md-raised md-primary"
+                                   ng-click="crtl.login()"
+                                   ng-disabled="!loginForm.$valid">Sign in
+                        </md-button>
+                    </div>
                 </form>
             </md-content>
         </div>

@@ -27,7 +27,7 @@
             var authenticationStatus = this.$authenticated;
             authService.authenticate(username, password).then(
                 function (success) {
-                    $location.path("/dashboard");
+                    $location.path("/dashboard"); 
                     authenticationStatus.onNext(true);
                 },
                 function (error) {
