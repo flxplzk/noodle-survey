@@ -5,6 +5,7 @@ import de.nordakademie.iaa.examsurvey.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -40,14 +41,14 @@ public class HttpSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.httpBasic()
                 .and()
-                .authorizeRequests().antMatchers(
-                "/index.html",
-                "/",
-                "/css/**",
-                "/js/**",
-                "/bower_components/**")
-                .permitAll().anyRequest().authenticated()
-                .and().userDetailsService(userService);
+                .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/registration").permitAll()
+                .antMatchers(HttpMethod.GET, "/index.html", "/", "/css/**", "/js/**",
+                        "/bower_components/**").permitAll()
+                .anyRequest().authenticated()
+
+                .and().userDetailsService(userService)
+                .csrf().disable();
         ;
     }
 }

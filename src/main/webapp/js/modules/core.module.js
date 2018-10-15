@@ -15,6 +15,8 @@
     core.service("appService", ["$location", "authService", "errorService", "rx", AppService]);
     core.service("resourceStoreService", ["rx", "ACTION_TYPES", ResourceStoreService]);
 
+    core.service("userService", ["$http", UserService]);
+
     function AppService($location, authService, errorService, rx) {
         var isAuthenticated = false;
         this.$authenticated = new rx.BehaviorSubject(isAuthenticated);
@@ -27,7 +29,7 @@
             var authenticationStatus = this.$authenticated;
             authService.authenticate(username, password).then(
                 function (success) {
-                    $location.path("/dashboard"); 
+                    $location.path("/dashboard"); // TODO implement provider for making this configureable
                     authenticationStatus.onNext(true);
                 },
                 function (error) {
@@ -54,12 +56,24 @@
         }
     }
 
+    function UserService($http) {
+        this.register = function (firstName, lastName, userName, password) {
+            var model = {
+                firstName: firstName,
+                lastName: lastName,
+                password: password,
+                username: userName
+            };
+            return $http.post("./registration", model);
+        }
+    }
+
     function AuthenticationService($http, encoder) {
         this.authenticate = function (username, password) {
             // Try to log in
             var encodedCredentials = encoder.encode(username + ":" + password);
             setAuthorizationHeaders("Basic " + encodedCredentials);
-            return $http.get("./user");
+            return $http.get("./authentication");
         };
         this.removeAuthorization = function () {
             setAuthorizationHeaders(null);
@@ -86,7 +100,7 @@
      *
      * @constructor
      */
-    function ResourceStore(BehaviorSubject, ACTION_TYPES, compare) {
+    function ResourceStore(BehaviorSubject, ACTION_TYPES, compare) { // TODO extract to module for reactive data storage
         this.resources = [];
         this.items$ = new rx.BehaviorSubject(this.resources);
 
@@ -101,8 +115,8 @@
          * @param resource      Entities which should be dispatched
          *                      IMPORTANT NOTE: When ACTION_TYPE
          *                      is {@link ACTION_TYPES#LOAD},
-         *                      resource must be an array.
-         *                      otherwise a single resource must be passed in.
+         *                      controller must be an array.
+         *                      otherwise a single controller must be passed in.
          */
         this.dispatch = function (ACTION_TYPE, resource) {
             this.resources = this._reduce(ACTION_TYPE, resource);
@@ -111,7 +125,7 @@
         };
 
         /**
-         * Reduces the given resource with the given ACTION_TYPE to the
+         * Reduces the given controller with the given ACTION_TYPE to the
          * actual state of the store.
          *
          * @param ACTION_TYPE   describes the action type.
@@ -121,8 +135,8 @@
          * @param resource      Entities which should be dispatched
          *                      IMPORTANT NOTE: When ACTION_TYPE
          *                      is {@link ACTION_TYPES#LOAD},
-         *                      resource must be an array.
-         *                      otherwise a single resource must be passed in.
+         *                      controller must be an array.
+         *                      otherwise a single controller must be passed in.
          * @returns {*}         current state of the store after action. always an
          *                      array of objects
          * @private

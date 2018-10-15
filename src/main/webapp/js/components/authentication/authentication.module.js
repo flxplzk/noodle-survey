@@ -6,41 +6,44 @@
     ]);
 
     app.controller("loginController", ["$scope", "appService", LoginController]);
-    app.controller("registerController", ["appService", "$state", RegistrationController]);
+
+    app.controller("registerController", ["$scope", "$state", "userService", "errorService", RegistrationController]);
 
     function LoginController($scope, appService) {
         $scope.username = "";
         $scope.password = "";
 
         this.login = function () {
-            console.log("invoked login!");
             appService.login($scope.username, $scope.password);
         }
     }
 
-    function RegistrationController($scope, $state) {
+    function RegistrationController($scope, $state, userService, errorService) {
         $scope.firstName = "";
         $scope.lastName = "";
-        $scope.userName = "";
+        $scope.username = "";
         $scope.password = "";
         $scope.passwordRepetition = "";
         $scope.passwordError = "";
 
-
         this.register = function () {
-            var isSamePw = this.validPassword();
-            if (isSamePw) {
+            if ($scope.password === $scope.passwordRepetition) {
                 $scope.passwordError = null;
-                // userService.register($scope.model)
-                $state.go("login");
+                userService.register($scope.firstName,
+                    $scope.lastName,
+                    $scope.username,
+                    $scope.password).then(successHandler, usernameAlreadyExistsHandler);
             } else {
                 $scope.passwordError = "passwords must match";
             }
-
         };
 
-        this.validPassword = function () {
-            return $scope.password === $scope.passwordRepetition;
+        function usernameAlreadyExistsHandler(success) {
+            errorService.showErrorNotification("register.user.already.exists");
+        }
+
+        function successHandler(success) {
+            $state.go("login");
         }
     }
 }());
