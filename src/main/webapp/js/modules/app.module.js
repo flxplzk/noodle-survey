@@ -1,11 +1,8 @@
 (function() {
     var app = angular.module("de.nordakademie.iaa.survey", [
-        "de.nordakademie.iaa.survey.authentication"
+        "de.nordakademie.iaa.survey.authentication",
+        "de.nordakademie.iaa.survey.toolbar"
     ]);
-
-    app.controller("mainController", ["$rootScope", function ($rootScope) {
-       $rootScope.greeting = "Hallo Welt";
-    }]);
 
     app.config(function ($stateProvider) {
         var enteringGuard = function ($transition$, $state$) {
@@ -44,4 +41,18 @@
         $stateProvider.state(dashboardState);
         $stateProvider.state(defaultState);
     });
+
+    app.config(function ($translateProvider) {
+        // german
+        $translateProvider.translations("de_DE", {
+            APP_HEADLINE:  "Angular Umfragetool"
+        });
+
+        // english
+        $translateProvider.translations("en_US", {
+            APP_HEADLINE:  "Angular survey tool"
+        });
+
+        $translateProvider.preferredLanguage("en_US");
+    })
 }());
