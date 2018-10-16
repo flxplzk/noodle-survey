@@ -21,15 +21,5 @@
     "angular-material": "^1.1.10",
     "angular-ui-router": "^1.0.20",
     "angular-translate": "^2.18.1"
-  },
-  "main": "",
-  "homepage": "",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "src/main/webapp/bower_components/",
-    "test",
-    "tests"
-  ]
+  }
 }

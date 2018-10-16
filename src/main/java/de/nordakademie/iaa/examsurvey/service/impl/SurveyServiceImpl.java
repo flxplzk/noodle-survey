@@ -1,5 +1,6 @@
 package de.nordakademie.iaa.examsurvey.service.impl;
 
+import com.google.common.collect.Lists;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
@@ -22,9 +23,6 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public List<Survey> loadAll() {
-        Iterable<Survey> source = surveyRepository.findAll();
-        List<Survey> target = new ArrayList<Survey>();
-        source.forEach(target::add);
-        return target;
+        return Lists.newArrayList(surveyRepository.findAll());
     }
 }

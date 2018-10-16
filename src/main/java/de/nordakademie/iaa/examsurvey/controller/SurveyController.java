@@ -13,10 +13,16 @@ import java.util.List;
 @RestController
 public class SurveyController {
 
-    @Autowired
-    private SurveyService surveyService;
+    private final SurveyService surveyService;
 
-    @RequestMapping(value = "/Surveys", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @Autowired
+    public SurveyController(SurveyService surveyService) {
+        this.surveyService = surveyService;
+    }
+
+    @RequestMapping(value = "/surveys",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Survey> listSurveys() {
         return surveyService.loadAll();
     }
