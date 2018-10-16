@@ -1,7 +1,8 @@
 (function() {
     var app = angular.module("de.nordakademie.iaa.survey", [
         "de.nordakademie.iaa.survey.authentication",
-        "de.nordakademie.iaa.survey.toolbar"
+        "de.nordakademie.iaa.survey.toolbar",
+        "de.nordakademie.iaa.survey.dashboard"
     ]);
 
     app.config(function ($stateProvider) {
