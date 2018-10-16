@@ -22,6 +22,8 @@ import java.util.Collections;
 @Entity
 public class User implements UserDetails {
     private Long id;
+    private String firstName;
+    private String lastName;
     private String password;
     private String username;
     private boolean isAccountNonLocked;
@@ -80,6 +82,24 @@ public class User implements UserDetails {
     }
 
     @Column(nullable = false)
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @Column(nullable = false)
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    @Column(nullable = false)
     @Override
     public boolean isAccountNonExpired() {
         return isAccountNonExpired;
@@ -104,6 +124,7 @@ public class User implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return isCredentialsNonExpired;
     }
+
     public void setCredentialsNonExpired(boolean credentialsNonExpired) {
         isCredentialsNonExpired = credentialsNonExpired;
     }

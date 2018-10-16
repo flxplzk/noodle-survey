@@ -1,13 +1,12 @@
 package de.nordakademie.iaa.examsurvey.service.impl;
 
 import de.nordakademie.iaa.examsurvey.domain.User;
+import de.nordakademie.iaa.examsurvey.exception.UserAlreadyExistsException;
 import de.nordakademie.iaa.examsurvey.persistence.UserRepository;
 import de.nordakademie.iaa.examsurvey.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * UserService implementation.
@@ -25,6 +24,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
+        if (userRepository.findUserByUsername(user.getUsername()).isPresent()) {
+            throw new UserAlreadyExistsException();
+        }
+
         final String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         return userRepository.save(user);
