@@ -1,11 +1,8 @@
 (function() {
     var app = angular.module("de.nordakademie.iaa.survey", [
-        "de.nordakademie.iaa.survey.authentication"
+        "de.nordakademie.iaa.survey.authentication",
+        "de.nordakademie.iaa.survey.toolbar"
     ]);
-
-    app.controller("mainController", ["$rootScope", function ($rootScope) {
-       $rootScope.greeting = "Hallo Welt";
-    }]);
 
     app.config(function ($stateProvider) {
         var enteringGuard = function ($transition$, $state$) {

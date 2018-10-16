@@ -2,9 +2,7 @@
     var core = angular.module("de.nordakademie.iaa.survey.core", [
         "rx",
         "base64",
-        "ui.router",
-        "ngMaterial",
-        "pascalprecht.translate"
+        "ui.router"
     ]);
     core.constant("ACTION_TYPES", {
         LOAD: 'LOAD',
@@ -14,28 +12,31 @@
     });
     core.service("errorService", ["rx", ErrorService]);
     core.service("authService", ["$http", "$base64", AuthenticationService]);
-    core.service("appService", ["$location", "authService", "errorService", "rx", AppService]);
+    core.service("appService", ["$state", "authService", "errorService", "rx", AppService]);
     core.service("resourceStoreService", ["rx", "ACTION_TYPES", ResourceStoreService]);
 
     core.service("userService", ["$http", UserService]);
 
-    function AppService($location, authService, errorService, rx) {
+    function AppService($state, authService, errorService, rx) {
         var isAuthenticated = false;
+        var vm = this;
         this.$authenticated = new rx.BehaviorSubject(isAuthenticated);
 
         this.$authenticated.subscribeOnNext(function (authenticationStatus) {
             isAuthenticated = authenticationStatus;
+            if (!isAuthenticated){
+                $state.go("login");
+            }
         });
 
         this.login = function (username, password) {
-            var authenticationStatus = this.$authenticated;
             authService.authenticate(username, password).then(
                 function (success) {
-                    $location.path("/dashboard"); // TODO implement provider for making this configureable
-                    authenticationStatus.onNext(true);
+                    $state.go("dashboard"); // TODO implement provider for making this configureable
+                    vm.$authenticated.onNext(true);
                 },
                 function (error) {
-                    authenticationStatus
+                    vm.$authenticated
                         .onNext(authService.removeAuthorization());
                     errorService.showErrorNotification("login.wrong-data");
                 }

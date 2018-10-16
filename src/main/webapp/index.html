@@ -24,19 +24,19 @@
     <script type="application/javascript" src="bower_components/angular-messages/angular-messages.js"></script>
     <script type="application/javascript" src="bower_components/angular-material/angular-material.js"></script>
 </head>
-<body ng-controller="mainController">
-<md-toolbar>
-    <h1 translate="APP_HEADLINE"></h1>
-</md-toolbar>
+<body>
+<survey-tool-bar></survey-tool-bar>
 <div class="container">
     <!-- display screens -->
     <ui-view></ui-view>
 </div>
 
 <!-- modules -->
-<script type="application/javascript" src="js/modules/app.module.js"></script>
+<script type="application/javascript" src="js/modules/i18n.module.js"></script>
 <script type="application/javascript" src="js/modules/core.module.js"></script>
 <script type="application/javascript" src="js/components/authentication/authentication.module.js"></script>
+<script type="application/javascript" src="js/components/toolbar/toolbar.module.js"></script>
+<script type="application/javascript" src="js/modules/app.module.js"></script>
 
 </body>
 </html>
