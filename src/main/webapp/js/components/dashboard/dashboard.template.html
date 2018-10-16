@@ -2,11 +2,29 @@
     <div layout="row" layout-sm="column" layout-align="space-around" ng-show="model.loading">
         <md-progress-circular md-mode="indeterminate"></md-progress-circular>
     </div>
-    <md-list ng-show="!model.loading">
-        <md-list-item ng-repeat="survey in model.surveys">
-            {{survey.title}}
-            {{survey.initiator}}
-            {{survey.surveyStatus}}
-        </md-list-item>
-    </md-list>
+    <md-card>
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Card with image</span>
+                <span class="md-subhead">Large</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-actions layout="row" layout-align="end center">
+            <md-button>Action 1</md-button>
+            <md-button>Action 2</md-button>
+        </md-card-actions>
+    </md-card>
+
+    <md-content class="md-padding">
+        <md-tabs md-selected="selectedIndex" md-border-bottom md-autoselect md-swipe-content>
+            <md-tab ng-repeat="tab in model.tabs"
+                    label="{{tab.title}}">
+                <div class="demo-tab tab{{$index%4}}" style="padding: 25px; text-align: center;">
+                    <div ng-bind="tab.content"></div>
+                    <br/>
+                    <md-button class="md-primary md-raised" ng-click="removeTab( tab )" ng-disabled="model.tabs.length <= 1">Remove Tab</md-button>
+                </div>
+            </md-tab>
+        </md-tabs>
+    </md-content>
 </md-content>

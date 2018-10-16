@@ -10,9 +10,12 @@
     function DashboardController($scope, surveyService) {
         $scope.model = {
             surveys: [],
-            loading: true
+            loading: true,
+            tabs: [],
+            selectedIndex: 0
         };
 
+        // On init load all surveys from backend.
         surveyService.loadAll().subscribeOnNext(function (surveys) {
             $scope.model.surveys = surveys;
             $scope.model.loading = false;

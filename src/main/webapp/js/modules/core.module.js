@@ -73,7 +73,7 @@
         this.showErrorNotification = function (errorMessageKey) {
             var toast = $mdToast.simple()
                 .content($translate.instant(errorMessageKey))
-                .position('left top right');
+                .position('left bottom right');
             $mdToast.show(toast);
         }
     }
