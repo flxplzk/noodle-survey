@@ -15,13 +15,17 @@
             AUTH_LOGIN_PASSWORD_LABEL: "Password",
             AUTH_LOGIN_REGISTER: "No Account yet? Register!",
             AUTH_LOGIN_SIGN_IN: "Sign in",
+            AUTH_LOGIN_ERROR_CREDENTIALS: "Die eingegebenen Anmeldedaten sind leider falsch!",
             AUTH_REGISTER_HEADLINE: "Register",
             AUTH_REGISTER_FIRST_NAME_LABEL: "First name",
             AUTH_REGISTER_LAST_NAME_LABEL: "Last name",
             AUTH_REGISTER_REPEAT_PASSWORD_LABEL: "Repeat Password",
             AUTH_REGISTER_BUTTON_REGISTER: "Register",
             AUTH_REGISTER_ERROR_EMAIL: "Your email must be between 10 and 100 characters long and look like an e-mail address.",
-            AUTH_REGISTER_ERROR_PASSWORD_STRENGTH: "Password is required and must be secure! with at least 8 characters."
+            AUTH_REGISTER_ERROR_PASSWORD_STRENGTH: "Password is required and must be secure! with at least 8 characters.",
+            AUTH_REGISTER_USER_ALREADY_EXISTS: "Es existiert bereits ein Benutzer mit dem angegebenen Benutzernamen. Bitte wähle einen anderen.",
+            AUTH_REGISTER_PASSWORD_NON_MATCH: "Die Passwörter müssen übereinstimmen.",
+            AUTH_REGISTER_USER_CREATED: "Benutzer erfolgreich erstellt."
 
         });
 
@@ -35,14 +39,17 @@
             AUTH_LOGIN_PASSWORD_LABEL: "Password",
             AUTH_LOGIN_REGISTER: "No Account yet? Register!",
             AUTH_LOGIN_SIGN_IN: "Sign in",
+            AUTH_LOGIN_ERROR_CREDENTIALS: "Your login data is wrong",
             AUTH_REGISTER_HEADLINE: "Register",
             AUTH_REGISTER_FIRST_NAME_LABEL: "First name",
             AUTH_REGISTER_LAST_NAME_LABEL: "Last name",
             AUTH_REGISTER_REPEAT_PASSWORD_LABEL: "Repeat Password",
             AUTH_REGISTER_BUTTON_REGISTER: "Register",
             AUTH_REGISTER_ERROR_EMAIL: "Your email must be between 10 and 100 characters long and look like an e-mail address.",
-            AUTH_REGISTER_ERROR_PASSWORD_STRENGTH: "Password is required and must be secure! with at least 8 characters."
-
+            AUTH_REGISTER_ERROR_PASSWORD_STRENGTH: "Password is required and must be secure! with at least 8 characters.",
+            AUTH_REGISTER_USER_ALREADY_EXISTS: "Username is already in use. please select a new one",
+            AUTH_REGISTER_PASSWORD_NON_MATCH: "The passwords must match.",
+            AUTH_REGISTER_USER_CREATED: "User created successfully."
         });
 
         $translateProvider.preferredLanguage("en_US");

@@ -35,15 +35,18 @@
                     $scope.username,
                     $scope.password).then(successHandler, usernameAlreadyExistsHandler);
             } else {
-                $scope.passwordError = "passwords must match";
+                errorService.showErrorNotification("AUTH_REGISTER_PASSWORD_NON_MATCH");
             }
         };
 
         function usernameAlreadyExistsHandler(success) {
-            errorService.showErrorNotification("register.user.already.exists");
+           // if (success.status === 409) {
+                errorService.showErrorNotification("AUTH_REGISTER_USER_ALREADY_EXISTS");
+           // }
         }
 
         function successHandler(success) {
+            errorService.showErrorNotification("AUTH_REGISTER_USER_CREATED");
             $state.go("login");
         }
     }
