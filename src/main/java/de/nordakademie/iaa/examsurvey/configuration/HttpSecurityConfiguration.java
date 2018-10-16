@@ -8,38 +8,43 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
 public class HttpSecurityConfiguration extends WebSecurityConfigurerAdapter {
-    public static final String REALM = "SURVEY_REALM";
+    private static final String REALM = "SURVEY_REALM";
+
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserService userService;
+    public HttpSecurityConfiguration(UserService userService, PasswordEncoder passwordEncoder) {
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-    @Bean
     public BasicAuthenticationEntryPoint basicAuthenticationEntryPoint() {
         return new SurveyBasicAuthenticationEntryPoint(REALM);
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
-
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userService).passwordEncoder(passwordEncoder);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.httpBasic()
+        http
+                // using custum Entrypoint for disabling browser credentials dialog
+                .httpBasic()
+                .authenticationEntryPoint(basicAuthenticationEntryPoint())
+
+                // permitting required resources
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/registration").permitAll()
@@ -47,8 +52,8 @@ public class HttpSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/bower_components/**").permitAll()
                 .anyRequest().authenticated()
 
+                // setting custom user details service
                 .and().userDetailsService(userService)
                 .csrf().disable();
-        ;
     }
 }

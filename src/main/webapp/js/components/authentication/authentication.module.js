@@ -1,8 +1,7 @@
 (function () {
     var app = angular.module("de.nordakademie.iaa.survey.authentication", [
         "de.nordakademie.iaa.survey.core",
-        "ui.router",
-        "ngMaterial"
+        "ui.router"
     ]);
 
     app.controller("loginController", ["$scope", "appService", LoginController]);

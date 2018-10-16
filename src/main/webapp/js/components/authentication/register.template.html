@@ -29,29 +29,43 @@
                     <input type="email"
                            id="inputEmail"
                            placeholder="Email"
+                           name="email"
                            ng-model="username"
+                           minlength="10" maxlength="100"
                            required>
+                    <div ng-messages="register.inputEmail.$error">
+                        <div ng-message-exp="['required', 'minlength', 'maxlength']">
+                            Your email must be between 10 and 100 characters long and look like an e-mail address.
+                        </div>
+                    </div>
                 </md-input-container>
 
                 <md-input-container class="md-block">
                     <label for="inputPassword">Password</label>
                     <input type="password"
                            id="inputPassword"
+                           name="inputPassword"
                            placeholder="Password"
                            ng-model="password"
+                           ng-pattern="/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/"
+                           minlength="8"
                            required>
+                    <div ng-messages="register.inputPassword.$error">
+                        <div ng-message-exp="['required', 'minlength', 'pattern']">
+                            Password is required and must be secure! with at least 8 characters.
+                        </div>
+                    </div>
                 </md-input-container>
 
                 <md-input-container class="md-block">
                     <label for="inputPasswordRepeat">Repeat Password</label>
                     <input type="password"
                            id="inputPasswordRepeat"
+                           name="inputPasswordRepeat"
                            placeholder="Password"
                            ng-model="passwordRepetition"
+                           minlength="8"
                            required>
-                    <div ng-hide="passwordError == null">
-                        <strong>Error!</strong> {{passwordError}}
-                    </div>
                 </md-input-container>
                 <md-button class="md-raised md-primary"
                         ng-disabled="!(register.$valid)"

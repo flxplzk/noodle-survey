@@ -2,7 +2,9 @@
     var core = angular.module("de.nordakademie.iaa.survey.core", [
         "rx",
         "base64",
-        "ui.router"
+        "ui.router",
+        "ngMaterial",
+        "pascalprecht.translate"
     ]);
     core.constant("ACTION_TYPES", {
         LOAD: 'LOAD',

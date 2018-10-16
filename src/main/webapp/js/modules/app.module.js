@@ -44,4 +44,18 @@
         $stateProvider.state(dashboardState);
         $stateProvider.state(defaultState);
     });
+
+    app.config(function ($translateProvider) {
+        // german
+        $translateProvider.translations("de_DE", {
+            APP_HEADLINE:  "Angular Umfragetool"
+        });
+
+        // english
+        $translateProvider.translations("en_US", {
+            APP_HEADLINE:  "Angular survey tool"
+        });
+
+        $translateProvider.preferredLanguage("en_US");
+    })
 }());

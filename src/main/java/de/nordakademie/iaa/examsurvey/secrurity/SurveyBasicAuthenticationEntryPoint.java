@@ -21,7 +21,7 @@ public class SurveyBasicAuthenticationEntryPoint extends BasicAuthenticationEntr
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authEx)
             throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.addHeader("WWW-Authenticate", "Basic realm=" + getRealmName() + "");
+        response.addHeader("WWW-Authenticate", "xBasic realm=" + getRealmName() + "");
 
         PrintWriter writer = response.getWriter();
         writer.println("HTTP Status 401 : " + authEx.getMessage());
