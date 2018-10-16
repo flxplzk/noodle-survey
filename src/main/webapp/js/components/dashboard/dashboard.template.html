@@ -1,7 +1,12 @@
 <md-content flex layout-padding ng-controller="dashboardController as dashboardCrtl">
-    <md-list>
+    <div layout="row" layout-sm="column" layout-align="space-around" ng-show="model.loading">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
+    <md-list ng-show="!model.loading">
         <md-list-item ng-repeat="survey in model.surveys">
-            okey
+            {{survey.title}}
+            {{survey.initiator}}
+            {{survey.surveyStatus}}
         </md-list-item>
     </md-list>
 </md-content>
