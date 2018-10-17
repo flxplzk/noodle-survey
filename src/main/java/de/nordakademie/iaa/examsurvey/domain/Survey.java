@@ -27,6 +27,7 @@ public class Survey {
     private Option event;
     private LocalDateTime creationDate;
     private SurveyStatus surveyStatus;
+    private SurveyType surveyType;
 
     @Id
     @GeneratedValue
@@ -82,7 +83,18 @@ public class Survey {
     public SurveyStatus getSurveyStatus() {
         return surveyStatus;
     }
+
     public void setSurveyStatus(SurveyStatus surveyStatus) {
         this.surveyStatus = surveyStatus;
+    }
+
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    public SurveyType getSurveyType() {
+        return surveyType;
+    }
+
+    public void setSurveyType(SurveyType surveyType) {
+        this.surveyType = surveyType;
     }
 }

@@ -12,12 +12,12 @@ public class SurveyServiceImplTest {
 
     @Test
     public void createSurveyTest() {
-        @Autowired
-        private final SurveyRepository surveyRepository
+        //@Autowired
+        //SurveyRepository surveyRepository;
 
-        new SurveyServiceImpl(surveyRepository);
-        Survey survey = mock(Survey.class);
-        survey.
+        //new SurveyServiceImpl(surveyRepository);
+        //Survey survey = mock(Survey.class);
+
 
     }
 }

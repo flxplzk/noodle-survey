@@ -22,18 +22,18 @@ public class SurveyController {
     }
 
     @RequestMapping(value = "/surveys",
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @GetMapping
-    public List<Survey> listSurveys() {
-        return surveyService.loadAll();
+    public Survey createSurvey(@RequestBody Survey survey) {
+        return surveyService.createSurvey(survey);
     }
 
     @RequestMapping(value = "/surveys",
-            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @PostMapping
-    public Survey createSurvey(@RequestBody Survey survey) {
-        return surveyService.createSurvey(survey);
+    public List<Survey> allSurveys() {
+        return surveyService.loadAll();
     }
 
 }
