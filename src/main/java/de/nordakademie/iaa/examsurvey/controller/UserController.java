@@ -33,6 +33,6 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ExceptionHandler(UserAlreadyExistsException.class)
     public User createUser(@RequestBody User user) {
-        return userService.save(user);
+        return userService.createUser(user);
     }
 }
