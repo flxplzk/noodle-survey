@@ -3,8 +3,8 @@
         <md-card ng-repeat="survey in model.surveys" layout="row">
             <md-card-title>
                 <md-card-title-text>
-                    <span class="md-headline">Card with image</span>
-                    <span class="md-subhead">Large</span>
+                    <span class="md-subhead">{{survey.title}}</span>
+                    <span class="md-text">{{survey.description}}</span>
                 </md-card-title-text>
             </md-card-title>
             <md-card-actions layout="row" layout-align="end center">
@@ -21,7 +21,9 @@
                 <div class="demo-tab tab{{$index%4}}" style="padding: 25px; text-align: center;">
                     <div ng-bind="tab.content"></div>
                     <br/>
-                    <md-button class="md-primary md-raised" ng-click="removeTab( tab )" ng-disabled="model.tabs.length <= 1">Remove Tab</md-button>
+                    <md-button class="md-primary md-raised" ng-click="removeTab( tab )"
+                               ng-disabled="model.tabs.length <= 1">Remove Tab
+                    </md-button>
                 </div>
             </md-tab>
         </md-tabs>
