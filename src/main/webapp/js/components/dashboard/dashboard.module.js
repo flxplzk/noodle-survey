@@ -19,6 +19,10 @@
         surveyService.loadAll().subscribeOnNext(function (surveys) {
             $scope.model.surveys = surveys;
             $scope.model.loading = false;
-        })
+        });
+
+        this.addToSelectedSurveys = function (survey) {
+            $scope.model.tabs.push(survey)
+        }
     }
 }());
