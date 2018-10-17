@@ -1,8 +1,9 @@
 (function () {
     var app = angular.module("de.nordakademie.iaa.survey.authentication", [
+        "de.nordakademie.iaa.survey.core.domain",
         "de.nordakademie.iaa.survey.core",
-        "ui.router",
         "de.nordakademie.iaa.i18n",
+        "ui.router",
         "ngMaterial"
     ]);
 

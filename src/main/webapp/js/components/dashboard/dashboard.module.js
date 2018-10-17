@@ -1,5 +1,6 @@
 (function () {
     var dashboard = angular.module("de.nordakademie.iaa.survey.dashboard", [
+        "de.nordakademie.iaa.survey.core.domain",
         "de.nordakademie.iaa.survey.core",
         "de.nordakademie.iaa.i18n",
         "ngMaterial"
