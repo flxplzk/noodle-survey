@@ -1,5 +1,6 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.security.core.GrantedAuthority;
@@ -98,6 +99,7 @@ public class User implements UserDetails {
     }
 
     @Column(nullable = false)
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return isAccountNonExpired;
@@ -108,6 +110,7 @@ public class User implements UserDetails {
     }
 
     @Column(nullable = false)
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return isAccountNonLocked;
@@ -118,6 +121,7 @@ public class User implements UserDetails {
     }
 
     @Column(nullable = false)
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return isCredentialsNonExpired;
@@ -128,6 +132,7 @@ public class User implements UserDetails {
     }
 
     @Column(nullable = false)
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return isEnabled;
