@@ -9,4 +9,5 @@ import java.util.List;
 @Transactional(propagation = Propagation.REQUIRED)
 public interface SurveyService {
     List<Survey> loadAll();
+    Survey createSurvey(Survey survey);
 }

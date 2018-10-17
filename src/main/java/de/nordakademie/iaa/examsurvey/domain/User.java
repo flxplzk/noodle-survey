@@ -1,15 +1,11 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -20,6 +16,7 @@ import java.util.Collections;
  * @author Felix Plazek
  */
 @Entity
+@Table(name = "app_user")
 public class User implements UserDetails {
     private Long id;
     private String firstName;
@@ -61,6 +58,7 @@ public class User implements UserDetails {
     }
 
     @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
     public String getPassword() {
         return password;

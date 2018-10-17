@@ -6,7 +6,6 @@ import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -24,5 +23,10 @@ public class SurveyServiceImpl implements SurveyService {
     @Override
     public List<Survey> loadAll() {
         return Lists.newArrayList(surveyRepository.findAll());
+    }
+
+    @Override
+    public Survey createSurvey(Survey survey) {
+        return surveyRepository.save(survey);
     }
 }

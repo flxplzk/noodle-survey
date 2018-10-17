@@ -38,7 +38,7 @@ public class Option {
         this.fromDatetime = fromDatetime;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     public LocalDateTime getToDatetime() {
         return toDateTime;
     }

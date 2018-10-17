@@ -4,12 +4,13 @@ import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * @author Robert Peters
+ */
 @RestController
 public class SurveyController {
 
@@ -21,9 +22,18 @@ public class SurveyController {
     }
 
     @RequestMapping(value = "/surveys",
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Survey createSurvey(@RequestBody Survey survey) {
+        return surveyService.createSurvey(survey);
+    }
+
+    @RequestMapping(value = "/surveys",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Survey> listSurveys() {
+    public List<Survey> allSurveys() {
         return surveyService.loadAll();
     }
+
 }
