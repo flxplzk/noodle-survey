@@ -14,7 +14,6 @@ import java.security.Principal;
  */
 @RestController
 public class UserController {
-
     private final UserService userService;
 
     @Autowired
@@ -22,17 +21,17 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/authentication")
-    @GetMapping
+    @RequestMapping(value = "/authentication",
+            method = RequestMethod.GET)
     public Principal user(Principal user) {
         return user;
     }
 
     @RequestMapping(value = "/registration",
+            method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ExceptionHandler(UserAlreadyExistsException.class)
-    @PostMapping
     public User createUser(@RequestBody User user) {
         return userService.save(user);
     }

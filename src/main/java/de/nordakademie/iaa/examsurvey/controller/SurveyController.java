@@ -32,7 +32,7 @@ public class SurveyController {
     @RequestMapping(value = "/surveys",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Survey> allSurveys() {
+    public List<Survey> loadSurveys() {
         return surveyService.loadAll();
     }
 
