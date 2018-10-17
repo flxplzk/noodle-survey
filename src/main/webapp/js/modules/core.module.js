@@ -11,9 +11,6 @@
     core.service("authService", ["$http", "$base64", AuthenticationService]);
     core.service("appService", ["$state", "authService", "errorService", "rx", AppService]);
 
-    core.service("userService", ["$http", UserService]);
-    core.service("surveyService", ["$http", "rx", "errorService", SurveyService]);
-
     /**
      * Central service for login and logout + retrieving info concerning logged in user
      *
@@ -59,8 +56,10 @@
     }
 
     /**
+     * NotificationService; informs user via toast on events.
      *
-     * @param rx
+     * @param $mdToast ngMaterial ToastService
+     * @param $translate ngTranslate translationService
      * @constructor
      */
     function ErrorService($mdToast, $translate) {
@@ -79,38 +78,10 @@
     }
 
     /**
+     * Service for ensuring httpbasic authentication, by setting http authorization header information.
      *
-     * @param $http
-     * @constructor
-     */
-    function UserService($http) {
-        this.register = function (firstName, lastName, userName, password) {
-            var model = {
-                firstName: firstName,
-                lastName: lastName,
-                password: password,
-                username: userName
-            };
-            return $http.post("./registration", model);
-        }
-    }
-
-    function SurveyService($http, rx, errorService) {
-        this.loadAll = function () {
-            var $surveys = new rx.BehaviorSubject([{},{},{}]);
-            $http.get("./surveys").then(function (success) {
-                $surveys.onNext(success);
-            }, function (error) {
-                errorService.showErrorNotification("DASHBOARD_NETWORK_ERROR")
-            });
-            return $surveys;
-        }
-    }
-
-    /**
-     *
-     * @param $http
-     * @param encoder
+     * @param $http http service
+     * @param encoder base 64 encoder
      * @constructor
      */
     function AuthenticationService($http, encoder) {
