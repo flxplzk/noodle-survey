@@ -14,9 +14,13 @@ import java.util.List;
 @RestController
 public class SurveyController {
 
-    @Autowired
-    private SurveyService surveyService;
+    private final SurveyService surveyService;
 
+    @Autowired
+    public SurveyController(SurveyService surveyService) {
+        this.surveyService = surveyService;
+    }
+    
     @RequestMapping(value = "/Surveys",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

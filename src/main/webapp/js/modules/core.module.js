@@ -12,6 +12,7 @@
     core.service("appService", ["$state", "authService", "errorService", "rx", AppService]);
 
     core.service("userService", ["$http", UserService]);
+    core.service("surveyService", ["$http", "rx", "errorService", SurveyService]);
 
     /**
      * Central service for login and logout + retrieving info concerning logged in user
@@ -72,7 +73,7 @@
         this.showErrorNotification = function (errorMessageKey) {
             var toast = $mdToast.simple()
                 .content($translate.instant(errorMessageKey))
-                .position('left top right');
+                .position('left bottom right');
             $mdToast.show(toast);
         }
     }
@@ -91,6 +92,18 @@
                 username: userName
             };
             return $http.post("./registration", model);
+        }
+    }
+
+    function SurveyService($http, rx, errorService) {
+        this.loadAll = function () {
+            var $surveys = new rx.BehaviorSubject([{},{},{}]);
+            $http.get("./surveys").then(function (success) {
+                $surveys.onNext(success);
+            }, function (error) {
+                errorService.showErrorNotification("DASHBOARD_NETWORK_ERROR")
+            });
+            return $surveys;
         }
     }
 
