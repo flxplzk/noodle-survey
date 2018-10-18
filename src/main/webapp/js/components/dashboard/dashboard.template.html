@@ -4,11 +4,11 @@
             <md-card-title>
                 <md-card-title-text>
                     <span class="md-subhead">{{survey.title}}</span>
-                    <span class="md-text">{{survey.description}}</span>
+                    <span class="md-text">{{survey.inititator.username}}</span>
                 </md-card-title-text>
             </md-card-title>
             <md-card-actions layout="row" layout-align="end center">
-                <md-button ng-click="dashboardCrtl.addToSelectedSurveys(survey)">Open</md-button>
+                <md-button ng-click="dashboardCrtl.viewDetails(survey)">Open</md-button>
             </md-card-actions>
         </md-card>
     </md-content>

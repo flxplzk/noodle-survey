@@ -6,9 +6,9 @@
         "ngMaterial"
     ]);
 
-    dashboard.controller("dashboardController", ["$scope", "surveyService", DashboardController]);
+    dashboard.controller("dashboardController", ["$scope", "surveyService", "$state", DashboardController]);
 
-    function DashboardController($scope, surveyService) {
+    function DashboardController($scope, surveyService, $state) {
         $scope.model = {
             surveys: [],
             loading: true,
@@ -22,8 +22,8 @@
             $scope.model.loading = false;
         });
 
-        this.addToSelectedSurveys = function (survey) {
-            $scope.model.tabs.push(survey)
+        this.viewDetails = function (survey) {
+           $state.go("detail")
         }
     }
 }());
