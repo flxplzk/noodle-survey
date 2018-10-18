@@ -1,0 +1,29 @@
+<md-dialog aria-label="{{ 'EDITOR_TITLE' | translate}}" ng-controller="editorController as editorCrtl">
+    <form ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>{{ 'EDITOR_TITLE' | translate}}</h2>
+                <span flex></span>
+                <md-button ng-click="editorCrtl.cancel()">
+                    x
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content">
+               Here comes the creation form
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="editorCrtl.cancel()">
+                {{ 'EDITOR_CANCEL' | translate}}
+            </md-button>
+            <md-button ng-click="editorCrtl.answer('useful')">
+                {{ 'EDITOR_SAVE' | translate}}
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

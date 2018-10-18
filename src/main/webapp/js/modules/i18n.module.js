@@ -28,7 +28,11 @@
             AUTH_REGISTER_USER_CREATED: "Benutzer erfolgreich erstellt.",
 
             DASHBOARD_OPEN_DETAILS: "Öffnen",
-            DASHBOARD_TITLE: "Alle Umfragen im Überblick"
+            DASHBOARD_TITLE: "Alle Umfragen im Überblick",
+            EDITOR_TITLE: "Neue Umfrage erstellen",
+
+            EDITOR_SAVE: "Speichern",
+            EDITOR_CANCEL: "Abbrechen"
         });
 
         // english
@@ -54,7 +58,11 @@
             AUTH_REGISTER_USER_CREATED: "User created successfully.",
 
             DASHBOARD_OPEN_DETAILS: "Öffnen",
-            DASHBOARD_TITLE: "All surveys"
+            DASHBOARD_TITLE: "All surveys",
+            EDITOR_TITLE: "Create new Survey",
+
+            EDITOR_SAVE: "Save",
+            EDITOR_CANCEL: "Cancel"
         });
 
         $translateProvider.preferredLanguage("en_US");

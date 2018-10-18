@@ -6,9 +6,10 @@
         "ngMaterial"
     ]);
 
-    dashboard.controller("dashboardController", ["$scope", "surveyService", "$state", DashboardController]);
+    dashboard.controller("dashboardController", ["$scope", "surveyService", "$state", "$mdDialog", DashboardController]);
+    dashboard.controller("editorController", ["$mdDialog", EditorController]);
 
-    function DashboardController($scope, surveyService, $state) {
+    function DashboardController($scope, surveyService, $state, $mdDialog) {
         $scope.model = {
             surveys: [],
             loading: true,
@@ -23,12 +24,31 @@
         });
 
         this.viewDetails = function (survey) {
-           $state.go("detail", { surveyId: survey.title})
+            $state.go("detail", {surveyId: survey.title})
         };
 
         $scope.initiatorOfSurveyShort = function (survey) {
-            return survey.initiator.firstName.substring(0,1)
-            + survey.initiator.lastName.substring(0,1)
+            return survey.initiator.firstName.substring(0, 1)
+                + survey.initiator.lastName.substring(0, 1)
+        };
+
+        $scope.showAdvanced = function (ev) {
+            $mdDialog.show({
+                templateUrl: "/js/components/editor/editor.dialog.template.html",
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                fullscreen: false
+            })
+        };
+
+    }
+
+
+    function EditorController($mdDialog) {
+        this.cancel = function () {
+            $mdDialog.cancel();
         }
     }
+
 }());
