@@ -1,15 +1,14 @@
 package de.nordakademie.iaa.examsurvey.service.impl;
 
-import com.google.common.collect.Lists;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
-import de.nordakademie.iaa.examsurvey.domain.SurveyStatus;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
 import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
 import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
+import de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
+import org.springframework.data.jpa.domain.Specification;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,11 +25,8 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public List<Survey> loadAllSurveysForUser(User requestingUser) {
-        ArrayList<SurveyStatus> statuses = Lists.newArrayList(SurveyStatus.CLOSED, SurveyStatus.OPEN);
-        List<Survey> surveys = surveyRepository
-                .findAllByInitiatorEqualsAndSurveyStatusEqualsOrSurveyStatusIn(requestingUser,
-                        SurveyStatus.PRIVATE, statuses);
-        return Lists.newArrayList(surveys);
+        Specification<Survey> visibleForUser = SurveySpecifications.isVisibleForUser(requestingUser);
+        return surveyRepository.findAll(visibleForUser);
     }
 
     @Override

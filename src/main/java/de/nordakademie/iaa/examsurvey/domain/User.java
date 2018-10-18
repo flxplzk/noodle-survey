@@ -10,6 +10,8 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
 
+import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
+
 /**
  * Base Entity for application user.
  * Implementing the {@link UserDetails}-Interface for Spring security integration.
@@ -59,7 +61,7 @@ public class User implements UserDetails {
     }
 
     @Column(nullable = false)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = WRITE_ONLY)
     @Override
     public String getPassword() {
         return password;
