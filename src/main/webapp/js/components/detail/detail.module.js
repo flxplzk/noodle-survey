@@ -6,9 +6,9 @@
         "ngMaterial"
     ]);
 
-    detail.controller("detailController", ["$scope", DetailController]);
+    detail.controller("detailController", ["$scope", "$stateParams", DetailController]);
 
-    function DetailController($scope) {
-        $scope.greeting = "details works"
+    function DetailController($scope, $stateParams) {
+        $scope.greeting = "details works: " + $stateParams.surveyId
     }
 }());

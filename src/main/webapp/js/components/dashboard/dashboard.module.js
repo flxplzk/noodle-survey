@@ -23,7 +23,12 @@
         });
 
         this.viewDetails = function (survey) {
-           $state.go("detail")
+           $state.go("detail", { surveyId: survey.title})
+        };
+
+        $scope.initiatorOfSurveyShort = function (survey) {
+            return survey.initiator.firstName.substring(0,1)
+            + survey.initiator.lastName.substring(0,1)
         }
     }
 }());

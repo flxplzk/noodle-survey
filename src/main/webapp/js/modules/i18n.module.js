@@ -1,4 +1,4 @@
-(function() {
+(function () {
     var app = angular.module("de.nordakademie.iaa.i18n", [
         "pascalprecht.translate"
     ]);
@@ -7,7 +7,7 @@
         // german
         $translateProvider.translations("de_DE", {
 
-            APP_HEADLINE:  "Angular Umfragetool",
+            APP_HEADLINE: "Angular Umfragetool",
             APP_LOGOUT: "Abmelden",
 
             AUTH_LOGIN_HEADLINE: "Bitte melde Dich an",
@@ -27,15 +27,13 @@
             AUTH_REGISTER_PASSWORD_NON_MATCH: "Die Passwörter müssen übereinstimmen.",
             AUTH_REGISTER_USER_CREATED: "Benutzer erfolgreich erstellt.",
 
-            DASHBOARD_TAB_OWN: "Meine Umfragen",
-            DASHBOARD_TAB_ALL: "Alle Umfragen",
-            DASHBOARD_TAB_OPEN: "Offen für Teilnahme"
-
+            DASHBOARD_OPEN_DETAILS: "Öffnen",
+            DASHBOARD_TITLE: "Alle Umfragen im Überblick"
         });
 
         // english
         $translateProvider.translations("en_US", {
-            APP_HEADLINE:  "Angular survey tool",
+            APP_HEADLINE: "Angular survey tool",
             APP_LOGOUT: "Logout",
 
             AUTH_LOGIN_HEADLINE: "Please Sign in",
@@ -55,9 +53,8 @@
             AUTH_REGISTER_PASSWORD_NON_MATCH: "The passwords must match.",
             AUTH_REGISTER_USER_CREATED: "User created successfully.",
 
-            DASHBOARD_TAB_OWN: "My surveys",
-            DASHBOARD_TAB_ALL: "All Surveys",
-            DASHBOARD_TAB_OPEN: "Open for participation"
+            DASHBOARD_OPEN_DETAILS: "Öffnen",
+            DASHBOARD_TITLE: "All surveys"
         });
 
         $translateProvider.preferredLanguage("en_US");

@@ -34,7 +34,7 @@
         };
         var detailState ={
             name: "detail",
-            url: "/detail",
+            url: "/detail/{surveyId}",
             templateUrl: "js/components/detail/detail.template.html",
             onEnter: enteringGuard
         };
