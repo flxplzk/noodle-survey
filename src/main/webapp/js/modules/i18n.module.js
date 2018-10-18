@@ -25,7 +25,11 @@
             AUTH_REGISTER_ERROR_PASSWORD_STRENGTH: "Das Passwort darf nicht leer sein, muss midestens eine Zahl, ein Sonderzeichen und jeweils einen Groß und einen kleinbuchstaben enthalten.",
             AUTH_REGISTER_USER_ALREADY_EXISTS: "Es existiert bereits ein Benutzer mit dieser Emailadresse. Bitte wähle eine Andere.",
             AUTH_REGISTER_PASSWORD_NON_MATCH: "Die Passwörter müssen übereinstimmen.",
-            AUTH_REGISTER_USER_CREATED: "Benutzer erfolgreich erstellt."
+            AUTH_REGISTER_USER_CREATED: "Benutzer erfolgreich erstellt.",
+
+            DASHBOARD_TAB_OWN: "Meine Umfragen",
+            DASHBOARD_TAB_ALL: "Alle Umfragen",
+            DASHBOARD_TAB_OPEN: "Offen für Teilnahme"
 
         });
 
@@ -49,7 +53,11 @@
             AUTH_REGISTER_ERROR_PASSWORD_STRENGTH: "Password is required and must be secure! with at least 8 characters.",
             AUTH_REGISTER_USER_ALREADY_EXISTS: "Username is already in use. please select a new one",
             AUTH_REGISTER_PASSWORD_NON_MATCH: "The passwords must match.",
-            AUTH_REGISTER_USER_CREATED: "User created successfully."
+            AUTH_REGISTER_USER_CREATED: "User created successfully.",
+
+            DASHBOARD_TAB_OWN: "My surveys",
+            DASHBOARD_TAB_ALL: "All Surveys",
+            DASHBOARD_TAB_OPEN: "Open for participation"
         });
 
         $translateProvider.preferredLanguage("en_US");

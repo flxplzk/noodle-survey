@@ -10,8 +10,4 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SurveyRepository extends CrudRepository<Survey, Long>, JpaSpecificationExecutor<Survey> {
-    List<Survey> findAllByInitiatorEqualsAndSurveyStatusEqualsOrSurveyStatusIn
-            (final User initiator, final SurveyStatus privateStatus, final List<SurveyStatus> statuses);
-
-    Optional<Survey> findByTitle(String title);
 }

@@ -11,10 +11,13 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
+import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.isVisibleForUser;
+
 /**
  * UserService implementation.
  *
  * @author Robert Peters
+ * @author Felix Plazek
  */
 public class SurveyServiceImpl implements SurveyService {
     private final SurveyRepository surveyRepository;
@@ -25,8 +28,7 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public List<Survey> loadAllSurveysForUser(User requestingUser) {
-        Specification<Survey> visibleForUser = SurveySpecifications.isVisibleForUser(requestingUser);
-        return surveyRepository.findAll(visibleForUser);
+        return surveyRepository.findAll(isVisibleForUser(requestingUser));
     }
 
     @Override
@@ -36,9 +38,10 @@ public class SurveyServiceImpl implements SurveyService {
         }
         survey.setInitiator(initiator);
 
-        if (surveyRepository.findByTitle(survey.getTitle()).isPresent()) {
-            throw new SurveyAlreadyExistsException();
-        }
+        // if survey with title already exists; throw exeption
+        surveyRepository.findOne(SurveySpecifications.hasTitle(survey.getTitle()))
+                .orElseThrow(SurveyAlreadyExistsException::new);
+
         return surveyRepository.save(survey);
     }
 }

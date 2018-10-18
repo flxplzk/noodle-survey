@@ -6,6 +6,9 @@ import de.nordakademie.iaa.examsurvey.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+/**
+ * @author Felix Plazek
+ */
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserService userService;
 

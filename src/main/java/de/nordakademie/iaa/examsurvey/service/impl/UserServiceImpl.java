@@ -28,9 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
-        if (findUserByUsername(user.getUsername()).isPresent()) {
-            throw new UserAlreadyExistsException();
-        }
+        findUserByUsername(user.getUsername()).orElseThrow(UserAlreadyExistsException::new);
 
         final String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);

@@ -1,6 +1,7 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.NaturalId;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Column;
@@ -40,6 +41,7 @@ public class Survey {
         this.id = id;
     }
 
+    @NaturalId
     @Column(nullable = false)
     public String getTitle() {
         return title;

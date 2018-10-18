@@ -1,6 +1,6 @@
 <md-content flex layout-padding ng-controller="dashboardController as dashboardCrtl" layout="row">
-    <md-content layout="column">
-        <md-card ng-repeat="survey in model.surveys" layout="row">
+    <md-content layout="column" flex>
+        <md-card ng-repeat="survey in model.surveys" layout="row" flex>
             <md-card-title>
                 <md-card-title-text>
                     <span class="md-subhead">{{survey.title}}</span>
@@ -11,21 +11,5 @@
                 <md-button ng-click="dashboardCrtl.addToSelectedSurveys(survey)">Open</md-button>
             </md-card-actions>
         </md-card>
-    </md-content>
-
-
-    <md-content class="md-padding" layout="column" flex>
-        <md-tabs md-selected="selectedIndex" md-border-bottom md-autoselect md-swipe-content>
-            <md-tab ng-repeat="tab in model.tabs"
-                    label="{{tab.title}}">
-                <div class="demo-tab tab{{$index%4}}" style="padding: 25px; text-align: center;">
-                    <div ng-bind="tab.content"></div>
-                    <br/>
-                    <md-button class="md-primary md-raised" ng-click="removeTab( tab )"
-                               ng-disabled="model.tabs.length <= 1">Remove Tab
-                    </md-button>
-                </div>
-            </md-tab>
-        </md-tabs>
     </md-content>
 </md-content>
