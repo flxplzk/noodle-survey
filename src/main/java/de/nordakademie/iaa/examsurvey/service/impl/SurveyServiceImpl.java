@@ -48,6 +48,8 @@ public class SurveyServiceImpl implements SurveyService {
         // if survey with title already exists; throw exeption
         surveyRepository.findOne(SurveySpecifications.hasTitle(survey.getTitle()))
                 .orElseThrow(SurveyAlreadyExistsException::new);
+        //TODO: Autogenerate Unique Value in Database
+        survey.setIdentifier("123456");
         Survey createdSurvey = surveyRepository.save(survey);
         if (survey.getOptionList().size() > 0) {
             saveOptionForSurveyClass(survey.getOptionList(), createdSurvey, initiator);
@@ -59,7 +61,7 @@ public class SurveyServiceImpl implements SurveyService {
     public List<Option> saveOptionForSurvey(List<Option> options, String title, User initiator) {
         Survey survey = surveyRepository.findOne(SurveySpecifications.hasTitle(title))
                 .orElseThrow(SurveyNotExistsException::new);
-        saveOptionForSurveyClass(options, survey, initiator)
+        return saveOptionForSurveyClass(options, survey, initiator);
     }
 
     private List<Option> saveOptionForSurveyClass(List<Option> options, Survey survey, User initiator) {
