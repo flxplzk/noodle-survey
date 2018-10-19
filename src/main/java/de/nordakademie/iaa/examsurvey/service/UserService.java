@@ -6,9 +6,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
+
 @Transactional(propagation = Propagation.REQUIRED)
 public interface UserService extends UserDetailsService {
-
     /**
      * Creates new User. username must be unused.
      *
@@ -16,5 +17,5 @@ public interface UserService extends UserDetailsService {
      * @return created user
      * @throws UserAlreadyExistsException if a User with the username already exists
      */
-    User createUser(User user);
+    User createUser(@NotNull final User user);
 }

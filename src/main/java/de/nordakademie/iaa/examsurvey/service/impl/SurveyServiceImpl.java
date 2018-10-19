@@ -34,7 +34,7 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
     @Override
-    public List<Survey> loadAllSurveysForUser(User requestingUser) {
+    public List<Survey> loadAllSurveysWithUser(User requestingUser) {
         return surveyRepository.findAll(isVisibleForUser(requestingUser));
     }
 
@@ -62,7 +62,7 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
     @Override
-    public List<Option> getOptionsForSurvey(String surveyTitle, User authenticatedUser) {
+    public List<Option> loadAllOptionsForSurveyWithUser(String surveyTitle, User authenticatedUser) {
         Survey survey = surveyRepository.findOne(hasTitleAndVisibleForUser(surveyTitle, authenticatedUser))
                 .orElseThrow(SurveyNotExistsException::new);
 

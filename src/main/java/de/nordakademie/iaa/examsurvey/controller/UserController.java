@@ -49,6 +49,6 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Notification> getNotifications(){
         User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
-        return notificationService.getNotifications(authenticatedUser);
+        return notificationService.getNotificationsForUser(authenticatedUser);
     }
 }

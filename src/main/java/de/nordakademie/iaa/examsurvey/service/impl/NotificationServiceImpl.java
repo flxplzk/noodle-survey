@@ -19,13 +19,13 @@ public class NotificationServiceImpl implements NotificationService{
     }
 
     @Override
-    public List<Notification> getNotifications(User authenticatedUser) {
+    public List<Notification> getNotificationsForUser(User authenticatedUser) {
         return Lists.newArrayList(notificationRepository
                 .findAll(NotificationSpecifications.byUser(authenticatedUser)));
     }
 
     @Override
-    public void notifyUsers(NotificationType type, List<User> users) {
+    public void notifyUsersWithNotificationType(NotificationType type, List<User> users) {
         List<Notification> notifications = new ArrayList<>();
         Notification note = new Notification();
         note.setNotificationType(type);

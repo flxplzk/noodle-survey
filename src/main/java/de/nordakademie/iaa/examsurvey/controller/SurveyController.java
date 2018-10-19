@@ -43,7 +43,7 @@ public class SurveyController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Survey> loadSurveys() {
         User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
-        return surveyService.loadAllSurveysForUser(authenticatedUser);
+        return surveyService.loadAllSurveysWithUser(authenticatedUser);
     }
 
     @RequestMapping(value = "/surveys/{identifier}/options",
@@ -61,6 +61,6 @@ public class SurveyController {
     @ExceptionHandler({SurveyNotExistsException.class})
     public List<Option> saveOptions(@PathVariable String identifier) {
         User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
-        return surveyService.getOptionsForSurvey(identifier, authenticatedUser);
+        return surveyService.loadAllOptionsForSurveyWithUser(identifier, authenticatedUser);
     }
 }
