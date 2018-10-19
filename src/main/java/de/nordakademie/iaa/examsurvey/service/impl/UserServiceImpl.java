@@ -8,6 +8,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Optional;
+
+import static de.nordakademie.iaa.examsurvey.persistence.specification.UserSpecifications.hasUsername;
+
 /**
  * UserService implementation.
  *
@@ -23,10 +27,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User save(User user) {
-        if (userRepository.findUserByUsername(user.getUsername()).isPresent()) {
-            throw new UserAlreadyExistsException();
-        }
+    public User createUser(User user) {
+        findUserByUsername(user.getUsername()).orElseThrow(UserAlreadyExistsException::new);
 
         final String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
@@ -35,7 +37,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findUserByUsername(username)
+        return findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("No User with given username found"));
+    }
+
+    private Optional<User> findUserByUsername(final String userName) {
+        return userRepository.findOne(hasUsername(userName));
     }
 }

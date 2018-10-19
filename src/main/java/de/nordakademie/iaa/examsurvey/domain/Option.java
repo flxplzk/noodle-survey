@@ -1,8 +1,11 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -22,7 +25,7 @@ public class Option {
     private Survey survey;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
@@ -38,7 +41,7 @@ public class Option {
         this.fromDatetime = fromDatetime;
     }
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     public LocalDateTime getToDatetime() {
         return toDateTime;
     }
@@ -47,6 +50,7 @@ public class Option {
     }
 
     @ManyToOne
+    @JsonIgnore
     public Survey getSurvey() {
         return survey;
     }

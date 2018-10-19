@@ -1,16 +1,17 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
+
+import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
 
 /**
  * Base Entity for Survey, containing basic information.
@@ -27,9 +28,12 @@ public class Survey {
     private Option event;
     private LocalDateTime creationDate;
     private SurveyStatus surveyStatus;
+    private SurveyType surveyType;
+    private List<Option> optionList;
+    private String identifier;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
@@ -37,6 +41,7 @@ public class Survey {
         this.id = id;
     }
 
+    @NaturalId
     @Column(nullable = false)
     public String getTitle() {
         return title;
@@ -82,7 +87,37 @@ public class Survey {
     public SurveyStatus getSurveyStatus() {
         return surveyStatus;
     }
+
     public void setSurveyStatus(SurveyStatus surveyStatus) {
         this.surveyStatus = surveyStatus;
+    }
+
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    public SurveyType getSurveyType() {
+        return surveyType;
+    }
+
+    public void setSurveyType(SurveyType surveyType) {
+        this.surveyType = surveyType;
+    }
+
+    @JsonProperty(access = WRITE_ONLY)
+    @Transient
+    public List<Option> getOptionList() {
+        return optionList;
+    }
+
+    public void setOptionList(List<Option> optionList) {
+        this.optionList = optionList;
+    }
+
+    @Length(min = 6, max = 6)
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 }

@@ -1,8 +1,13 @@
 package de.nordakademie.iaa.examsurvey.configuration;
 
-import de.nordakademie.iaa.examsurvey.domain.User;
+import de.nordakademie.iaa.examsurvey.persistence.OptionRepository;
+import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
 import de.nordakademie.iaa.examsurvey.persistence.UserRepository;
+import de.nordakademie.iaa.examsurvey.service.AuthenticationService;
+import de.nordakademie.iaa.examsurvey.service.SurveyService;
 import de.nordakademie.iaa.examsurvey.service.UserService;
+import de.nordakademie.iaa.examsurvey.service.impl.AuthenticationServiceImpl;
+import de.nordakademie.iaa.examsurvey.service.impl.SurveyServiceImpl;
 import de.nordakademie.iaa.examsurvey.service.impl.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,5 +28,17 @@ public class ServiceConfiguration {
     @Scope(value = "singleton")
     public UserService userService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return new UserServiceImpl(userRepository, passwordEncoder);
+    }
+
+    @Bean
+    @Scope(value = "singleton")
+    public SurveyService surveyService(SurveyRepository surveyRepository, OptionRepository optionRepository) {
+        return new SurveyServiceImpl(surveyRepository, optionRepository);
+    }
+
+    @Bean
+    @Scope(value = "singleton")
+    public AuthenticationService authenticationService(UserService userService) {
+        return new AuthenticationServiceImpl(userService);
     }
 }

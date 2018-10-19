@@ -5,11 +5,7 @@ import de.nordakademie.iaa.examsurvey.exception.UserAlreadyExistsException;
 import de.nordakademie.iaa.examsurvey.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -18,11 +14,15 @@ import java.security.Principal;
  */
 @RestController
 public class UserController {
+    private final UserService userService;
 
     @Autowired
-    private UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
-    @RequestMapping(value = "/authentication", method = RequestMethod.GET)
+    @RequestMapping(value = "/authentication",
+            method = RequestMethod.GET)
     public Principal user(Principal user) {
         return user;
     }
@@ -33,6 +33,6 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ExceptionHandler(UserAlreadyExistsException.class)
     public User createUser(@RequestBody User user) {
-        return userService.save(user);
+        return userService.createUser(user);
     }
 }

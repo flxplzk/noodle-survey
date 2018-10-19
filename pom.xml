@@ -67,7 +67,6 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 		<!-- Fun libs -->
 		<dependency>
 			<groupId>com.google.guava</groupId>

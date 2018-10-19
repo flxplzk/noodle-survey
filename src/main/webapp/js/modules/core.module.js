@@ -11,8 +11,6 @@
     core.service("authService", ["$http", "$base64", AuthenticationService]);
     core.service("appService", ["$state", "authService", "errorService", "rx", AppService]);
 
-    core.service("userService", ["$http", UserService]);
-
     /**
      * Central service for login and logout + retrieving info concerning logged in user
      *
@@ -58,8 +56,10 @@
     }
 
     /**
+     * NotificationService; informs user via toast on events.
      *
-     * @param rx
+     * @param $mdToast ngMaterial ToastService
+     * @param $translate ngTranslate translationService
      * @constructor
      */
     function ErrorService($mdToast, $translate) {
@@ -72,32 +72,16 @@
         this.showErrorNotification = function (errorMessageKey) {
             var toast = $mdToast.simple()
                 .content($translate.instant(errorMessageKey))
-                .position('left top right');
+                .position('left bottom right');
             $mdToast.show(toast);
         }
     }
 
     /**
+     * Service for ensuring httpbasic authentication, by setting http authorization header information.
      *
-     * @param $http
-     * @constructor
-     */
-    function UserService($http) {
-        this.register = function (firstName, lastName, userName, password) {
-            var model = {
-                firstName: firstName,
-                lastName: lastName,
-                password: password,
-                username: userName
-            };
-            return $http.post("./registration", model);
-        }
-    }
-
-    /**
-     *
-     * @param $http
-     * @param encoder
+     * @param $http http service
+     * @param encoder base 64 encoder
      * @constructor
      */
     function AuthenticationService($http, encoder) {

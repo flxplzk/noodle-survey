@@ -1,6 +1,7 @@
 package de.nordakademie.iaa.examsurvey.persistence;
 
 import de.nordakademie.iaa.examsurvey.domain.User;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
@@ -10,6 +11,6 @@ import java.util.Optional;
  *
  * @author Felix Plazek
  */
-public interface UserRepository extends CrudRepository<User, Long> {
-    Optional<User> findUserByUsername(String username);
+public interface UserRepository extends CrudRepository<User, Long>, JpaSpecificationExecutor<User> {
+
 }

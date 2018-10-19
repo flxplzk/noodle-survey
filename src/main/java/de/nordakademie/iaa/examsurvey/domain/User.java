@@ -1,17 +1,16 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+
+import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
 
 /**
  * Base Entity for application user.
@@ -20,6 +19,7 @@ import java.util.Collections;
  * @author Felix Plazek
  */
 @Entity
+@Table(name = "app_user")
 public class User implements UserDetails {
     private Long id;
     private String firstName;
@@ -45,7 +45,7 @@ public class User implements UserDetails {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
@@ -61,6 +61,7 @@ public class User implements UserDetails {
     }
 
     @Column(nullable = false)
+    @JsonProperty(access = WRITE_ONLY)
     @Override
     public String getPassword() {
         return password;
@@ -100,6 +101,7 @@ public class User implements UserDetails {
     }
 
     @Column(nullable = false)
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return isAccountNonExpired;
@@ -110,6 +112,7 @@ public class User implements UserDetails {
     }
 
     @Column(nullable = false)
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return isAccountNonLocked;
@@ -120,6 +123,7 @@ public class User implements UserDetails {
     }
 
     @Column(nullable = false)
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return isCredentialsNonExpired;
@@ -130,6 +134,7 @@ public class User implements UserDetails {
     }
 
     @Column(nullable = false)
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return isEnabled;
