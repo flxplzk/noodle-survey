@@ -1,15 +1,9 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
@@ -22,10 +16,10 @@ import java.time.LocalDateTime;
 public class Notification {
     private Long id;
     private User user;
-    private Survey survey;
-    private String notificationText;
-    private NotificationType notificationType;
     private LocalDateTime creationDate;
+    private Survey survey;
+    private NotificationType notificationType;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,12 +30,21 @@ public class Notification {
         this.id = id;
     }
 
-    @Column(nullable = false)
+    @ManyToOne
+    @JsonIgnore
     public User getUser() {
         return user;
     }
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @CreatedDate
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 
     @ManyToOne
@@ -50,14 +53,6 @@ public class Notification {
     }
     public void setSurvey(Survey survey) {
         this.survey = survey;
-    }
-
-    @Column(name = "NOTIFICATION_TEXT")
-    public String getNotificationText() {
-        return notificationText;
-    }
-    public void setNotificationText(String notificationText) {
-        this.notificationText = notificationText;
     }
 
     @Enumerated(value = EnumType.STRING)
@@ -69,11 +64,4 @@ public class Notification {
         this.notificationType = notificationType;
     }
 
-    @CreatedDate
-    public LocalDateTime getCreationDate() {
-        return creationDate;
-    }
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
-    }
 }

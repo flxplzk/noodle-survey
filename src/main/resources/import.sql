@@ -18,3 +18,6 @@ insert into option (from_datetime, survey_id, to_datetime, id) values (CURRENT_D
 insert into participation (survey_id, user_id, id) values (-2,-1,-13);
 insert into participation (survey_id, user_id, id) values (-2,-3,-14);
 insert into participation (survey_id, user_id, id) values (-4,-3,-15);
+insert into notification (creation_date,notification_type,survey_id,user_id,id) values (CURRENT_DATE,'SURVEY_CHANGE',-2,-1,-21);
+insert into notification (creation_date,notification_type,survey_id,user_id,id) values (CURRENT_DATE,'EVENT_PLANNED',-18,-3,-22);
+insert into notification (creation_date,notification_type,survey_id,user_id,id) values (CURRENT_DATE,'NEW_SURVEY',-17,-1,-23);
