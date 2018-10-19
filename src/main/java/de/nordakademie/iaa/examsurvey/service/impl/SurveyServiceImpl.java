@@ -58,8 +58,8 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
     @Override
-    public List<Option> saveOptionForSurvey(List<Option> options, String title, User initiator) {
-        Survey survey = surveyRepository.findOne(SurveySpecifications.hasTitle(title))
+    public List<Option> saveOptionForSurvey(List<Option> options, String identifier, User initiator) {
+        Survey survey = surveyRepository.findOne(SurveySpecifications.hasIdentifier(identifier))
                 .orElseThrow(SurveyNotExistsException::new);
         return saveOptionForSurveyClass(options, survey, initiator);
     }
@@ -77,8 +77,8 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
     @Override
-    public List<Option> getOptionsForSurvey(String title) {
-        Survey survey = surveyRepository.findOne(SurveySpecifications.hasTitle(title))
+    public List<Option> getOptionsForSurvey(String identifier) {
+        Survey survey = surveyRepository.findOne(SurveySpecifications.hasIdentifier(identifier))
                 .orElseThrow(SurveyNotExistsException::new);
 
         return Lists.newArrayList(optionRepository.findAll(OptionSpecifications.hasSurvey(survey)));

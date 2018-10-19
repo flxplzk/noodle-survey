@@ -40,12 +40,12 @@ public interface SurveyService {
      * Creates Option for survey
      *
      * @param options    to create
-     * @param title      of the survey
+     * @param identifier of the survey
      * @param user       initiator of the survey
      * @return persistent Options
      * TODO: ggf. exception
      */
-    List<Option> saveOptionForSurvey(List<Option> options, String title, User user);
+    List<Option> saveOptionForSurvey(List<Option> options, String identifier, User user);
 
     List<Option> getOptionsForSurvey(String title);
 }

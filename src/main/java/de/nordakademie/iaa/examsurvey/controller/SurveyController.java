@@ -45,20 +45,20 @@ public class SurveyController {
         return surveyService.loadAllSurveysForUser(authenticatedUser);
     }
 
-    @RequestMapping(value = "/survey/{title}/option",
+    @RequestMapping(value = "/surveys/{identifier}/options",
             method = RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Option> saveOptions(@PathVariable String title, @RequestBody List<Option> options) {
+    public List<Option> saveOptions(@PathVariable String identifier, @RequestBody List<Option> options) {
         User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
-        return surveyService.saveOptionForSurvey(options, title, authenticatedUser);
+        return surveyService.saveOptionForSurvey(options, identifier, authenticatedUser);
     }
 
-    @RequestMapping(value = "/survey/{title}/option",
+    @RequestMapping(value = "/surveys/{identifier}/options",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Option> saveOptions(@PathVariable String title) {
-        return surveyService.getOptionsForSurvey(title);
+    public List<Option> saveOptions(@PathVariable String identifier) {
+        return surveyService.getOptionsForSurvey(identifier);
     }
 
 }
