@@ -60,5 +60,4 @@ public class SurveyController {
     public List<Option> saveOptions(@PathVariable String identifier) {
         return surveyService.getOptionsForSurvey(identifier);
     }
-
 }

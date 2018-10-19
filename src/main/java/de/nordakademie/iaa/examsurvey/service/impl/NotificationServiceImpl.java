@@ -2,6 +2,7 @@ package de.nordakademie.iaa.examsurvey.service.impl;
 
 import com.google.common.collect.Lists;
 import de.nordakademie.iaa.examsurvey.domain.Notification;
+import de.nordakademie.iaa.examsurvey.domain.NotificationType;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.persistence.NotificationRepository;
 import de.nordakademie.iaa.examsurvey.persistence.specification.NotificationSpecifications;
@@ -19,7 +20,19 @@ public class NotificationServiceImpl implements NotificationService{
 
     @Override
     public List<Notification> getNotifications(User authenticatedUser) {
-        return Lists.newArrayList(notificationRepository.findAll(NotificationSpecifications.byUser(authenticatedUser)));
-        //TODO: Remove: return Lists.newArrayList(notificationRepository.findAll());
+        return Lists.newArrayList(notificationRepository
+                .findAll(NotificationSpecifications.byUser(authenticatedUser)));
+    }
+
+    @Override
+    public void notifyUsers(NotificationType type, List<User> users) {
+        List<Notification> notifications = new ArrayList<>();
+        Notification note = new Notification();
+        note.setNotificationType(type);
+        for (User user: users) {
+            note.setUser(user);
+            notifications.add(note);
+        }
+        notificationRepository.saveAll(notifications);
     }
 }
