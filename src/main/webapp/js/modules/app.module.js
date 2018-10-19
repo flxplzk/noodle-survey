@@ -3,7 +3,9 @@
         "de.nordakademie.iaa.survey.authentication",
         "de.nordakademie.iaa.survey.toolbar",
         "de.nordakademie.iaa.survey.dashboard",
-        "de.nordakademie.iaa.survey.detail"
+        "de.nordakademie.iaa.survey.detail",
+        "de.nordakademie.iaa.survey.editor"
+
     ]);
 
     app.config(function ($stateProvider) {

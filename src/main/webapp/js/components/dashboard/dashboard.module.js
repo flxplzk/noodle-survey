@@ -7,7 +7,6 @@
     ]);
 
     dashboard.controller("dashboardController", ["$scope", "surveyService", "$state", "$mdDialog", DashboardController]);
-    dashboard.controller("editorController", ["$mdDialog", EditorController]);
 
     function DashboardController($scope, surveyService, $state, $mdDialog) {
         $scope.model = {
@@ -42,13 +41,6 @@
             })
         };
 
-    }
-
-
-    function EditorController($mdDialog) {
-        this.cancel = function () {
-            $mdDialog.cancel();
-        }
     }
 
 }());

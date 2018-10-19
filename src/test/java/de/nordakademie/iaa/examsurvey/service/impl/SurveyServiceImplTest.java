@@ -11,13 +11,12 @@ import static org.mockito.Mockito.mock;
 public class SurveyServiceImplTest {
 
     @Test
-    public void createSurveyTest() {
-        //@Autowired
-        //SurveyRepository surveyRepository;
+    public void loadAllSurveysForUser() {
+        throw new UnsupportedOperationException();
+    }
 
-        //new SurveyServiceImpl(surveyRepository);
-        //Survey survey = mock(Survey.class);
-
-
+    @Test
+    public void createSurvey() {
+        throw new UnsupportedOperationException();
     }
 }

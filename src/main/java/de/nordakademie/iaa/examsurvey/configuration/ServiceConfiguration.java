@@ -1,6 +1,5 @@
 package de.nordakademie.iaa.examsurvey.configuration;
 
-import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
 import de.nordakademie.iaa.examsurvey.persistence.UserRepository;
 import de.nordakademie.iaa.examsurvey.service.AuthenticationService;
@@ -38,7 +37,7 @@ public class ServiceConfiguration {
 
     @Bean
     @Scope(value = "singleton")
-    public AuthenticationService authenticationService(UserService userService){
+    public AuthenticationService authenticationService(UserService userService) {
         return new AuthenticationServiceImpl(userService);
     }
 }

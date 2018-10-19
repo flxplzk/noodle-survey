@@ -2,6 +2,8 @@ package de.nordakademie.iaa.examsurvey.controller;
 
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
+import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
+import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
 import de.nordakademie.iaa.examsurvey.service.AuthenticationService;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,7 @@ public class SurveyController {
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ExceptionHandler({PermissionDeniedException.class, SurveyAlreadyExistsException.class})
     public Survey createSurvey(@RequestBody Survey survey) {
         User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
         return surveyService.createSurvey(survey, authenticatedUser);
