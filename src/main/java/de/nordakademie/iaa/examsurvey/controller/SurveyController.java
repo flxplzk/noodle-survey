@@ -1,5 +1,6 @@
 package de.nordakademie.iaa.examsurvey.controller;
 
+import de.nordakademie.iaa.examsurvey.domain.Option;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
@@ -42,6 +43,22 @@ public class SurveyController {
     public List<Survey> loadSurveys() {
         User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
         return surveyService.loadAllSurveysForUser(authenticatedUser);
+    }
+
+    @RequestMapping(value = "/surveys/{identifier}/options",
+            method = RequestMethod.PUT,
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public List<Option> saveOptions(@PathVariable String identifier, @RequestBody List<Option> options) {
+        User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
+        return surveyService.saveOptionForSurvey(options, identifier, authenticatedUser);
+    }
+
+    @RequestMapping(value = "/surveys/{identifier}/options",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public List<Option> saveOptions(@PathVariable String identifier) {
+        return surveyService.getOptionsForSurvey(identifier);
     }
 
 }

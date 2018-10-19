@@ -35,4 +35,9 @@ public class SurveySpecifications {
                 ? criteriaBuilder.isNull(root.get(Survey_.title))
                 : criteriaBuilder.equal(root.get(Survey_.title), title);
     }
+    public static Specification<Survey> hasIdentifier(final String identifier) {
+        return (Specification<Survey>) (root, query, criteriaBuilder) -> identifier == null
+                ? criteriaBuilder.isNull(root.get(Survey_.identifier))
+                : criteriaBuilder.equal(root.get(Survey_.identifier), identifier);
+    }
 }
