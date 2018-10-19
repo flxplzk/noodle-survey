@@ -8,6 +8,13 @@ public class NotificationServiceImplTest {
     public void SaveNotificationsForUsersTest() {
         //NotificationService notificationService = new NotificationServiceImpl(notificationRepository);
         //TODO: Testfälle schreiben
-        throw new UnsupportedOperationException();
+    }
+
+    @Test
+    public void getNotificationsForUser() {
+    }
+
+    @Test
+    public void notifyUsersWithNotificationType() {
     }
 }

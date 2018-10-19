@@ -13,7 +13,6 @@ public class UserServiceImplTest {
         // WHEN
 
         // THEN
-        throw new UnsupportedOperationException();
     }
 
     @Test

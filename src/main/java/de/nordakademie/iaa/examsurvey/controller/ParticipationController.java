@@ -7,7 +7,6 @@ public class ParticipationController {
     private final ParticipationService participationService;
 
     @Autowired
-
     public ParticipationController(ParticipationService participationService) {
         this.participationService = participationService;
     }

@@ -6,7 +6,7 @@ import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
 import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
-import de.nordakademie.iaa.examsurvey.exception.SurveyNotExistsException;
+import de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException;
 import de.nordakademie.iaa.examsurvey.persistence.OptionRepository;
 import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
 import de.nordakademie.iaa.examsurvey.persistence.specification.OptionSpecifications;
@@ -34,11 +34,6 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
     @Override
-    public List<Survey> loadAllSurveysWithUser(User requestingUser) {
-        return surveyRepository.findAll(isVisibleForUser(requestingUser));
-    }
-
-    @Override
     public Survey createSurvey(Survey survey, User initiator) {
         requireNonNull(initiator);
         requireNonExistent(survey);
@@ -53,10 +48,10 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
     @Override
-    public List<Option> saveOptionForSurvey(List<Option> options, String surveyTitle, User requestingUser) {
+    public List<Option> saveOptionsForSurvey(List<Option> options, String surveyTitle, User requestingUser) {
         requireNonNull(requestingUser);
         Survey survey = surveyRepository.findOne(hasTitle(surveyTitle))
-                .orElseThrow(SurveyNotExistsException::new);
+                .orElseThrow(SurveyNotFoundException::new);
         requireInitiator(requestingUser, survey);
         return saveOptionForSurveyClass(options, survey);
     }
@@ -64,9 +59,15 @@ public class SurveyServiceImpl implements SurveyService {
     @Override
     public List<Option> loadAllOptionsForSurveyWithUser(String surveyTitle, User authenticatedUser) {
         Survey survey = surveyRepository.findOne(hasTitleAndVisibleForUser(surveyTitle, authenticatedUser))
-                .orElseThrow(SurveyNotExistsException::new);
+                .orElseThrow(SurveyNotFoundException::new);
 
         return Lists.newArrayList(optionRepository.findAll(OptionSpecifications.hasSurvey(survey)));
+    }
+
+    @Override
+    public List<Survey> loadAllSurveysWithUser(User requestingUser) {
+        requireNonNull(requestingUser);
+        return surveyRepository.findAll(isVisibleForUser(requestingUser));
     }
 
     private List<Option> saveOptionForSurveyClass(List<Option> options, Survey survey) {

@@ -34,9 +34,9 @@ public interface SurveyService {
      * @param user       initiator of the survey
      * @return persistent Options
      */
-    List<Option> saveOptionForSurvey(@NotNull final List<Option> options,
-                                     @NotNull final String identifier,
-                                     @NotNull final User user);
+    List<Option> saveOptionsForSurvey(@NotNull final List<Option> options,
+                                      @NotNull final String identifier,
+                                      @NotNull final User user);
 
     /**
      * retrieves all {@link Option}'s which are visible for the authenticated User.

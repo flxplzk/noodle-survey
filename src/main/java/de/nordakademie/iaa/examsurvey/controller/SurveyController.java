@@ -5,7 +5,7 @@ import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
 import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
-import de.nordakademie.iaa.examsurvey.exception.SurveyNotExistsException;
+import de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException;
 import de.nordakademie.iaa.examsurvey.service.AuthenticationService;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
+ * @author Felix Plazek
  * @author Robert Peters
  */
 @RestController
@@ -52,14 +53,14 @@ public class SurveyController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Option> saveOptions(@PathVariable String identifier, @RequestBody List<Option> options) {
         User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
-        return surveyService.saveOptionForSurvey(options, identifier, authenticatedUser);
+        return surveyService.saveOptionsForSurvey(options, identifier, authenticatedUser);
     }
 
     @RequestMapping(value = "/surveys/{identifier}/options",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ExceptionHandler({SurveyNotExistsException.class})
-    public List<Option> saveOptions(@PathVariable String identifier) {
+    @ExceptionHandler({SurveyNotFoundException.class})
+    public List<Option> loadOptions(@PathVariable String identifier) {
         User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
         return surveyService.loadAllOptionsForSurveyWithUser(identifier, authenticatedUser);
     }

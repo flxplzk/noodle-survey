@@ -20,6 +20,15 @@ public class Notification {
     private Survey survey;
     private NotificationType notificationType;
 
+    public Notification() {
+        // JPA constructor
+    }
+
+    public Notification(User user, Survey targetSurvey, NotificationType type) {
+        this.user = user;
+        this.survey = targetSurvey;
+        this.notificationType = type;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,7 +65,7 @@ public class Notification {
     }
 
     @Enumerated(value = EnumType.STRING)
-    @Column(name = "NOTIFICATION_TYPE")
+    @Column(name = "NOTIFICATION_TYPE", nullable = false)
     public NotificationType getNotificationType() {
         return notificationType;
     }
