@@ -1,5 +1,6 @@
 package de.nordakademie.iaa.examsurvey.service;
 
+import de.nordakademie.iaa.examsurvey.domain.Option;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
@@ -7,7 +8,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+/**
+ * @author Robert Peters, Bengt-Lasse Arndt, Felix Plazek
+ */
 @Transactional(propagation = Propagation.REQUIRED)
 public interface SurveyService {
 
@@ -32,4 +35,15 @@ public interface SurveyService {
      * @throws SurveyAlreadyExistsException if title is not unique
      */
     Survey createSurvey(final Survey survey, final User initiator);
+
+    /**
+     * Creates Option for survey
+     *
+     * @param options    to create
+     * @param title      of the survey
+     * @param user       initiator of the survey
+     * @return persistent Options
+     * TODO: ggf. exception
+     */
+    List<Option> saveOptionForSurvey(List<Option> options, String title, User user);
 }

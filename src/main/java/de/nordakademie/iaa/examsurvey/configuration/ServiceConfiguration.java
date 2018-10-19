@@ -1,5 +1,6 @@
 package de.nordakademie.iaa.examsurvey.configuration;
 
+import de.nordakademie.iaa.examsurvey.persistence.OptionRepository;
 import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
 import de.nordakademie.iaa.examsurvey.persistence.UserRepository;
 import de.nordakademie.iaa.examsurvey.service.AuthenticationService;
@@ -31,8 +32,8 @@ public class ServiceConfiguration {
 
     @Bean
     @Scope(value = "singleton")
-    public SurveyService surveyService(SurveyRepository surveyRepository) {
-        return new SurveyServiceImpl(surveyRepository);
+    public SurveyService surveyService(SurveyRepository surveyRepository, OptionRepository optionRepository) {
+        return new SurveyServiceImpl(surveyRepository, optionRepository);
     }
 
     @Bean
