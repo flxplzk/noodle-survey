@@ -1,3 +1,25 @@
 <section ng-controller="detailController as detailCrtl">
     {{greeting}}
+
+    <md-content layout-padding>
+        <md-grid-list
+                md-cols-gt-md="{{options.length + 1}}" md-row-height="100"
+                md-gutter="8">
+            <md-grid-tile></md-grid-tile>
+            <md-grid-tile ng-repeat="option in options">
+                {{option.dateTime | date: "shortDate"}}
+                <br>
+                {{option.dateTime | date: "shortTime"}}
+            </md-grid-tile>
+        </md-grid-list>
+        <md-grid-list ng-repeat="participation in participations"
+                      md-cols-gt-md="{{options.length + 1}}"
+                      md-row-height="50"
+                      md-gutter="8">
+            <md-grid-tile>{{participation.user.username}}</md-grid-tile>
+            <md-grid-tile ng-repeat="option in options" ng-click="detailCrtl.doSomething()"
+                          ng-style="{'background': detailCrtl.participates(participation, option) ? '#bdff80': '#edf0ea'}">
+            </md-grid-tile>
+        </md-grid-list>
+    </md-content>
 </section>
