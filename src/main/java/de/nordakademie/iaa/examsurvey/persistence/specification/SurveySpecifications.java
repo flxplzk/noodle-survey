@@ -35,9 +35,17 @@ public class SurveySpecifications {
                 ? criteriaBuilder.isNull(root.get(Survey_.title))
                 : criteriaBuilder.equal(root.get(Survey_.title), title);
     }
-    public static Specification<Survey> hasIdentifier(final String identifier) {
-        return (Specification<Survey>) (root, query, criteriaBuilder) -> identifier == null
-                ? criteriaBuilder.isNull(root.get(Survey_.identifier))
-                : criteriaBuilder.equal(root.get(Survey_.identifier), identifier);
+
+    /**
+     * specifies the survey with given title
+     *
+     * @param title for searched survey
+     * @return specification for a survey title
+     */
+    public static Specification<Survey> hasTitleAndVisibleForUser(final String title, final User requestingUser) {
+        return (Specification<Survey>) (root, query, criteriaBuilder) -> criteriaBuilder.and(
+                hasTitle(title).toPredicate(root, query, criteriaBuilder),
+                isVisibleForUser(requestingUser).toPredicate(root, query, criteriaBuilder)
+        );
     }
 }

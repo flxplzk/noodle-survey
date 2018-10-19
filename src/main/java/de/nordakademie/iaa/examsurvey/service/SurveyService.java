@@ -47,5 +47,5 @@ public interface SurveyService {
      */
     List<Option> saveOptionForSurvey(List<Option> options, String identifier, User user);
 
-    List<Option> getOptionsForSurvey(String title);
+    List<Option> getOptionsForSurvey(String title, User authenticatedUser);
 }

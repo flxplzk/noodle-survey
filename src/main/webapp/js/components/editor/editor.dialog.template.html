@@ -18,7 +18,7 @@
 
                     <md-input-container class="md-block">
                         <label>{{ "EDITOR_FORM_TITLE" | translate}}</label>
-                        <input md-maxlength="30" required md-no-asterisk name="title" ng-model="survey.title">
+                        <input md-maxlength="50" required md-no-asterisk name="title" ng-model="survey.title">
                         <div ng-messages="surveyCreationForm.title.$error">
                             <div ng-message="required">{{ "EDITOR_FORM_ERROR_REQUIRED" | translate}}</div>
                             <div ng-message="md-maxlength">{{"EDITOR_FORM_ERROR_MAX_LENGTH" | translate}}</div>
@@ -26,12 +26,11 @@
                     </md-input-container>
 
                     <md-input-container class="md-block">
-                        <label>{{ "EDITOR_FORM_DESCRIPTION" | translate}}</label>
-                        <input minlength="20" required md-no-asterisk name="description"
+                        <label for="description">{{ "EDITOR_FORM_DESCRIPTION" | translate}}</label>
+                        <input id="description" required md-no-asterisk name="description"
                                ng-model="survey.description">
                         <div ng-messages="surveyCreationForm.description.$error">
                             <div ng-message="required">{{ "EDITOR_FORM_ERROR_REQUIRED" | translate}}</div>
-                            <div ng-message="minlength">{{ "EDITOR_FORM_ERROR_MIN_LENGTH" | translate}}</div>
                         </div>
                     </md-input-container>
                     <div>
@@ -40,11 +39,11 @@
                     <div layout="row" ng-repeat="option in options">
                         <div layout="row">
                             <div layout="column" flex="50">
-                                <md-datepicker ng-model="option.date"
+                                <md-datepicker ng-model="option.dateTime"
                                                md-placeholder="{{'EDITOR_FORM_OPTION_FROM' | translate}}"></md-datepicker>
                             </div>
                             <div layout="column" flex="50">
-                                <md-time-picker layout="column" flex="50" ng-model="option.time" mandatory="required"
+                                <md-time-picker layout="column" flex="50" ng-model="option.dateTime" mandatory="required"
                                                 no-meridiem
                                                 no-auto-switch></md-time-picker>
                             </div>

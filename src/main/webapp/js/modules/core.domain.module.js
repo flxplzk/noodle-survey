@@ -43,15 +43,9 @@
         };
 
         function createSurveyWithStatusAndOptions(survey, status, options) {
-            survey.options = normalizedOptions(options);
+            survey.options = options;
             survey.surveyStatus = status;
             return $http.post("./surveys", survey);
         }
-
-        function normalizedOptions(options) {
-            return options; // TODO
-        }
-
-
     }
 }());

@@ -13,6 +13,4 @@ public class Survey_ {
     public static volatile SingularAttribute<Survey, Option> event;
     public static volatile SingularAttribute<Survey, LocalDateTime> creationDate;
     public static volatile SingularAttribute<Survey, SurveyStatus> surveyStatus;
-    public static volatile SingularAttribute<Survey, SurveyType> surveyType;
-    public static volatile SingularAttribute<Survey, String> identifier;
 }

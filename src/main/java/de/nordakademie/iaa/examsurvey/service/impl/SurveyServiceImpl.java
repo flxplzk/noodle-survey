@@ -10,12 +10,12 @@ import de.nordakademie.iaa.examsurvey.exception.SurveyNotExistsException;
 import de.nordakademie.iaa.examsurvey.persistence.OptionRepository;
 import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
 import de.nordakademie.iaa.examsurvey.persistence.specification.OptionSpecifications;
-import de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
-import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
+import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.hasTitle;
+import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.hasTitleAndVisibleForUser;
 import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.isVisibleForUser;
 
 /**
@@ -40,49 +40,59 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public Survey createSurvey(Survey survey, User initiator) {
-        if (initiator == null) {
-            throw new PermissionDeniedException("initiator must be non null");
-        }
+        requireNonNull(initiator);
+        requireNonExistent(survey);
+
         survey.setInitiator(initiator);
 
-        // if survey with title already exists; throw exeption
-        surveyRepository.findOne(SurveySpecifications.hasTitle(survey.getTitle()))
-                .orElseThrow(SurveyAlreadyExistsException::new);
-        //TODO: Autogenerate Unique Value in Database
-        survey.setIdentifier("123456");
         Survey createdSurvey = surveyRepository.save(survey);
-        if (survey.getOptionList().size() > 0) {
-            saveOptionForSurveyClass(survey.getOptionList(), createdSurvey, initiator);
+        if (survey.getOptions().size() > 0) {
+            saveOptionForSurveyClass(survey.getOptions(), createdSurvey);
         }
         return createdSurvey;
     }
 
     @Override
-    public List<Option> saveOptionForSurvey(List<Option> options, String identifier, User initiator) {
-        Survey survey = surveyRepository.findOne(SurveySpecifications.hasIdentifier(identifier))
+    public List<Option> saveOptionForSurvey(List<Option> options, String surveyTitle, User requestingUser) {
+        requireNonNull(requestingUser);
+        Survey survey = surveyRepository.findOne(hasTitle(surveyTitle))
                 .orElseThrow(SurveyNotExistsException::new);
-        return saveOptionForSurveyClass(options, survey, initiator);
+        requireInitiator(requestingUser, survey);
+        return saveOptionForSurveyClass(options, survey);
     }
 
-    private List<Option> saveOptionForSurveyClass(List<Option> options, Survey survey, User initiator) {
-        if (initiator == null) {
-            throw new PermissionDeniedException("initiator must be non null");
-        } else if (!survey.getInitiator().equals(initiator)) {
-            throw new PermissionDeniedException("User must be initiator of the survey");
-        }
+    @Override
+    public List<Option> getOptionsForSurvey(String surveyTitle, User authenticatedUser) {
+        Survey survey = surveyRepository.findOne(hasTitleAndVisibleForUser(surveyTitle, authenticatedUser))
+                .orElseThrow(SurveyNotExistsException::new);
+
+        return Lists.newArrayList(optionRepository.findAll(OptionSpecifications.hasSurvey(survey)));
+    }
+
+    private List<Option> saveOptionForSurveyClass(List<Option> options, Survey survey) {
         for(Option option : options) {
             option.setSurvey(survey);
         }
         return Lists.newArrayList(optionRepository.saveAll(options));
     }
 
-    @Override
-    public List<Option> getOptionsForSurvey(String identifier) {
-        Survey survey = surveyRepository.findOne(SurveySpecifications.hasIdentifier(identifier))
-                .orElseThrow(SurveyNotExistsException::new);
-
-        return Lists.newArrayList(optionRepository.findAll(OptionSpecifications.hasSurvey(survey)));
+    private void requireNonNull(User initiator) {
+        if (initiator == null) {
+            throw new PermissionDeniedException("initiator must be non null");
+        }
     }
 
+    private void requireNonExistent(Survey survey) {
+        // if survey with title already exists; throw exception
+        if (surveyRepository.findOne(hasTitle(survey.getTitle())).isPresent()){
+            throw new SurveyAlreadyExistsException();
+        }
+    }
 
+    private void requireInitiator(User requestingUser, Survey survey) {
+        if (!survey.getInitiator().equals(requestingUser)) {
+            throw new PermissionDeniedException("User must be initiator of the survey");
+        }
+    }
 }
+

@@ -48,19 +48,18 @@
         };
         $scope.options = [
             {
-                date: "",
-                time: ""
+                dateTime: ""
             }
         ];
 
         this.addEmptyOption = function () {
-            $scope.options.push({date: "", time: ""})
+            $scope.options.push({dateTime: ""})
         };
 
         this.removeOption = function (optionToRemove) {
             for (opt in $scope.options) {
                 if (opt === optionToRemove) {
-                    // TODO
+
                 }
             }
         };
@@ -76,8 +75,8 @@
         };
 
         function validOptions() {
-            for (option in $scope.options){
-                if (option.time === "" || option.date === ""){
+            for (var i = 0;i<=$scope.options.length;i++){
+                if ($scope.options[1].dateTime === ""){
                     return false;
                 }
             }
@@ -94,7 +93,7 @@
         };
 
         function successHandler(success) {
-            $state.go("detail", {surveyId: success.data.identifier});
+            $state.go("detail", {surveyId: success.data.title});
             vm.cancel()
         }
 

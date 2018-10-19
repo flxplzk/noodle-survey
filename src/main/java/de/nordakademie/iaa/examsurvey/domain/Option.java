@@ -1,6 +1,7 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,8 +21,7 @@ import java.time.LocalDateTime;
 @Table(name = "Option")
 public class Option {
     private Long id;
-    private LocalDateTime fromDatetime;
-    private LocalDateTime toDateTime;
+    private LocalDateTime dateTime;
     private Survey survey;
 
     @Id
@@ -34,23 +34,17 @@ public class Option {
     }
 
     @Column(nullable = false)
-    public LocalDateTime getFromDatetime() {
-        return fromDatetime;
+    @NaturalId
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
-    public void setFromDatetime(LocalDateTime fromDatetime) {
-        this.fromDatetime = fromDatetime;
-    }
-
-    @Column(nullable = true)
-    public LocalDateTime getToDatetime() {
-        return toDateTime;
-    }
-    public void setToDatetime(LocalDateTime toDateTime) {
-        this.toDateTime = toDateTime;
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     @ManyToOne
     @JsonIgnore
+    @NaturalId
     public Survey getSurvey() {
         return survey;
     }

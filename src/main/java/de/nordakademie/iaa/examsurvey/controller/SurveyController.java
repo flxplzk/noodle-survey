@@ -5,6 +5,7 @@ import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
 import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
+import de.nordakademie.iaa.examsurvey.exception.SurveyNotExistsException;
 import de.nordakademie.iaa.examsurvey.service.AuthenticationService;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +58,9 @@ public class SurveyController {
     @RequestMapping(value = "/surveys/{identifier}/options",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ExceptionHandler({SurveyNotExistsException.class})
     public List<Option> saveOptions(@PathVariable String identifier) {
-        return surveyService.getOptionsForSurvey(identifier);
+        User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
+        return surveyService.getOptionsForSurvey(identifier, authenticatedUser);
     }
-
 }

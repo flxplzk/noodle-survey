@@ -1,8 +1,6 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
@@ -28,9 +26,7 @@ public class Survey {
     private Option event;
     private LocalDateTime creationDate;
     private SurveyStatus surveyStatus;
-    private SurveyType surveyType;
-    private List<Option> optionList;
-    private String identifier;
+    private List<Option> options;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -92,32 +88,13 @@ public class Survey {
         this.surveyStatus = surveyStatus;
     }
 
-    @Column(nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    public SurveyType getSurveyType() {
-        return surveyType;
-    }
-
-    public void setSurveyType(SurveyType surveyType) {
-        this.surveyType = surveyType;
-    }
-
     @JsonProperty(access = WRITE_ONLY)
     @Transient
-    public List<Option> getOptionList() {
-        return optionList;
+    public List<Option> getOptions() {
+        return options;
     }
 
-    public void setOptionList(List<Option> optionList) {
-        this.optionList = optionList;
-    }
-
-    @Length(min = 6, max = 6)
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+    public void setOptions(List<Option> options) {
+        this.options = options;
     }
 }
