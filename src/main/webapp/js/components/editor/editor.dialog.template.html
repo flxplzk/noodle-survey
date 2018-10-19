@@ -49,7 +49,7 @@
                                                 no-auto-switch></md-time-picker>
                             </div>
                         </div>
-                        <md-button layout="column" ng-click="editorCrtl.romoveOption(option)">remove</md-button>
+                        <md-button layout="column" ng-click="editorCrtl.removeOption(option)">remove</md-button>
                     </div>
                     <div layout="row">
                         <span flex></span>
@@ -63,10 +63,13 @@
 
         <md-dialog-actions layout="row">
             <span flex></span>
-            <md-button ng-click="editorCrtl.cancel()">
+            <md-button  ng-click="editorCrtl.cancel()">
                 {{ 'EDITOR_CANCEL' | translate}}
             </md-button>
-            <md-button ng-click="editorCrtl.answer('useful')">
+            <md-button ng-disabled="!editorCrtl.valid()" ng-click="editorCrtl.saveAsDraft()">
+                {{ 'EDITOR_SAVE_AS_DRAFT' | translate}}
+            </md-button>
+            <md-button ng-disabled="!editorCrtl.valid()" ng-click="editorCrtl.saveAndPublish()">
                 {{ 'EDITOR_SAVE' | translate}}
             </md-button>
         </md-dialog-actions>

@@ -31,7 +31,7 @@
             DASHBOARD_TITLE: "Alle Umfragen im Überblick",
             EDITOR_TITLE: "Neue Umfrage erstellen",
 
-            EDITOR_SAVE: "Speichern",
+            EDITOR_SAVE: "Veröffentlichen",
             EDITOR_CANCEL: "Abbrechen",
             EDITOR_FORM_TITLE: "Titel",
             EDITOR_FORM_ERROR_REQUIRED: "Dieses Feld muss gefüllt sein",
@@ -44,7 +44,10 @@
             EDITOR_FORM_DATE_RANGE: "Tagesspanne - Umfrage um eine Datumsbereich zu bestimmen",
             EDITOR_FORM_SURVEY_TYPE: "Umfragentyp",
             EDITOR_FORM_OPTION_HEADING: "Bitte füge ein paar Optionen hinzu",
-            EDITOR_FORM_OPTION_FROM: "Datum auswählen"
+            EDITOR_FORM_OPTION_FROM: "Datum auswählen",
+            EDITOR_SAVE_AS_DRAFT: "Entwurf speichern",
+            EDITOR_CONFLICT: "Bitte wähle einen anderen Titel für deine Umfrage!",
+            EDITOR_NETWORK: "Bitte versuche es später erneut!"
         });
 
         // english
@@ -69,11 +72,11 @@
             AUTH_REGISTER_PASSWORD_NON_MATCH: "The passwords must match.",
             AUTH_REGISTER_USER_CREATED: "User created successfully.",
 
-            DASHBOARD_OPEN_DETAILS: "Öffnen",
+            DASHBOARD_OPEN_DETAILS: "Open",
             DASHBOARD_TITLE: "All surveys",
             EDITOR_TITLE: "Create new Survey",
 
-            EDITOR_SAVE: "Save",
+            EDITOR_SAVE: "Save and publish",
             EDITOR_CANCEL: "Cancel",
             EDITOR_FORM_TITLE: "Title",
             EDITOR_FORM_ERROR_REQUIRED: "This field is required",
@@ -86,7 +89,10 @@
             EDITOR_FORM_DATE_RANGE: "Daterange",
             EDITOR_FORM_SURVEY_TYPE: "Survey type",
             EDITOR_FORM_OPTION_FROM: "Select Date",
-            EDITOR_FORM_OPTION_HEADING: "Please add options"
+            EDITOR_FORM_OPTION_HEADING: "Please add options",
+            EDITOR_SAVE_AS_DRAFT: "Save draft",
+            EDITOR_CONFLICT: "Please choose a new title for your survey, yours is already in use",
+            EDITOR_NETWORK: "Please try again later!"
         });
 
         $translateProvider.preferredLanguage("en_US");

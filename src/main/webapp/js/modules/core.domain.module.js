@@ -32,6 +32,26 @@
                 $surveys.onNext([]);
             });
             return $surveys;
+        };
+
+        this.createSurveyAsDraft = function(survey, options) {
+            return createSurveyWithStatusAndOptions(survey, "PRIVATE", options);
+        };
+
+        this.createSurvey = function (survey, options) {
+            return createSurveyWithStatusAndOptions(survey, "OPEN", options);
+        };
+
+        function createSurveyWithStatusAndOptions(survey, status, options) {
+            survey.options = normalizedOptions(options);
+            survey.surveyStatus = status;
+            return $http.post("./surveys", survey);
         }
+
+        function normalizedOptions(options) {
+            return options; // TODO
+        }
+
+
     }
 }());
