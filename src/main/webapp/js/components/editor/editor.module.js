@@ -2,13 +2,14 @@
     var editor = angular.module("de.nordakademie.iaa.survey.editor", [
         "de.nordakademie.iaa.survey.core",
         "de.nordakademie.iaa.i18n",
-        "ngMaterial"
+        "ngMaterial",
+        "md.time.picker"
     ]);
 
     editor.directive("surveyEditor", EditorDirective);
     editor.directive("surveyEditorActionButton", FloatingActionButtonDirective);
     editor.controller("floatingEditorController", ["$mdDialog", FloatingActionButtonController]);
-    editor.controller("surveyEditorController", ["$scope", "$mdDialog", EditorController]);
+    editor.controller("surveyEditorController", ["$scope", "$mdDialog", "surveyService", EditorController]);
 
     function FloatingActionButtonDirective() {
         return {
@@ -32,13 +33,44 @@
                     templateUrl: "/js/components/editor/editor.dialog.template.html",
                     parent: angular.element(document.body),
                     targetEvent: ev,
-                    clickOutsideToClose: true,
-                    fullscreen: false
+                    clickOutsideToClose: false,
+                    fullscreen: true
                 })
         }
     }
 
-    function EditorController($scope, $mdDialog) {
+    function EditorController($scope, $mdDialog, surveyService) {
+        $scope.survey = {
+            title: "",
+            description: ""
+        };
+        $scope.options =[
+            {
+                date: "",
+                time: ""
+            }
+        ];
+
+        this.addEmptyOption = function () {
+            $scope.options.push({date: "", time:""})
+        };
+
+        this.removeOption = function (optionToRemove) {
+            for (opt in $scope.options) {
+                if (opt === optionToRemove) {
+                    // TODO
+                }
+            }
+        };
+
+        this.saveAsDraft = function () {
+            surveyService.createSurveyAsDraft($scope.survey);
+        };
+
+        this.saveAndPublish = function () {
+            surveyService.createSurveyAsDraft($scope.survey);
+        };
+
         this.cancel = function () {
             $mdDialog.cancel();
         }

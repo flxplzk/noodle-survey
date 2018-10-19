@@ -32,7 +32,19 @@
             EDITOR_TITLE: "Neue Umfrage erstellen",
 
             EDITOR_SAVE: "Speichern",
-            EDITOR_CANCEL: "Abbrechen"
+            EDITOR_CANCEL: "Abbrechen",
+            EDITOR_FORM_TITLE: "Titel",
+            EDITOR_FORM_ERROR_REQUIRED: "Dieses Feld muss gefüllt sein",
+            EDITOR_FORM_ERROR_MAX_LENGTH: "Der Titel einer Umfrage darf nicht länger als 30 Zeichen sein!",
+            EDITOR_FORM_DESCRIPTION: "Description",
+            EDITOR_FORM_ERROR_MIN_LENGTH: "Der Beschreibung einer Umfrage darf nicht kürzer als 20 Zeichen sein!",
+            EDITOR_FORM_TYPE_DATE: "Datum - Umfrage um einen Tag zu bestimmen",
+            EDITOR_FORM_TYPE_TIME: "Uhrzeit - Umfrage um einen Tag mit Uhrzeit zu bestimmen",
+            EDITOR_FORM_TYPE_TIME_RANGE: "Zeitspanne - Umfrage um einen Tag mit Zeitspanne bestimmen",
+            EDITOR_FORM_DATE_RANGE: "Tagesspanne - Umfrage um eine Datumsbereich zu bestimmen",
+            EDITOR_FORM_SURVEY_TYPE: "Umfragentyp",
+            EDITOR_FORM_OPTION_HEADING: "Bitte füge ein paar Optionen hinzu",
+            EDITOR_FORM_OPTION_FROM: "Datum auswählen"
         });
 
         // english
@@ -62,7 +74,19 @@
             EDITOR_TITLE: "Create new Survey",
 
             EDITOR_SAVE: "Save",
-            EDITOR_CANCEL: "Cancel"
+            EDITOR_CANCEL: "Cancel",
+            EDITOR_FORM_TITLE: "Title",
+            EDITOR_FORM_ERROR_REQUIRED: "This field is required",
+            EDITOR_FORM_ERROR_MAX_LENGTH: "The title must be less than 30 characters long.",
+            EDITOR_FORM_DESCRIPTION: "Description",
+            EDITOR_FORM_ERROR_MIN_LENGTH: "The description of a survey must not contain less than 20 characters.",
+            EDITOR_FORM_TYPE_DATE: "Date",
+            EDITOR_FORM_TYPE_TIME: "Time",
+            EDITOR_FORM_TYPE_TIME_RANGE: "Timerange",
+            EDITOR_FORM_DATE_RANGE: "Daterange",
+            EDITOR_FORM_SURVEY_TYPE: "Survey type",
+            EDITOR_FORM_OPTION_FROM: "Select Date",
+            EDITOR_FORM_OPTION_HEADING: "Please add options"
         });
 
         $translateProvider.preferredLanguage("en_US");

@@ -12,7 +12,52 @@
 
         <md-dialog-content>
             <div class="md-dialog-content">
-               Here comes the creation form
+
+
+                <form name="surveyCreationForm">
+
+                    <md-input-container class="md-block">
+                        <label>{{ "EDITOR_FORM_TITLE" | translate}}</label>
+                        <input md-maxlength="30" required md-no-asterisk name="title" ng-model="survey.title">
+                        <div ng-messages="surveyCreationForm.title.$error">
+                            <div ng-message="required">{{ "EDITOR_FORM_ERROR_REQUIRED" | translate}}</div>
+                            <div ng-message="md-maxlength">{{"EDITOR_FORM_ERROR_MAX_LENGTH" | translate}}</div>
+                        </div>
+                    </md-input-container>
+
+                    <md-input-container class="md-block">
+                        <label>{{ "EDITOR_FORM_DESCRIPTION" | translate}}</label>
+                        <input minlength="20" required md-no-asterisk name="description"
+                               ng-model="survey.description">
+                        <div ng-messages="surveyCreationForm.description.$error">
+                            <div ng-message="required">{{ "EDITOR_FORM_ERROR_REQUIRED" | translate}}</div>
+                            <div ng-message="minlength">{{ "EDITOR_FORM_ERROR_MIN_LENGTH" | translate}}</div>
+                        </div>
+                    </md-input-container>
+                    <div>
+                        <h4>{{ "EDITOR_FORM_OPTION_HEADING" | translate }}</h4>
+                    </div>
+                    <div layout="row" ng-repeat="option in options">
+                        <div layout="row">
+                            <div layout="column" flex="50">
+                                <md-datepicker ng-model="option.date"
+                                               md-placeholder="{{'EDITOR_FORM_OPTION_FROM' | translate}}"></md-datepicker>
+                            </div>
+                            <div layout="column" flex="50">
+                                <md-time-picker layout="column" flex="50" ng-model="option.time" mandatory="required"
+                                                no-meridiem
+                                                no-auto-switch></md-time-picker>
+                            </div>
+                        </div>
+                        <md-button layout="column" ng-click="editorCrtl.romoveOption(option)">remove</md-button>
+                    </div>
+                    <div layout="row">
+                        <span flex></span>
+                        <md-button ng-click="editorCrtl.addEmptyOption()">Add</md-button>
+                    </div>
+                </form>
+
+
             </div>
         </md-dialog-content>
 
