@@ -18,10 +18,12 @@
 
                     <md-input-container class="md-block">
                         <label>{{ "EDITOR_FORM_TITLE" | translate}}</label>
-                        <input md-maxlength="50" required md-no-asterisk name="title" ng-model="survey.title">
+                        <input md-maxlength="50" required md-no-asterisk name="title" ng-model="survey.title"
+                               ng-pattern="/[`~!@#$%^&*()_|+\-=?;:,.<>\{\}\[\]\\\/]/gi">
                         <div ng-messages="surveyCreationForm.title.$error">
                             <div ng-message="required">{{ "EDITOR_FORM_ERROR_REQUIRED" | translate}}</div>
                             <div ng-message="md-maxlength">{{"EDITOR_FORM_ERROR_MAX_LENGTH" | translate}}</div>
+                            <div ng-message="pattern">okay works</div>
                         </div>
                     </md-input-container>
 
@@ -39,20 +41,23 @@
                     <div layout="row" ng-repeat="option in options">
                         <div layout="row">
                             <div layout="column" flex="50">
-                                <md-datepicker ng-model="option.dateTime"
+                                <md-datepicker style="padding-top: 13px" ng-model="option.dateTime"
                                                md-placeholder="{{'EDITOR_FORM_OPTION_FROM' | translate}}"></md-datepicker>
                             </div>
                             <div layout="column" flex="50">
-                                <md-time-picker layout="column" flex="50" ng-model="option.dateTime" mandatory="required"
+                                <md-time-picker layout="column" flex="50" ng-model="option.dateTime"
+                                                mandatory="required"
                                                 no-meridiem
                                                 no-auto-switch></md-time-picker>
                             </div>
                         </div>
-                        <md-button layout="column" ng-click="editorCrtl.removeOption(option)">remove</md-button>
+                        <md-button layout="column" ng-click="editorCrtl.removeOption(option)">
+                           <div style="padding-top: 9px">remove</div>
+                        </md-button>
                     </div>
                     <div layout="row">
                         <span flex></span>
-                        <md-button ng-click="editorCrtl.addEmptyOption()">Add</md-button>
+                        <md-button class="md-raised md-accent" ng-click="editorCrtl.addEmptyOption()">Add</md-button>
                     </div>
                 </form>
 
@@ -62,7 +67,7 @@
 
         <md-dialog-actions layout="row">
             <span flex></span>
-            <md-button  ng-click="editorCrtl.cancel()">
+            <md-button ng-click="editorCrtl.cancel()">
                 {{ 'EDITOR_CANCEL' | translate}}
             </md-button>
             <md-button ng-disabled="!editorCrtl.valid()" ng-click="editorCrtl.saveAsDraft()">

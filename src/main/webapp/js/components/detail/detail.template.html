@@ -1,25 +1,36 @@
 <section ng-controller="detailController as detailCrtl">
-    {{greeting}}
-
     <md-content layout-padding>
-        <md-grid-list
-                md-cols-gt-md="{{options.length + 1}}" md-row-height="100"
-                md-gutter="8">
-            <md-grid-tile></md-grid-tile>
-            <md-grid-tile ng-repeat="option in options">
-                {{option.dateTime | date: "shortDate"}}
-                <br>
-                {{option.dateTime | date: "shortTime"}}
-            </md-grid-tile>
-        </md-grid-list>
-        <md-grid-list ng-repeat="participation in participations"
-                      md-cols-gt-md="{{options.length + 1}}"
-                      md-row-height="50"
-                      md-gutter="8">
-            <md-grid-tile>{{participation.user.username}}</md-grid-tile>
-            <md-grid-tile ng-repeat="option in options" ng-click="detailCrtl.doSomething()"
-                          ng-style="{'background': detailCrtl.participates(participation, option) ? '#bdff80': '#edf0ea'}">
-            </md-grid-tile>
-        </md-grid-list>
+        <div layout="row">
+            <h1>{{survey.title}}</h1>
+            <span flex></span>
+            <i class="material-icons">
+                lock_open
+            </i>
+            <md-button>Edit</md-button>
+            <md-button>Beenden</md-button>
+        </div>
+
+
+        <md-list layout="column" flex>
+            <md-list-item class="md-3-line">
+                <div style="width: 200px"></div>
+                <div ng-repeat="option in options" style="width: 100px">
+                    <div layout="row">{{option.dateTime | date: "shortDate"}}</div>
+                    <div layout="row">{{option.dateTime | date: "shortTime"}}</div>
+                </div>
+                <md-divider></md-divider>
+            </md-list-item>
+            <md-list-item
+                    class="md-2-line"
+                    ng-repeat="participation in participations"
+                    ng-click="detailCrtl.valueOf()">
+                <div style="width: 200px">{{participation.user.username}}</div>
+                <div style="width: 100px" ng-repeat="option in options" layout-align="center center"
+                     ng-style="{'background': detailCrtl.participates(participation, option) ? '#bdff80': '#edf0ea'}">
+                    <i ng-show="detailCrtl.participates(participation, option)" class="material-icons">done</i>
+                </div>
+                <md-divider ng-if="!$last"></md-divider>
+            </md-list-item>
+        </md-list>
     </md-content>
 </section>

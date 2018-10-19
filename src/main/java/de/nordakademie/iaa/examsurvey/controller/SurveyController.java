@@ -69,7 +69,7 @@ public class SurveyController {
     @RequestMapping(value = "/surveys/{identifier}/participations",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ExceptionHandler({SurveyNotFoundException.class})
+    @ExceptionHandler(value = SurveyNotFoundException.class)
     public List<Participation> loadParticipations(@PathVariable(name = "identifier") String identifier) {
         User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
         return surveyService.loadAllParticipationsForSurveyWithUser(identifier, authenticatedUser);

@@ -48,12 +48,12 @@
         };
         $scope.options = [
             {
-                dateTime: ""
+                dateTime: new Date()
             }
         ];
 
         this.addEmptyOption = function () {
-            $scope.options.push({dateTime: ""})
+            $scope.options.push({dateTime: new Date()})
         };
 
         this.removeOption = function (optionToRemove) {
