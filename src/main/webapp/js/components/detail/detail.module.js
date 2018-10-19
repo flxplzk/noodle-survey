@@ -6,106 +6,21 @@
             "ngMaterial"
         ]);
 
-        detail.controller("detailController", ["$scope", "$stateParams", DetailController]);
+        detail.controller("detailController", ["$scope", "$stateParams", "surveyService", DetailController]);
 
-        function DetailController($scope, $stateParams) {
-            $scope.options = [
-                {
-                    "id": -11,
-                    "dateTime": "2018-10-25T15:55:25.024"
-                },
-                {
-                    "id": -10,
-                    "dateTime": "2018-10-25T15:55:25.023"
-                },
-                {
-                    "id": -11,
-                    "dateTime": "2018-10-25T15:55:25.024"
-                },
-                {
-                    "id": -10,
-                    "dateTime": "2018-10-25T15:55:25.023"
-                },
-                {
-                    "id": -11,
-                    "dateTime": "2018-10-25T15:55:25.024"
-                },
-                {
-                    "id": -10,
-                    "dateTime": "2018-10-25T15:55:25.023"
-                },
-                {
-                    "id": -11,
-                    "dateTime": "2018-10-25T15:55:25.024"
-                },
-                {
-                    "id": -10,
-                    "dateTime": "2018-10-25T15:55:25.023"
-                },
-                {
-                    "id": -11,
-                    "dateTime": "2018-10-25T15:55:25.024"
-                },
-                {
-                    "id": -10,
-                    "dateTime": "2018-10-25T15:55:25.023"
-                },
-                {
-                    "id": -11,
-                    "dateTime": "2018-10-25T15:55:25.024"
-                },
-                {
-                    "id": -10,
-                    "dateTime": "2018-10-25T15:55:25.023"
-                }
-            ];
-            $scope.participations = [
-                {
-                    user: {
-                        username: "Hans"
-                    },
-                    options: [
-                        {
-                            "id": -10,
-                            "dateTime": "2018-10-25T15:55:25.021"
-                        }
-                    ]
-                },
-                {
-                    user: {
-                        username: "Torben"
-                    },
-                    options: [
-                        {
-                            "id": -10,
-                            "dateTime": "2018-10-25T15:55:25.022"
-                        }
-                    ]
-                },
-                {
-                    user: {
-                        username: "Mongo"
-                    },
-                    options: [
-                        {
-                            "id": -10,
-                            "dateTime": "2018-10-25T15:55:25.025"
-                        }
-                    ]
-                },
-                {
-                    user: {
-                        username: "Klaus"
-                    },
-                    options: [
-                        {
-                            "id": -10,
-                            "dateTime": "2018-10-25T15:55:25.024"
-                        }
-                    ]
-                }
+        function DetailController($scope, $stateParams, surveyService) {
+            $scope.options = [];
+            $scope.participations = [];
 
-            ];
+            surveyService.loadAllOptionsForSurveyWithId($stateParams.surveyId)
+                .subscribeOnNext(function (options) {
+                   $scope.options = options;
+                });
+
+            surveyService.loadAllParticipationsForSurveyWithId($stateParams.surveyId)
+                .subscribeOnNext(function (participations) {
+                $scope.participations = participations;
+            });
 
             this.participates = function (participation, option) {
                 for (var i = 0; i < participation.options.length; i++) {

@@ -1,6 +1,7 @@
 package de.nordakademie.iaa.examsurvey.controller;
 
 import de.nordakademie.iaa.examsurvey.domain.Option;
+import de.nordakademie.iaa.examsurvey.domain.Participation;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
@@ -63,5 +64,14 @@ public class SurveyController {
     public List<Option> loadOptions(@PathVariable String identifier) {
         User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
         return surveyService.loadAllOptionsForSurveyWithUser(identifier, authenticatedUser);
+    }
+
+    @RequestMapping(value = "/surveys/{identifier}/participations",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ExceptionHandler({SurveyNotFoundException.class})
+    public List<Participation> loadParticipations(@PathVariable(name = "identifier") String identifier) {
+        User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
+        return surveyService.loadAllParticipationsForSurveyWithUser(identifier, authenticatedUser);
     }
 }

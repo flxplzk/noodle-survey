@@ -24,14 +24,10 @@
     }
 
     function SurveyService($http, rx) {
-        var $surveys = new rx.BehaviorSubject([]);
+        var surveys$ = new rx.BehaviorSubject([]);
         this.loadAll = function () {
-            $http.get("./surveys").then(function (success) {
-                $surveys.onNext(success.data);
-            }, function (error) {
-                $surveys.onNext([]);
-            });
-            return $surveys;
+            dispatch($http.get("./surveys"), surveys$);
+            return surveys$;
         };
 
         this.createSurveyAsDraft = function(survey, options) {
@@ -42,10 +38,30 @@
             return createSurveyWithStatusAndOptions(survey, "OPEN", options);
         };
 
+        this.loadAllOptionsForSurveyWithId = function (surveyId) {
+            var options$ = new rx.BehaviorSubject([]);
+            dispatch($http.get("./surveys/"+surveyId+"/options"), options$);
+            return options$;
+        };
+
+        this.loadAllParticipationsForSurveyWithId = function (surveyId) {
+            var participations$ = new rx.BehaviorSubject([]);
+            dispatch($http.get("./surveys/"+surveyId+"/participations"), participations$);
+            return participations$;
+        };
+
         function createSurveyWithStatusAndOptions(survey, status, options) {
             survey.options = options;
             survey.surveyStatus = status;
             return $http.post("./surveys", survey);
+        }
+
+        function dispatch(promise, subject$) {
+            promise.then(function (success) {
+                subject$.onNext(success.data);
+            }, function (error) {
+                subject$.onNext([]);
+            });
         }
     }
 }());

@@ -1,6 +1,7 @@
 package de.nordakademie.iaa.examsurvey.service;
 
 import de.nordakademie.iaa.examsurvey.domain.Option;
+import de.nordakademie.iaa.examsurvey.domain.Participation;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
@@ -59,4 +60,6 @@ public interface SurveyService {
      * @return all surveys relevant for given {@link User}
      */
     List<Survey> loadAllSurveysWithUser(@NotNull final User requestingUser);
+
+    List<Participation> loadAllParticipationsForSurveyWithUser(String identifier, User authenticatedUser);
 }

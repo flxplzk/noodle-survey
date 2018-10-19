@@ -8,13 +8,13 @@ import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
 import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
 import de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException;
 import de.nordakademie.iaa.examsurvey.persistence.OptionRepository;
+import de.nordakademie.iaa.examsurvey.persistence.ParticipationRepository;
 import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,12 +31,14 @@ public class SurveyServiceImplTest {
     private SurveyService surveyService;
     private OptionRepository optionRepository;
     private SurveyRepository surveyRepository;
+    private ParticipationRepository participationRepository;
 
     @Before
     public void setUp() throws Exception {
         optionRepository = mock(OptionRepository.class);
         surveyRepository = mock(SurveyRepository.class);
-        surveyService = new SurveyServiceImpl(surveyRepository, optionRepository);
+        participationRepository = mock(ParticipationRepository.class);
+        surveyService = new SurveyServiceImpl(surveyRepository, optionRepository, participationRepository);
     }
 
     @Test(expected = PermissionDeniedException.class)
