@@ -9,6 +9,7 @@ import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
 import de.nordakademie.iaa.examsurvey.exception.SurveyNotExistsException;
 import de.nordakademie.iaa.examsurvey.persistence.OptionRepository;
 import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
+import de.nordakademie.iaa.examsurvey.persistence.specification.OptionSpecifications;
 import de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
 import org.springframework.data.jpa.domain.Specification;
@@ -64,6 +65,14 @@ public class SurveyServiceImpl implements SurveyService {
             option.setSurvey(survey);
         }
         return Lists.newArrayList(optionRepository.saveAll(options));
+    }
+
+    @Override
+    public List<Option> getOptionsForSurvey(String title) {
+        Survey survey = surveyRepository.findOne(SurveySpecifications.hasTitle(title))
+                .orElseThrow(SurveyNotExistsException::new);
+
+        return Lists.newArrayList(optionRepository.findAll(OptionSpecifications.hasSurvey(survey)));
     }
 
 

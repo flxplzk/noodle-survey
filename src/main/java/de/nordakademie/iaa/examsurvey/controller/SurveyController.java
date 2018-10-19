@@ -54,4 +54,11 @@ public class SurveyController {
         return surveyService.saveOptionForSurvey(options, title, authenticatedUser);
     }
 
+    @RequestMapping(value = "/survey/{title}/option",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public List<Option> saveOptions(@PathVariable String title) {
+        return surveyService.getOptionsForSurvey(title);
+    }
+
 }

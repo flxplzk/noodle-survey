@@ -46,4 +46,6 @@ public interface SurveyService {
      * TODO: ggf. exception
      */
     List<Option> saveOptionForSurvey(List<Option> options, String title, User user);
+
+    List<Option> getOptionsForSurvey(String title);
 }
