@@ -57,10 +57,11 @@
         };
 
         this.removeOption = function (optionToRemove) {
-            for (opt in $scope.options) {
-                if (opt === optionToRemove) {
-
-                }
+            $scope.options = $scope.options.filter(function (value) {
+                return value.dateTime !== optionToRemove.dateTime
+            });
+            if ($scope.options.length === 0) {
+                this.addEmptyOption();
             }
         };
 
@@ -75,8 +76,8 @@
         };
 
         function validOptions() {
-            for (var i = 0;i<=$scope.options.length;i++){
-                if ($scope.options[1].dateTime === ""){
+            for (var i = 0; i < $scope.options.length; i++) {
+                if ($scope.options[i].dateTime === "") {
                     return false;
                 }
             }
