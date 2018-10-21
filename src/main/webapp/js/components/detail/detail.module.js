@@ -38,7 +38,7 @@
 
         this.participates = function (participation, option) {
             for (var i = 0; i < participation.options.length; i++) {
-                if (option.dateTime === participation.options[i].dateTime) {
+                if (option.id === participation.options[i].id) {
                     return true;
                 }
             }
@@ -47,13 +47,13 @@
 
         this.sumParticipationsForOption = function (option) {
             var sum = 0;
-            for (var participation in $scope.participations) {
-                for (var entry in participation.options) {
-                    if (entry.dateTime === option.dateTime) {
+            $scope.participations.forEach(function (participation) {
+                participation.options.forEach(function (entry) {
+                    if (entry.id === option.id) {
                         sum++;
                     }
-                }
-            }
+                })
+            });
             return sum;
         };
 
@@ -62,13 +62,14 @@
                 $scope.ownParticipation.options.push(option);
             } else {
                 $scope.ownParticipation.options = $scope.ownParticipation.options.filter(function (value) {
-                    return value.dateTime !== option.dateTime;
+                    return value.id !== option.id;
                 })
             }
         };
 
         this.isOwnSurvey = function () {
-            return $scope.survey.initiator.username === currentUser.principal.username;
+            return $scope.survey.initiator
+                && $scope.survey.initiator.username === currentUser.principal.username;
         };
 
         this.isSurveyOpen = function () {

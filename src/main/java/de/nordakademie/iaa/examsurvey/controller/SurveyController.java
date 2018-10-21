@@ -34,7 +34,6 @@ public class SurveyController {
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ExceptionHandler({PermissionDeniedException.class, SurveyAlreadyExistsException.class})
     public Survey createSurvey(@RequestBody Survey survey) {
         User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
         return surveyService.createSurvey(survey, authenticatedUser);
@@ -51,7 +50,6 @@ public class SurveyController {
     @RequestMapping(value = "/surveys/{identifier}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ExceptionHandler({SurveyNotFoundException.class})
     public Survey loadsurvey(@PathVariable(value = "identifier") final String identifier) {
         User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
         return surveyService.loadSurveyWithUser(identifier, authenticatedUser);
@@ -69,7 +67,6 @@ public class SurveyController {
     @RequestMapping(value = "/surveys/{identifier}/options",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ExceptionHandler({SurveyNotFoundException.class})
     public List<Option> loadOptions(@PathVariable String identifier) {
         User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
         return surveyService.loadAllOptionsForSurveyWithUser(identifier, authenticatedUser);
@@ -78,7 +75,6 @@ public class SurveyController {
     @RequestMapping(value = "/surveys/{identifier}/participations",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ExceptionHandler(value = SurveyNotFoundException.class)
     public List<Participation> loadParticipations(@PathVariable(name = "identifier") String identifier) {
         User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
         return surveyService.loadAllParticipationsForSurveyWithUser(identifier, authenticatedUser);
@@ -87,9 +83,8 @@ public class SurveyController {
     @RequestMapping(value = "/surveys/{identifier}/participations",
             method = RequestMethod.PUT,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ExceptionHandler({SurveyNotFoundException.class, PermissionDeniedException.class})
     public Participation saveParticipationForSurvey(@RequestBody Participation participation,
-                                                          @PathVariable(name = "identifier") String identifier) {
+                                                    @PathVariable(name = "identifier") String identifier) {
         User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
         return surveyService.saveParticipationForSurveyWithAuthenticatedUser(participation, identifier, authenticatedUser);
     }
