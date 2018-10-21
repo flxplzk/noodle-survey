@@ -48,6 +48,15 @@ public class SurveyController {
         return surveyService.loadAllSurveysWithUser(authenticatedUser);
     }
 
+    @RequestMapping(value = "/surveys/{identifier}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ExceptionHandler({SurveyNotFoundException.class})
+    public Survey loadsurvey(@PathVariable(value = "identifier") final String identifier) {
+        User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
+        return surveyService.loadSurveyWithUser(identifier, authenticatedUser);
+    }
+
     @RequestMapping(value = "/surveys/{identifier}/options",
             method = RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
@@ -73,5 +82,15 @@ public class SurveyController {
     public List<Participation> loadParticipations(@PathVariable(name = "identifier") String identifier) {
         User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
         return surveyService.loadAllParticipationsForSurveyWithUser(identifier, authenticatedUser);
+    }
+
+    @RequestMapping(value = "/surveys/{identifier}/participations",
+            method = RequestMethod.PUT,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ExceptionHandler({SurveyNotFoundException.class, PermissionDeniedException.class})
+    public Participation saveParticipationForSurvey(@RequestBody Participation participation,
+                                                          @PathVariable(name = "identifier") String identifier) {
+        User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
+        return surveyService.saveParticipationForSurveyWithAuthenticatedUser(participation, identifier, authenticatedUser);
     }
 }

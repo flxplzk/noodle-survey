@@ -61,5 +61,25 @@ public interface SurveyService {
      */
     List<Survey> loadAllSurveysWithUser(@NotNull final User requestingUser);
 
-    List<Participation> loadAllParticipationsForSurveyWithUser(String identifier, User authenticatedUser);
+    /**
+     * TODO
+     * @param identifier
+     * @param authenticatedUser
+     * @return
+     */
+    List<Participation> loadAllParticipationsForSurveyWithUser(@NotNull String identifier,
+                                                               @NotNull User authenticatedUser);
+
+    /**
+     * TODO
+     * @param participation
+     * @param identifier
+     * @param authenticatedUser
+     * @return
+     */
+    Participation saveParticipationForSurveyWithAuthenticatedUser(@NotNull Participation participation,
+                                                                  @NotNull String identifier,
+                                                                  @NotNull User authenticatedUser);
+
+    Survey loadSurveyWithUser(String identifier, User authenticatedUser);
 }

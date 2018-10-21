@@ -38,6 +38,12 @@
             return createSurveyWithStatusAndOptions(survey, "OPEN", options);
         };
 
+        this.loadSurveyWithId = function (identifier) {
+            var survey$ = new rx.BehaviorSubject({});
+            dispatch($http.get("./surveys/"+identifier), survey$);
+            return survey$;
+        };
+
         this.loadAllOptionsForSurveyWithId = function (surveyId) {
             var options$ = new rx.BehaviorSubject([]);
             dispatch($http.get("./surveys/"+surveyId+"/options"), options$);
@@ -48,6 +54,10 @@
             var participations$ = new rx.BehaviorSubject([]);
             dispatch($http.get("./surveys/"+surveyId+"/participations"), participations$);
             return participations$;
+        };
+
+        this.saveParticipationforSurvey = function (participation, survey) {
+            return $http.put("./surveys/"+ survey.title+"/participations", participation);
         };
 
         function createSurveyWithStatusAndOptions(survey, status, options) {

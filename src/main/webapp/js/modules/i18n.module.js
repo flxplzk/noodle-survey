@@ -100,7 +100,8 @@
             DETAIL_TOOLTIP_OPEN: "OPEN",
             DETAIL_TOOLTIP_CLOSED: "CLOSED",
             DETAIL_TOOLTIP_PRIVATE: "PRIVATE",
-            DETAIL_INITIATOR: "Initiator"
+            DETAIL_INITIATOR: "Initiator",
+            DETAIL_SAVE_SUCCESS: "changes has been saved!"
 
         });
 

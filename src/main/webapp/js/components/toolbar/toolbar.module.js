@@ -30,8 +30,9 @@
                 "        <survey-editor-action-button ng-show=\"toolBarCrtl.authenticated\">" +
                 "        </survey-editor-action-button>" +
                 "        <md-button ng-show=\"toolBarCrtl.authenticated\" ng-click=\"toolBarCrtl.logout()\"\n" +
-                "                   class=\"md-raised md-accent md-hue-3\">\n" +
-                "            {{\"APP_LOGOUT\"|translate}}\n" +
+                "                   class=\"md-icon-button\">\n" +
+                "            <i class=\"material-icons\">power_settings_new</i>" +
+                "           <md-tooltip >{{\"APP_LOGOUT\"|translate}}</md-tooltip>\n" +
                 "        </md-button>\n" +
                 "    </div>\n" +
                 "</md-toolbar>"

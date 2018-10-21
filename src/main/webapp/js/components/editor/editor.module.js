@@ -10,7 +10,7 @@
     editor.directive("surveyEditor", EditorDirective);
     editor.directive("surveyEditorActionButton", FloatingActionButtonDirective);
     editor.controller("floatingEditorController", ["$mdDialog", FloatingActionButtonController]);
-    editor.controller("surveyEditorController", ["$scope", "$mdDialog", "surveyService", "$state", "errorService", EditorController]);
+    editor.controller("surveyEditorController", ["$scope", "$mdDialog", "surveyService", "$state", "notificationService", EditorController]);
 
     function FloatingActionButtonDirective() {
         return {
@@ -42,7 +42,7 @@
         }
     }
 
-    function EditorController($scope, $mdDialog, surveyService, $state, errorService) {
+    function EditorController($scope, $mdDialog, surveyService, $state, notificationService) {
         var vm = this;
         $scope.survey = {
             title: "",
@@ -102,9 +102,9 @@
 
         function errorHandler(error) {
             if (error.status === 409) {
-                errorService.showErrorNotification("EDITOR_CONFLICT")
+                notificationService.showNotification("EDITOR_CONFLICT")
             } else {
-                errorService.showErrorNotification("EDITOR_NETWORK")
+                notificationService.showNotification("EDITOR_NETWORK")
             }
         }
     }

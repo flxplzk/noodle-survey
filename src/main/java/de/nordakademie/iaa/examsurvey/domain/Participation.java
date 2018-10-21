@@ -1,5 +1,7 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
+import org.hibernate.annotations.NaturalId;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,6 +36,7 @@ public class Participation {
     }
 
     @ManyToOne
+    @NaturalId
     public User getUser() {
         return user;
     }
@@ -42,6 +45,7 @@ public class Participation {
     }
 
     @ManyToOne
+    @NaturalId
     public Survey getSurvey() {
         return survey;
     }

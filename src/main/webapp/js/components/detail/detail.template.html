@@ -27,7 +27,11 @@
         </md-card-content>
     </md-card>
 
-    <md-card>
+    <div layout="row" layout-sm="column" layout-align="space-around" ng-show="computing">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
+
+    <md-card ng-show="!computing">
         <md-card-content>
             <md-list layout="column" flex style="margin-bottom: 0; padding-bottom: 0">
                 <md-list-item class="md-3-line">
@@ -64,7 +68,8 @@
                     </div>
                     <div ng-repeat="option in options" style="width: 100px">
                         <md-input-container style="padding-left: 25%">
-                            <md-checkbox ng-click="detailCrtl.participate(option)" ng-model="option.checked"
+                            <md-checkbox ng-disabled="detailCrtl.isOpen()"
+                                         ng-click="detailCrtl.participate(option)" ng-model="option.checked"
                                          name="tos"></md-checkbox>
                     </div>
                 </md-list-item>
@@ -78,7 +83,7 @@
         </md-card-content>
         <md-card-actions layout="row" layout-align="end center"
                          ng-show="!detailCrtl.isOwnSurvey() && detailCrtl.isSurveyOpen()">
-            <md-button class="md-raised md-accent">{{"DETAIL_SEND"|translate}}</md-button>
+            <md-button class="md-raised md-accent" ng-click="detailCrtl.save()">{{"DETAIL_SEND"|translate}}</md-button>
         </md-card-actions>
     </md-card>
 

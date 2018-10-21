@@ -28,8 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
-        findUserByUsername(user.getUsername()).orElseThrow(UserAlreadyExistsException::new);
-
+        requireNonExistent(user);
         final String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         return userRepository.save(user);
@@ -43,5 +42,11 @@ public class UserServiceImpl implements UserService {
 
     private Optional<User> findUserByUsername(final String userName) {
         return userRepository.findOne(hasUsername(userName));
+    }
+
+    private void requireNonExistent(User user) {
+        if (findUserByUsername(user.getUsername()).isPresent()) {
+            throw new UserAlreadyExistsException();
+        }
     }
 }

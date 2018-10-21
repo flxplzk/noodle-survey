@@ -9,7 +9,7 @@
 
     app.controller("loginController", ["$scope", "appService", LoginController]);
 
-    app.controller("registerController", ["$scope", "$state", "userService", "errorService", RegistrationController]);
+    app.controller("registerController", ["$scope", "$state", "userService", "notificationService", RegistrationController]);
 
     function LoginController($scope, appService) {
         $scope.username = "";
@@ -36,18 +36,18 @@
                     $scope.username,
                     $scope.password).then(successHandler, usernameAlreadyExistsHandler);
             } else {
-                errorService.showErrorNotification("AUTH_REGISTER_PASSWORD_NON_MATCH");
+                errorService.showNotification("AUTH_REGISTER_PASSWORD_NON_MATCH");
             }
         };
 
         function usernameAlreadyExistsHandler(success) {
            // if (success.status === 409) {
-                errorService.showErrorNotification("AUTH_REGISTER_USER_ALREADY_EXISTS");
+                errorService.showNotification("AUTH_REGISTER_USER_ALREADY_EXISTS");
            // }
         }
 
         function successHandler(success) {
-            errorService.showErrorNotification("AUTH_REGISTER_USER_CREATED");
+            errorService.showNotification("AUTH_REGISTER_USER_CREATED");
             $state.go("login");
         }
     }

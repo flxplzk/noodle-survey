@@ -6,29 +6,35 @@
         "ngMaterial"
     ]);
 
-    detail.controller("detailController", ["$scope", "$stateParams", "surveyService", "appService", DetailController]);
+    detail.controller("detailController", ["$scope", "$stateParams", "surveyService", "appService", "notificationService", DetailController]);
 
-    function DetailController($scope, $stateParams, surveyService, appService) {
+    function DetailController($scope, $stateParams, surveyService, appService, notificationService) {
         var currentUser = appService.getAuthenticatedUser();
-        $scope.survey = {
-            title: $stateParams.surveyId,
-            initiator: {username: "felix@admin.de"},
-            description: "Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet Lorem Ipsum Dolor et amet "
-        };
+        var vm = this;
+        $scope.survey = {};
         $scope.options = [];
         $scope.participations = [];
-        $scope.ownParticipation = {options:[]};
+        $scope.ownParticipation = {options: []};
 
-        surveyService.loadAllOptionsForSurveyWithId($stateParams.surveyId)
-            .subscribeOnNext(function (options) {
-                $scope.options = options;
-            });
+        init();
 
-        surveyService.loadAllParticipationsForSurveyWithId($stateParams.surveyId)
-            .subscribeOnNext(function (participations) {
-                $scope.participations = participations;
-                filterOwnParticipation();
-            });
+        function init() {
+            surveyService.loadSurveyWithId($stateParams.surveyId)
+                .subscribeOnNext(function (survey) {
+                    $scope.survey = survey;
+                });
+
+            surveyService.loadAllOptionsForSurveyWithId($stateParams.surveyId)
+                .subscribeOnNext(function (options) {
+                    $scope.options = options;
+                });
+
+            surveyService.loadAllParticipationsForSurveyWithId($stateParams.surveyId)
+                .subscribeOnNext(function (participations) {
+                    $scope.participations = participations;
+                    filterOwnParticipation();
+                });
+        }
 
         this.participates = function (participation, option) {
             for (var i = 0; i < participation.options.length; i++) {
@@ -43,7 +49,7 @@
             var sum = 0;
             for (var participation in $scope.participations) {
                 for (var entry in participation.options) {
-                    if (entry === option) {
+                    if (entry.dateTime === option.dateTime) {
                         sum++;
                     }
                 }
@@ -56,7 +62,7 @@
                 $scope.ownParticipation.options.push(option);
             } else {
                 $scope.ownParticipation.options = $scope.ownParticipation.options.filter(function (value) {
-                    return value !== option;
+                    return value.dateTime !== option.dateTime;
                 })
             }
         };
@@ -70,13 +76,26 @@
                 $scope.survey.surveyStatus === "OPEN";
         };
 
+        this.save = function () {
+            $scope.computing = true;
+            surveyService.saveParticipationforSurvey($scope.ownParticipation, $scope.survey)
+                .then(function (value) {
+                    $scope.computing = false;
+                    init();
+                    notificationService.showNotification("DETAIL_SAVE_SUCCESS");
+                });
+        };
+
         function filterOwnParticipation() {
-            $scope.participations = $scope.participations.filter(function (value, index) { 
-               if (value.user.username === currentUser.username) {
-                   $scope.ownParticipation = value;
-                   return false
-               }
-               return true;
+            $scope.participations = $scope.participations.filter(function (value, index) {
+                if (value.user.username === currentUser.principal.username) {
+                    $scope.ownParticipation = value;
+                    $scope.options.forEach(function (option) {
+                        option.checked = vm.participates($scope.ownParticipation, option);
+                    });
+                    return false
+                }
+                return true;
             });
         }
     }

@@ -7,9 +7,9 @@
         "ngMaterial"
     ]);
 
-    core.service("errorService", ["$mdToast", "$translate", ErrorService]);
+    core.service("notificationService", ["$mdToast", "$translate", NotificationService]);
     core.service("authService", ["$http", "$base64", AuthenticationService]);
-    core.service("appService", ["$state", "authService", "errorService", "rx", AppService]);
+    core.service("appService", ["$state", "authService", "notificationService", "rx", AppService]);
 
     /**
      * Central service for login and logout + retrieving info concerning logged in user
@@ -44,7 +44,7 @@
                 function (error) {
                     vm.$authenticated
                         .onNext(authService.removeAuthorization());
-                    errorService.showErrorNotification("AUTH_LOGIN_ERROR_CREDENTIALS");
+                    errorService.showNotification("AUTH_LOGIN_ERROR_CREDENTIALS");
                 }
             );
         };
@@ -68,14 +68,14 @@
      * @param $translate ngTranslate translationService
      * @constructor
      */
-    function ErrorService($mdToast, $translate) {
+    function NotificationService($mdToast, $translate) {
         var position = {
             bottom: false,
             top: true,
             left: false,
             right: true
         };
-        this.showErrorNotification = function (errorMessageKey) {
+        this.showNotification = function (errorMessageKey) {
             var toast = $mdToast.simple()
                 .content($translate.instant(errorMessageKey))
                 .position('left bottom right');
