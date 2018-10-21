@@ -23,11 +23,13 @@
     function AppService($state, authService, errorService, rx) {
         var isAuthenticated = false;
         var vm = this;
+        this.authenticatedUser = null;
         this.$authenticated = new rx.BehaviorSubject(isAuthenticated);
 
         this.$authenticated.subscribeOnNext(function (authenticationStatus) {
             isAuthenticated = authenticationStatus;
             if (!isAuthenticated) {
+                vm.authenticatedUser = null;
                 $state.go("login");
             }
         });
@@ -36,6 +38,7 @@
             authService.authenticate(username, password).then(
                 function (success) {
                     $state.go("dashboard");
+                    vm.authenticatedUser = success.data;
                     vm.$authenticated.onNext(true);
                 },
                 function (error) {
@@ -52,6 +55,9 @@
         };
         this.isAuthenticated = function () {
             return isAuthenticated;
+        };
+        this.getAuthenticatedUser = function () {
+            return this.authenticatedUser;
         }
     }
 

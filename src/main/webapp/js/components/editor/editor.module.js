@@ -16,7 +16,9 @@
         return {
             restrict: "E",
             template: "<div ng-controller='floatingEditorController as dialogManager'>" +
-                "<md-button class=\"md-raised md-accent md-hue-3\" ng-click=\"dialogManager.showEditorDialog($event)\">Anlegen</md-button>" +
+                "<md-button class=\"md-primary md-raised md-accent md-icon-button\"" +
+                " ng-click=\"dialogManager.showEditorDialog($event)\">" +
+                "<i class=\"material-icons\"> add </i></md-button>" +
                 "</div>"
         }
     }

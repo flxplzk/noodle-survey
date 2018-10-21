@@ -46,7 +46,9 @@
             EDITOR_FORM_OPTION_FROM: "Datum auswählen",
             EDITOR_SAVE_AS_DRAFT: "Entwurf speichern",
             EDITOR_CONFLICT: "Bitte wähle einen anderen Titel für deine Umfrage!",
-            EDITOR_NETWORK: "Bitte versuche es später erneut!"
+            EDITOR_NETWORK: "Bitte versuche es später erneut!",
+
+            DETAIL_SEND: "Teilnahme speichern"
         });
 
         // english
@@ -90,7 +92,16 @@
             EDITOR_FORM_OPTION_HEADING: "Please add options",
             EDITOR_SAVE_AS_DRAFT: "Save draft",
             EDITOR_CONFLICT: "Please choose a new title for your survey, yours is already in use",
-            EDITOR_NETWORK: "Please try again later!"
+            EDITOR_NETWORK: "Please try again later!",
+
+            DETAIL_SEND: "Save",
+            DETAIL_YOU: "You",
+            DETAIL_TERMINATE_SURVEY: "Close survey",
+            DETAIL_TOOLTIP_OPEN: "OPEN",
+            DETAIL_TOOLTIP_CLOSED: "CLOSED",
+            DETAIL_TOOLTIP_PRIVATE: "PRIVATE",
+            DETAIL_INITIATOR: "Initiator"
+
         });
 
         $translateProvider.preferredLanguage("en_US");

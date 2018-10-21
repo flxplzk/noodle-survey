@@ -2,6 +2,7 @@
     var toolbar = angular.module("de.nordakademie.iaa.survey.toolbar", [
         "de.nordakademie.iaa.survey.core",
         "de.nordakademie.iaa.i18n",
+        "de.nordakademie.iaa.survey.editor",
         "ngMaterial"
     ]);
 
@@ -25,12 +26,11 @@
             template: "<md-toolbar ng-controller=\"mainController as toolBarCrtl\">\n" +
                 "    <div class=\"md-toolbar-tools\">\n" +
                 "        <h2 md-truncate>{{\"APP_HEADLINE\"|translate}}</h2>\n" +
+                "        <span flex></span>" +
                 "        <survey-editor-action-button ng-show=\"toolBarCrtl.authenticated\">" +
                 "        </survey-editor-action-button>" +
-                "        <span flex></span>" +
                 "        <md-button ng-show=\"toolBarCrtl.authenticated\" ng-click=\"toolBarCrtl.logout()\"\n" +
-                "                   class=\"md-raised md-accent md-hue-3\"\n" +
-                "                   aria-label=\"Learn More\">\n" +
+                "                   class=\"md-raised md-accent md-hue-3\">\n" +
                 "            {{\"APP_LOGOUT\"|translate}}\n" +
                 "        </md-button>\n" +
                 "    </div>\n" +

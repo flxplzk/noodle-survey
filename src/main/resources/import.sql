@@ -26,7 +26,6 @@ insert into participation (survey_id, user_id, id) values (-2,-3,-24);
 insert into participation (survey_id, user_id, id) values (-4,-3,-25);
 insert into participation (survey_id, user_id, id) values (-2,-1,-26);
 insert into participation (survey_id, user_id, id) values (-2,-3,-27);
-insert into participation (survey_id, user_id, id) values (-4,-3,-28);
 insert into notification (creation_date,notification_type,survey_id,user_id,id) values (CURRENT_DATE,'SURVEY_CHANGE',-2,-1,-21);
 insert into notification (creation_date,notification_type,survey_id,user_id,id) values (CURRENT_DATE,'EVENT_PLANNED',-18,-3,-22);
 insert into notification (creation_date,notification_type,survey_id,user_id,id) values (CURRENT_DATE,'NEW_SURVEY',-17,-1,-23);
