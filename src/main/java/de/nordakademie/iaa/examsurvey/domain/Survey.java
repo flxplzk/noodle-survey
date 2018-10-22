@@ -2,11 +2,16 @@ package de.nordakademie.iaa.examsurvey.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.NaturalId;
-import org.hibernate.validator.constraints.Length;
-import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
@@ -17,28 +22,18 @@ import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
  * @author Bengt-Lasse Arndt, Robert Peters
  */
 @Entity
-@Table(name = "Survey")
-public class Survey {
-    private Long id;
+@Table(name = "surveys")
+public class Survey extends AuditModel {
     private String title;
     private String description;
     private User initiator;
     private Option event;
-    private LocalDateTime creationDate;
     private SurveyStatus surveyStatus;
     private List<Option> options;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     @NaturalId
-    @Column(nullable = false)
+    @Size(max = 50)
+    @Column(name = "title", nullable = false)
     public String getTitle() {
         return title;
     }
@@ -46,7 +41,8 @@ public class Survey {
         this.title = title;
     }
 
-    @Column(nullable = false)
+    @Size(max = 1000)
+    @Column(name = "description", nullable = false)
     public String getDescription() {
         return description;
     }
@@ -55,6 +51,7 @@ public class Survey {
     }
 
     @ManyToOne
+    @JoinColumn(name = "initiator_id", nullable = false)
     public User getInitiator() {
         return initiator;
     }
@@ -63,6 +60,7 @@ public class Survey {
     }
 
     @ManyToOne
+    @Deprecated
     public Option getEvent() {
         return event;
     }
@@ -70,30 +68,20 @@ public class Survey {
         this.event = event;
     }
 
-    @CreatedDate
-    public LocalDateTime getCreationDate() {
-        return creationDate;
-    }
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    @Column(nullable = false)
+    @Column(name = "survey_status", nullable = false)
     @Enumerated(value = EnumType.STRING)
     public SurveyStatus getSurveyStatus() {
         return surveyStatus;
     }
-
     public void setSurveyStatus(SurveyStatus surveyStatus) {
         this.surveyStatus = surveyStatus;
     }
 
-    @JsonProperty(access = WRITE_ONLY)
     @Transient
+    @JsonProperty(access = WRITE_ONLY)
     public List<Option> getOptions() {
         return options;
     }
-
     public void setOptions(List<Option> options) {
         this.options = options;
     }

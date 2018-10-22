@@ -10,7 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
 
 /**
  * Base Entity for Date-Options toDateTime choose from within a Survey.
@@ -18,27 +20,18 @@ import java.time.LocalDateTime;
  * @author Bengt-Lasse Arndt, Robert Peters
  */
 @Entity
-@Table(name = "Option")
-public class Option {
-    private Long id;
-    private LocalDateTime dateTime;
+@Table(name = "options")
+public class Option extends AuditModel{
+    private Date dateTime;
     private Survey survey;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     @NaturalId
-    public LocalDateTime getDateTime() {
+    public Date getDateTime() {
         return dateTime;
     }
-    public void setDateTime(LocalDateTime dateTime) {
+    public void setDateTime(Date dateTime) {
         this.dateTime = dateTime;
     }
 

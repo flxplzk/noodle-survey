@@ -6,7 +6,10 @@ import org.hibernate.annotations.NaturalId;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -20,22 +23,13 @@ import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
  */
 @Entity
 @Table(name = "app_user")
-public class User implements UserDetails {
-    private Long id;
+public class User extends AuditModel implements UserDetails {
     private String firstName;
     private String lastName;
     private String password;
     private String username;
-    private boolean isAccountNonLocked;
-    private boolean isAccountNonExpired;
-    private boolean isCredentialsNonExpired;
-    private boolean isEnabled;
 
     public User() {
-        isAccountNonLocked = true;
-        isAccountNonExpired = true;
-        isCredentialsNonExpired = true;
-        isEnabled = true;
     }
 
     public User(String username, String password) {
@@ -44,23 +38,17 @@ public class User implements UserDetails {
         this.username = username;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Transient
+    @NaturalId
+    @Column(name = "username", nullable = false)
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList(); // not needed so far implementation may be useful in future stories
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false)
     @JsonProperty(access = WRITE_ONLY)
     @Override
     public String getPassword() {
@@ -71,76 +59,55 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    @NaturalId
-    @Column(nullable = false)
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    @Column(nullable = false)
+    @Column(name = "first_name", nullable = false)
     public String getFirstName() {
         return firstName;
     }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    @Column(nullable = false)
+    @Column(name = "last_name", nullable = false)
     public String getLastName() {
         return lastName;
     }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    @Column(nullable = false)
+    // ### Transient fields relevant for Spring security not important for the app -> therefor no persistence ###
+
+    @Transient
     @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
-        return isAccountNonExpired;
+        return true;
     }
 
-    public void setAccountNonExpired(boolean accountNonExpired) {
-        isAccountNonExpired = accountNonExpired;
-    }
-
-    @Column(nullable = false)
+    @Transient
     @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
-        return isAccountNonLocked;
+        return true;
     }
 
-    public void setAccountNonLocked(boolean accountNonLocked) {
-        isAccountNonLocked = accountNonLocked;
-    }
-
-    @Column(nullable = false)
+    @Transient
     @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
-        return isCredentialsNonExpired;
+        return true;
     }
 
-    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
-        isCredentialsNonExpired = credentialsNonExpired;
-    }
-
-    @Column(nullable = false)
+    @Transient
     @JsonIgnore
     @Override
     public boolean isEnabled() {
-        return isEnabled;
+        return true;
     }
 
-    public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
+    @Transient
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.emptyList(); // not needed so far implementation may be useful in future stories
     }
 }
