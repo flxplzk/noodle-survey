@@ -4,9 +4,6 @@ import de.nordakademie.iaa.examsurvey.domain.Option;
 import de.nordakademie.iaa.examsurvey.domain.Participation;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
-import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
-import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
-import de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException;
 import de.nordakademie.iaa.examsurvey.service.AuthenticationService;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +18,12 @@ import java.util.List;
  */
 @RestController
 public class SurveyController {
+    private static final String PATH_V_IDENTIFIER = "identifier";
+    private static final String PATH_SURVEYS = "/surveys";
+    private static final String PATH_SURVEY_PARTICIPATIONS = "/surveys/{identifier}/participations";
+    private static final String PATH_SURVEY_OPTIONS = "/surveys/{identifier}/options";
+    private static final String PATH_SURVEYS_IDENTIFIER = "/surveys/{identifier}";
+
     private final SurveyService surveyService;
     private final AuthenticationService authenticationService;
 
@@ -30,62 +33,60 @@ public class SurveyController {
         this.authenticationService = authenticationService;
     }
 
-    @RequestMapping(value = "/surveys",
+    @RequestMapping(value = PATH_SURVEYS,
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Survey createSurvey(@RequestBody Survey survey) {
-        User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
-        return surveyService.createSurvey(survey, authenticatedUser);
+        return surveyService.createSurvey(survey, getAuthenticatedUser());
     }
 
-    @RequestMapping(value = "/surveys",
+    @RequestMapping(value = PATH_SURVEYS,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Survey> loadSurveys() {
-        User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
-        return surveyService.loadAllSurveysWithUser(authenticatedUser);
+        return surveyService.loadAllSurveysWithUser(getAuthenticatedUser());
     }
 
-    @RequestMapping(value = "/surveys/{identifier}",
+    @RequestMapping(value = PATH_SURVEYS_IDENTIFIER,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Survey loadsurvey(@PathVariable(value = "identifier") final String identifier) {
-        User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
-        return surveyService.loadSurveyWithUser(identifier, authenticatedUser);
+    public Survey loadsurvey(@PathVariable(value = PATH_V_IDENTIFIER) final String identifier) {
+        return surveyService.loadSurveyWithUser(identifier, getAuthenticatedUser());
     }
 
-    @RequestMapping(value = "/surveys/{identifier}/options",
+    @RequestMapping(value = PATH_SURVEY_OPTIONS,
             method = RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Option> saveOptions(@PathVariable String identifier, @RequestBody List<Option> options) {
-        User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
-        return surveyService.saveOptionsForSurvey(options, identifier, authenticatedUser);
+    public List<Option> saveOptions(@PathVariable(value = PATH_V_IDENTIFIER) String identifier,
+                                    @RequestBody List<Option> options) {
+        return surveyService.saveOptionsForSurvey(options, identifier, getAuthenticatedUser());
     }
 
-    @RequestMapping(value = "/surveys/{identifier}/options",
+    @RequestMapping(value = PATH_SURVEY_OPTIONS,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Option> loadOptions(@PathVariable String identifier) {
-        User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
-        return surveyService.loadAllOptionsForSurveyWithUser(identifier, authenticatedUser);
+    public List<Option> loadOptions(@PathVariable(value = PATH_V_IDENTIFIER) String identifier) {
+        return surveyService.loadAllOptionsForSurveyWithUser(identifier, getAuthenticatedUser());
     }
 
-    @RequestMapping(value = "/surveys/{identifier}/participations",
+    @RequestMapping(value = PATH_SURVEY_PARTICIPATIONS,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Participation> loadParticipations(@PathVariable(name = "identifier") String identifier) {
-        User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
-        return surveyService.loadAllParticipationsForSurveyWithUser(identifier, authenticatedUser);
+    public List<Participation> loadParticipations(@PathVariable(name = PATH_V_IDENTIFIER) String identifier) {
+        return surveyService.loadAllParticipationsForSurveyWithUser(identifier, getAuthenticatedUser());
     }
 
-    @RequestMapping(value = "/surveys/{identifier}/participations",
+    @RequestMapping(value = PATH_SURVEY_PARTICIPATIONS,
             method = RequestMethod.PUT,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Participation saveParticipationForSurvey(@RequestBody Participation participation,
-                                                    @PathVariable(name = "identifier") String identifier) {
-        User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
-        return surveyService.saveParticipationForSurveyWithAuthenticatedUser(participation, identifier, authenticatedUser);
+                                                    @PathVariable(name = PATH_V_IDENTIFIER) String identifier) {
+        return surveyService.saveParticipationForSurveyWithAuthenticatedUser(participation, identifier, getAuthenticatedUser());
+    }
+
+    private User getAuthenticatedUser() {
+        return authenticationService.getCurrentAuthenticatedUser();
     }
 }

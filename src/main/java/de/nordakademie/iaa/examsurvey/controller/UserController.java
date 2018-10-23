@@ -18,6 +18,10 @@ import java.util.List;
  */
 @RestController
 public class UserController {
+    public static final String PATH_AUTHENTICATION = "/authentication";
+    public static final String PATH_REGISTRATION = "/registration";
+    public static final String PATH_USERS_NOTIFICATIONS = "/users/me/notifications";
+
     private final UserService userService;
     private final AuthenticationService authenticationService;
     private final NotificationService notificationService;
@@ -29,13 +33,13 @@ public class UserController {
         this.notificationService = notificationService;
     }
 
-    @RequestMapping(value = "/authentication",
+    @RequestMapping(value = PATH_AUTHENTICATION,
             method = RequestMethod.GET)
     public Principal user(Principal user) {
         return user;
     }
 
-    @RequestMapping(value = "/registration",
+    @RequestMapping(value = PATH_REGISTRATION,
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -44,7 +48,7 @@ public class UserController {
         return userService.createUser(user);
     }
 
-    @RequestMapping(value = "/users/me/notifications",
+    @RequestMapping(value = PATH_USERS_NOTIFICATIONS,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Notification> getNotifications(){

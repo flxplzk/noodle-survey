@@ -16,6 +16,12 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationEn
 @EnableWebSecurity
 public class HttpSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private static final String REALM = "SURVEY_REALM";
+    private static final String ANT_REGISTRATION = "/registration";
+    private static final String ANT_INDEX_HTML = "/index.html";
+    private static final String ANT_ROOT = "/";
+    private static final String ANT_CSS = "/css/**";
+    private static final String ANT_JS = "/js/**";
+    private static final String ANT_FRONTEND_DEPENDENCIES = "/node_modules/**";
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
@@ -38,16 +44,16 @@ public class HttpSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                // using custum Entrypoint for disabling browser credentials dialog
+                // using custom Entrypoint for disabling browser credentials dialog
                 .httpBasic()
                 .authenticationEntryPoint(basicAuthenticationEntryPoint())
 
                 // permitting required resources
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/registration").permitAll()
-                .antMatchers(HttpMethod.GET, "/index.html", "/", "/css/**", "/js/**",
-                        "/node_modules/**").permitAll()
+                .antMatchers(HttpMethod.POST, ANT_REGISTRATION).permitAll()
+                .antMatchers(HttpMethod.GET, ANT_INDEX_HTML, ANT_ROOT, ANT_CSS, ANT_JS,
+                        ANT_FRONTEND_DEPENDENCIES).permitAll()
                 .anyRequest().authenticated()
 
                 // setting custom user details service
