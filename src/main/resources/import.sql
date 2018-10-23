@@ -14,6 +14,10 @@ insert into surveys (id,description,event_id,initiator_id,survey_status,title,cr
 insert into surveys (id,description,event_id,initiator_id,survey_status,title,created_at,updated_at) values (-8,'Test Survey Description',NULL,-4,'CLOSED','Test Survey Felix CLOSED',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 insert into surveys (id,description,event_id,initiator_id,survey_status,title,created_at,updated_at) values (-9,'Survey Description',NULL,-5,'OPEN','Test Survey Stefan OPEN',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 insert into surveys (id,description,event_id,initiator_id,survey_status,title,created_at,updated_at) values (-10,'Test Survey Description',NULL,-5,'CLOSED','Test Survey Stefan CLOSED',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into surveys (id,description,event_id,initiator_id,survey_status,title,created_at,updated_at) values (-11,'Test Survey Description',NULL,-1,'PRIVATE','Test Survey Bengt-Lasse PRIVATE', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into surveys (id,description,event_id,initiator_id,survey_status,title,created_at,updated_at) values (-12,'Test Survey Description',NULL,-2,'PRIVATE','Test Survey Robert PRIVATE', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into surveys (id,description,event_id,initiator_id,survey_status,title,created_at,updated_at) values (-13,'Test Survey Description',NULL,-3,'PRIVATE','Test Survey Sascha PRIVATE', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+insert into surveys (id,description,event_id,initiator_id,survey_status,title,created_at,updated_at) values (-14,'Test Survey Description',NULL,-4,'PRIVATE','Test Survey Felix PRIVATE', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 insert into options (id,survey_id, date_time, created_at, updated_at) values (-1, -1,CURRENT_TIMESTAMP()+100, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 insert into options (id,survey_id, date_time, created_at, updated_at) values (-2, -1,CURRENT_TIMESTAMP()+101, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
