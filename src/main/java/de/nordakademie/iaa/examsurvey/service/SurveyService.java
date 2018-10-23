@@ -81,5 +81,6 @@ public interface SurveyService {
                                                                   @NotNull String identifier,
                                                                   @NotNull User authenticatedUser);
 
-    Survey loadSurveyWithUser(String identifier, User authenticatedUser);
+    Survey loadSurveyWithUser(@NotNull String identifier,
+                              @NotNull User authenticatedUser);
 }

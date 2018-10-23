@@ -1,13 +1,11 @@
 package de.nordakademie.iaa.examsurvey.service.impl;
 
 import com.google.common.collect.Lists;
-import de.nordakademie.iaa.examsurvey.domain.Option;
-import de.nordakademie.iaa.examsurvey.domain.Participation;
-import de.nordakademie.iaa.examsurvey.domain.Survey;
-import de.nordakademie.iaa.examsurvey.domain.User;
+import de.nordakademie.iaa.examsurvey.domain.*;
 import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
 import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
 import de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException;
+import de.nordakademie.iaa.examsurvey.exception.SurveyNotOpenForParticipationException;
 import de.nordakademie.iaa.examsurvey.persistence.OptionRepository;
 import de.nordakademie.iaa.examsurvey.persistence.ParticipationRepository;
 import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
@@ -85,9 +83,9 @@ public class SurveyServiceImpl implements SurveyService {
                                                                          String identifier,
                                                                          User authenticatedUser) {
         requireNonNull(authenticatedUser);
-        Survey survey = requireSurveyVisibleForUser(identifier, authenticatedUser);
-
+        final Survey survey = requireSurveyVisibleForUser(identifier, authenticatedUser);
         requireNonInitiator(survey, authenticatedUser);
+        requireOpenForParticipation(survey);
         participation = requireOne(survey, participation, authenticatedUser);
 
         return participationRepository.save(participation);
@@ -99,6 +97,11 @@ public class SurveyServiceImpl implements SurveyService {
         return requireSurveyVisibleForUser(identifier, authenticatedUser);
     }
 
+    private List<Option> saveOptionsForSurvey(List<Option> options, Survey survey) {
+        options.forEach(option -> option.setSurvey(survey));
+        return Lists.newArrayList(optionRepository.saveAll(options));
+    }
+
     // ########################################## VALIDATION METHODS ###################################################
 
     private void requireNonInitiator(Survey survey, User authenticatedUser) {
@@ -107,7 +110,7 @@ public class SurveyServiceImpl implements SurveyService {
         }
     }
 
-    private Participation requireOne(Survey survey, Participation newParticipation, User authenticatedUser) {
+    private Participation requireOne(final Survey survey, final Participation newParticipation, final User authenticatedUser) {
         Participation participation = participationRepository.findOne(withSurveyAndUser(survey, authenticatedUser))
                 .orElse(newParticipation);
         participation.setUser(authenticatedUser);
@@ -117,40 +120,41 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
 
-    private Survey requireSurveyVisibleForUser(String identifier, User authenticatedUser) {
+    private Survey requireSurveyVisibleForUser(final String identifier, final User authenticatedUser) {
         return surveyRepository.findOne(hasTitleAndVisibleForUser(identifier, authenticatedUser))
                 .orElseThrow(SurveyNotFoundException::new);
     }
 
-
-    private List<Option> saveOptionsForSurvey(List<Option> options, Survey survey) {
-        options.forEach(option -> option.setSurvey(survey));
-        return Lists.newArrayList(optionRepository.saveAll(options));
-    }
-
-    private Survey requireSurveyWithInitiator(String identifier, User authenticatedUser) {
+    private Survey requireSurveyWithInitiator(final String identifier, final User authenticatedUser) {
         Survey survey = requireSurveyVisibleForUser(identifier, authenticatedUser);
         requireInitiator(authenticatedUser, survey);
         return survey;
     }
 
-    private void requireNonNull(User initiator) {
+    private void requireNonNull(final User initiator) {
         if (initiator == null) {
             throw new PermissionDeniedException("initiator must be non null");
         }
     }
 
-    private void requireNonExistent(Survey survey) {
+    private void requireNonExistent(final Survey survey) {
         // if survey with title already exists; throw exception
         if (surveyRepository.findOne(hasTitle(survey.getTitle())).isPresent()) {
             throw new SurveyAlreadyExistsException();
         }
     }
 
-    private void requireInitiator(User requestingUser, Survey survey) {
+    private void requireInitiator(final User requestingUser, final Survey survey) {
         if (!survey.getInitiator().equals(requestingUser)) {
             throw new PermissionDeniedException("User must be initiator of the survey");
         }
+    }
+
+    private void requireOpenForParticipation(final Survey survey){
+        if (SurveyStatus.OPEN.equals(survey.getSurveyStatus())) {
+            return;
+        }
+        throw new SurveyNotOpenForParticipationException("Participation for this Survey is not Allowed");
     }
 }
 
