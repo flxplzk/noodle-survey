@@ -76,8 +76,11 @@
             DASHBOARD_OPEN_DETAILS: "Open",
             DASHBOARD_TITLE: "All surveys",
             EDITOR_TITLE: "Create new Survey",
+            EDITOR_TITLE_NEW:  "Create new Survey",
+            EDITOR_TITLE_UPDATE:  "Update Survey",
 
-            EDITOR_SAVE: "Save and publish",
+
+        EDITOR_SAVE: "Save and publish",
             EDITOR_CANCEL: "Cancel",
             EDITOR_FORM_TITLE: "Title",
             EDITOR_FORM_ERROR_REQUIRED: "This field is required",

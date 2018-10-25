@@ -1,5 +1,6 @@
 (function () {
     var detail = angular.module("de.nordakademie.iaa.survey.detail", [
+        "de.nordakademie.iaa.survey.editor",
         "de.nordakademie.iaa.survey.core.domain",
         "de.nordakademie.iaa.survey.core",
         "de.nordakademie.iaa.i18n",
@@ -15,6 +16,7 @@
         $scope.options = [];
         $scope.participations = [];
         $scope.ownParticipation = {options: []};
+        $scope.surveyId = $stateParams.surveyId;
 
         init();
 
