@@ -1,7 +1,11 @@
 package de.nordakademie.iaa.examsurvey.service.impl;
 
 import com.google.common.collect.Lists;
-import de.nordakademie.iaa.examsurvey.domain.*;
+import de.nordakademie.iaa.examsurvey.domain.Option;
+import de.nordakademie.iaa.examsurvey.domain.Participation;
+import de.nordakademie.iaa.examsurvey.domain.Survey;
+import de.nordakademie.iaa.examsurvey.domain.SurveyStatus;
+import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
 import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
 import de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException;
@@ -16,8 +20,8 @@ import java.util.List;
 
 import static de.nordakademie.iaa.examsurvey.persistence.specification.ParticipationSpecifications.withSurvey;
 import static de.nordakademie.iaa.examsurvey.persistence.specification.ParticipationSpecifications.withSurveyAndUser;
+import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.hasIdAndVisibleForUser;
 import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.hasTitle;
-import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.hasTitleAndVisibleForUser;
 import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.isVisibleForUser;
 
 /**
@@ -26,7 +30,7 @@ import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpe
  * @author Robert Peters
  * @author Felix Plazek
  */
-public class SurveyServiceImpl implements SurveyService {
+public class SurveyServiceImpl extends AbstractAuditModelService<Survey> implements SurveyService {
     private final SurveyRepository surveyRepository;
     private final OptionRepository optionRepository;
     private final ParticipationRepository participationRepository;
@@ -41,50 +45,50 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public Survey createSurvey(Survey survey, User initiator) {
-        requireNonNull(initiator);
+        requireNonNullUser(initiator);
         requireNonExistent(survey);
 
         survey.setInitiator(initiator);
 
         Survey createdSurvey = surveyRepository.save(survey);
-        if (survey.getOptions().size() > 0) {
-            saveOptionsForSurvey(survey.getOptions(), createdSurvey);
-        }
+        saveOptionsForSurvey(survey.getOptions(), createdSurvey);
+
         return createdSurvey;
     }
 
     @Override
-    public List<Option> saveOptionsForSurvey(List<Option> options, String surveyTitle, User requestingUser) {
-        requireNonNull(requestingUser);
+    public List<Option> saveOptionsForSurvey(List<Option> options, Long surveyTitle, User requestingUser) {
+        requireNonNullUser(requestingUser);
         Survey survey = requireSurveyWithInitiator(surveyTitle, requestingUser);
         return saveOptionsForSurvey(options, survey);
     }
 
     @Override
-    public List<Option> loadAllOptionsForSurveyWithUser(String surveyTitle, User authenticatedUser) {
+    public List<Option> loadAllOptionsOfSurveyForUser(Long surveyTitle, User authenticatedUser) {
         Survey survey = requireSurveyVisibleForUser(surveyTitle, authenticatedUser);
         return Lists.newArrayList(optionRepository.findAll(OptionSpecifications.hasSurvey(survey)));
     }
 
     @Override
     public List<Survey> loadAllSurveysWithUser(User requestingUser) {
-        requireNonNull(requestingUser);
+        requireNonNullUser(requestingUser);
         return surveyRepository.findAll(isVisibleForUser(requestingUser));
     }
 
     @Override
-    public List<Participation> loadAllParticipationsForSurveyWithUser(String identifier, User authenticatedUser) {
+    public List<Participation> loadAllParticipationsOfSurveyForUser(Long identifier, User authenticatedUser) {
         Survey survey = requireSurveyVisibleForUser(identifier, authenticatedUser);
         return participationRepository.findAll(withSurvey(survey));
     }
 
     @Override
     public Participation saveParticipationForSurveyWithAuthenticatedUser(Participation participation,
-                                                                         String identifier,
+                                                                         Long surveyId,
                                                                          User authenticatedUser) {
-        requireNonNull(authenticatedUser);
-        final Survey survey = requireSurveyVisibleForUser(identifier, authenticatedUser);
+        requireNonNullUser(authenticatedUser);
+        final Survey survey = requireSurveyVisibleForUser(surveyId, authenticatedUser);
         requireNonInitiator(survey, authenticatedUser);
+
         requireOpenForParticipation(survey);
         participation = requireOne(survey, participation, authenticatedUser);
 
@@ -92,8 +96,8 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
     @Override
-    public Survey loadSurveyWithUser(String identifier, User authenticatedUser) {
-        requireNonNull(authenticatedUser);
+    public Survey loadSurveyWithUser(Long identifier, User authenticatedUser) {
+        requireNonNullUser(authenticatedUser);
         return requireSurveyVisibleForUser(identifier, authenticatedUser);
     }
 
@@ -120,21 +124,15 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
 
-    private Survey requireSurveyVisibleForUser(final String identifier, final User authenticatedUser) {
-        return surveyRepository.findOne(hasTitleAndVisibleForUser(identifier, authenticatedUser))
+    private Survey requireSurveyVisibleForUser(final Long identifier, final User authenticatedUser) {
+        return surveyRepository.findOne(hasIdAndVisibleForUser(identifier, authenticatedUser))
                 .orElseThrow(SurveyNotFoundException::new);
     }
 
-    private Survey requireSurveyWithInitiator(final String identifier, final User authenticatedUser) {
+    private Survey requireSurveyWithInitiator(final Long identifier, final User authenticatedUser) {
         Survey survey = requireSurveyVisibleForUser(identifier, authenticatedUser);
         requireInitiator(authenticatedUser, survey);
         return survey;
-    }
-
-    private void requireNonNull(final User initiator) {
-        if (initiator == null) {
-            throw new PermissionDeniedException("initiator must be non null");
-        }
     }
 
     private void requireNonExistent(final Survey survey) {
@@ -150,7 +148,7 @@ public class SurveyServiceImpl implements SurveyService {
         }
     }
 
-    private void requireOpenForParticipation(final Survey survey){
+    private void requireOpenForParticipation(final Survey survey) {
         if (SurveyStatus.OPEN.equals(survey.getSurveyStatus())) {
             return;
         }

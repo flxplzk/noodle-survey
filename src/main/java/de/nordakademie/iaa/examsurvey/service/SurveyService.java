@@ -36,7 +36,7 @@ public interface SurveyService {
      * @return persistent Options
      */
     List<Option> saveOptionsForSurvey(@NotNull final List<Option> options,
-                                      @NotNull final String identifier,
+                                      final Long identifier,
                                       @NotNull final User user);
 
     /**
@@ -46,8 +46,8 @@ public interface SurveyService {
      * @param authenticatedUser which requests
      * @return list of options belonging to the survey
      */
-    List<Option> loadAllOptionsForSurveyWithUser(@NotNull final String title,
-                                                 @NotNull final User authenticatedUser);
+    List<Option> loadAllOptionsOfSurveyForUser(final Long title,
+                                               @NotNull final User authenticatedUser);
 
     /**
      * Loads all surveys which are relevant for the given {@link User}.
@@ -67,8 +67,8 @@ public interface SurveyService {
      * @param authenticatedUser
      * @return
      */
-    List<Participation> loadAllParticipationsForSurveyWithUser(@NotNull String identifier,
-                                                               @NotNull User authenticatedUser);
+    List<Participation> loadAllParticipationsOfSurveyForUser(Long identifier,
+                                                             @NotNull User authenticatedUser);
 
     /**
      * TODO
@@ -78,9 +78,9 @@ public interface SurveyService {
      * @return
      */
     Participation saveParticipationForSurveyWithAuthenticatedUser(@NotNull Participation participation,
-                                                                  @NotNull String identifier,
+                                                                  Long identifier,
                                                                   @NotNull User authenticatedUser);
 
-    Survey loadSurveyWithUser(@NotNull String identifier,
+    Survey loadSurveyWithUser(Long identifier,
                               @NotNull User authenticatedUser);
 }

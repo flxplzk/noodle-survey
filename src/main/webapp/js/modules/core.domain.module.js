@@ -57,7 +57,7 @@
         };
 
         this.saveParticipationforSurvey = function (participation, survey) {
-            return $http.put("./surveys/"+ survey.title+"/participations", participation);
+            return $http.put("./surveys/"+ survey.id+"/participations", participation);
         };
 
         function createSurveyWithStatusAndOptions(survey, status, options) {

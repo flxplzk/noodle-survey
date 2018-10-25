@@ -40,6 +40,9 @@ public class SurveyIntegrationTest {
     private static final String USER_STEFAN = "stefan@reichert.de";
     private static final SurveyStatus[] ALLOWED_FOR_INITIATOR = SurveyStatus.values();
     private static final SurveyStatus[] ALLOWED_FOR_NON_INITIATOR = {SurveyStatus.CLOSED, SurveyStatus.OPEN};
+    private static final long SURVEY_FELIX_OPEN = -9;
+    private static final long SURVEY_FELIX_CLOSED = -8;
+    private static final long SURVEY_FELIX_PRIVATE = -14;
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -106,7 +109,7 @@ public class SurveyIntegrationTest {
     @Test
     @WithMockUser(USER_FELIX)
     public void loadAllOptions_forPrivateSurveyWithInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, "Test Survey Felix PRIVATE"))
+        mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, SURVEY_FELIX_PRIVATE))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -115,7 +118,7 @@ public class SurveyIntegrationTest {
     @Test
     @WithMockUser(USER_STEFAN)
     public void loadAllOptions_forPrivateSurveyWithNonInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, "Test Survey Felix PRIVATE"))
+        mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, SURVEY_FELIX_PRIVATE))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isNotFound())
                 .andReturn();
@@ -124,7 +127,7 @@ public class SurveyIntegrationTest {
     @Test
     @WithMockUser(USER_STEFAN)
     public void loadAllOptions_forOpenSurveyWithNonInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, "Test Survey Felix OPEN"))
+        mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, SURVEY_FELIX_OPEN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -133,7 +136,7 @@ public class SurveyIntegrationTest {
     @Test
     @WithMockUser(USER_FELIX)
     public void loadAllOptions_forOpenSurveyWithInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, "Test Survey Felix OPEN"))
+        mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, SURVEY_FELIX_OPEN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -142,7 +145,7 @@ public class SurveyIntegrationTest {
     @Test
     @WithMockUser(USER_FELIX)
     public void loadAllOptions_forClosedSurveyWithInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, "Test Survey Felix CLOSED"))
+        mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, SURVEY_FELIX_CLOSED))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -151,7 +154,7 @@ public class SurveyIntegrationTest {
     @Test
     @WithMockUser(USER_STEFAN)
     public void loadAllOptions_forClosedSurveyWithNonInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, "Test Survey Felix CLOSED"))
+        mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, SURVEY_FELIX_OPEN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -160,7 +163,7 @@ public class SurveyIntegrationTest {
     @Test
     @WithMockUser(USER_FELIX)
     public void loadAllParticipations_forPrivateSurveyWithInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, "Test Survey Felix PRIVATE"))
+        mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, SURVEY_FELIX_PRIVATE))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -169,7 +172,7 @@ public class SurveyIntegrationTest {
     @Test
     @WithMockUser(USER_STEFAN)
     public void loadAllParticipations_forPrivateSurveyWithNonInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, "Test Survey Felix PRIVATE"))
+        mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, SURVEY_FELIX_PRIVATE))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isNotFound())
                 .andReturn();
@@ -178,7 +181,7 @@ public class SurveyIntegrationTest {
     @Test
     @WithMockUser(USER_STEFAN)
     public void loadAllParticipations_forOpenSurveyWithNonInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, "Test Survey Felix OPEN"))
+        mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, SURVEY_FELIX_OPEN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -187,7 +190,7 @@ public class SurveyIntegrationTest {
     @Test
     @WithMockUser(USER_FELIX)
     public void loadAllParticipations_forOpenSurveyWithInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, "Test Survey Felix OPEN"))
+        mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, SURVEY_FELIX_OPEN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -196,7 +199,7 @@ public class SurveyIntegrationTest {
     @Test
     @WithMockUser(USER_FELIX)
     public void loadAllParticipations_forClosedSurveyWithInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, "Test Survey Felix CLOSED"))
+        mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, SURVEY_FELIX_OPEN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -205,7 +208,7 @@ public class SurveyIntegrationTest {
     @Test
     @WithMockUser(USER_STEFAN)
     public void loadAllParticipations_forClosedSurveyWithNonInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, "Test Survey Felix CLOSED"))
+        mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, SURVEY_FELIX_CLOSED))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();

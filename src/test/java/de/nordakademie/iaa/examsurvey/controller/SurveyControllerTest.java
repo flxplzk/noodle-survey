@@ -9,13 +9,10 @@ import de.nordakademie.iaa.examsurvey.service.SurveyService;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.validation.constraints.NotNull;
-
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -73,15 +70,15 @@ public class SurveyControllerTest {
     @Test
     public void saveOptions() {
         // GIVEN
-        String identifier = "lol a random identifier mocking a survey title";
+        Long id = -1L;
         List<Option> mockedOptions = Lists.newArrayList(mock(Option.class), mock(Option.class));
         User user = mock(User.class);
 
         when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
-        when(surveyService.loadAllOptionsForSurveyWithUser(identifier, user)).thenReturn(mockedOptions);
+        when(surveyService.loadAllOptionsOfSurveyForUser(id, user)).thenReturn(mockedOptions);
 
         // WHEN
-        List<Option> options = controllerUnderTest.loadOptions(identifier);
+        List<Option> options = controllerUnderTest.loadOptions(id);
 
         // THEN
         assertThat(mockedOptions, is(options));

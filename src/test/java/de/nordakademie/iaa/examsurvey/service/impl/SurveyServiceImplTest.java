@@ -119,10 +119,10 @@ public class SurveyServiceImplTest {
     public void saveOptionForSurvey_notFound() {
         // GIVEN
         User requestingUser = mock(User.class);
-        String title = "lol rofl";
+        Long id = -1L;
 
         // WHEN
-        surveyService.loadAllOptionsForSurveyWithUser(title, requestingUser);
+        surveyService.loadAllOptionsOfSurveyForUser(id, requestingUser);
 
         // THEN
         fail();
@@ -134,13 +134,13 @@ public class SurveyServiceImplTest {
         // GIVEN
         User requestingUser = mock(User.class);
         List<Option> options = Lists.newArrayList(mock(Option.class));
-        String title = "lol rofl";
+        Long id = -1L;
 
         when(surveyRepository.findOne(any(Specification.class))).thenReturn(Optional.of(mock(Survey.class)));
         when(optionRepository.findAll(any(Specification.class))).thenReturn(options);
 
         // WHEN
-        List<Option> optionList = surveyService.loadAllOptionsForSurveyWithUser(title, requestingUser);
+        List<Option> optionList = surveyService.loadAllOptionsOfSurveyForUser(id, requestingUser);
 
         // THEN
         assertThat(optionList, is(options));
@@ -150,11 +150,11 @@ public class SurveyServiceImplTest {
     public void saveOptionForSurvey_PermissionDenied() {
         // GIVEN
         List<Option> options = Lists.newArrayList();
-        String identifier = "lol";
+        Long id = -1L;
         User user = null;
 
         // WHEN
-        surveyService.saveOptionsForSurvey(options, identifier, user);
+        surveyService.saveOptionsForSurvey(options, id, user);
 
         // THEN
         fail();
@@ -165,7 +165,7 @@ public class SurveyServiceImplTest {
     public void saveOptionForSurvey_WrongUser() {
         // GIVEN
         List<Option> options = Lists.newArrayList();
-        String identifier = "lol";
+        Long id = -1L;
         User user = mock(User.class);
         User anotherUser = mock(User.class);
         Survey alreadyExistentSurvey = mock(Survey.class);
@@ -174,7 +174,7 @@ public class SurveyServiceImplTest {
         when(surveyRepository.findOne(any(Specification.class))).thenReturn(Optional.of(alreadyExistentSurvey));
 
         // WHEN
-        surveyService.saveOptionsForSurvey(options, identifier, user);
+        surveyService.saveOptionsForSurvey(options, id, user);
 
         // THEN
         fail();
@@ -187,7 +187,7 @@ public class SurveyServiceImplTest {
         Option optionOne = mock(Option.class);
         Option optionTwo = mock(Option.class);
         List<Option> options = Lists.newArrayList(optionOne, optionTwo);
-        String identifier = "lol";
+        Long id = -1L;
         User user = mock(User.class);
         Survey alreadyExistentSurvey = mock(Survey.class);
 
@@ -195,7 +195,7 @@ public class SurveyServiceImplTest {
         when(surveyRepository.findOne(any(Specification.class))).thenReturn(Optional.of(alreadyExistentSurvey));
 
         // WHEN
-        surveyService.saveOptionsForSurvey(options, identifier, user);
+        surveyService.saveOptionsForSurvey(options, id, user);
 
         // THEN
         verify(optionRepository, times(1)).saveAll(any());
