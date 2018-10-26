@@ -17,7 +17,8 @@
         };
 
         // On init load all surveys from backend.
-        surveyService.loadAll().subscribeOnNext(function (surveys) {
+        var query = surveyService.query();
+        query.$promise.then(function (surveys) {
             $scope.model.surveys = surveys;
             $scope.model.loading = false;
         });
@@ -40,7 +41,5 @@
                 fullscreen: false
             })
         };
-
     }
-
 }());

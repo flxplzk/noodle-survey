@@ -31,19 +31,23 @@
         this.register = function () {
             if ($scope.password === $scope.passwordRepetition) {
                 $scope.passwordError = null;
-                userService.register($scope.firstName,
-                    $scope.lastName,
-                    $scope.username,
-                    $scope.password).then(successHandler, usernameAlreadyExistsHandler);
+                var user = {
+                    firstName: $scope.firstName,
+                    lastName: $scope.lastName,
+                    username: $scope.username,
+                    password: $scope.password
+                };
+                var saveRequest = userService.save(user);
+                saveRequest.$promise.then(successHandler, usernameAlreadyExistsHandler);
             } else {
                 errorService.showNotification("AUTH_REGISTER_PASSWORD_NON_MATCH");
             }
         };
 
         function usernameAlreadyExistsHandler(success) {
-           // if (success.status === 409) {
+            if (success.status === 409) {
                 errorService.showNotification("AUTH_REGISTER_USER_ALREADY_EXISTS");
-           // }
+            }
         }
 
         function successHandler(success) {

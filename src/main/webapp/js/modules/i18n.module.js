@@ -78,9 +78,9 @@
             EDITOR_TITLE: "Create new Survey",
             EDITOR_TITLE_NEW:  "Create new Survey",
             EDITOR_TITLE_UPDATE:  "Update Survey",
+            EDITOR_NOT_FOUND: "The requested entity could does not exist anymore :( ",
 
-
-        EDITOR_SAVE: "Save and publish",
+            EDITOR_SAVE: "Save and publish",
             EDITOR_CANCEL: "Cancel",
             EDITOR_FORM_TITLE: "Title",
             EDITOR_FORM_ERROR_REQUIRED: "This field is required",

@@ -1,77 +1,45 @@
 (function () {
     var domain = angular.module("de.nordakademie.iaa.survey.core.domain", [
-        "rx"
+        "ngResource"
     ]);
 
-    domain.service("userService", ["$http", UserService]);
-    domain.service("surveyService", ["$http", "rx", SurveyService]);
+    domain.factory("userService", ["$resource", UserServiceFactory]);
+    domain.factory("surveyService", ["$resource", SurveyServiceFactory]);
+    domain.factory("participationService", ["$resource", ParticipationServiceFactory]);
+    domain.factory("optionService", ["$resource", OptionServiceFactory]);
+    domain.factory("userNotificationService", ["$resource", NotificationServiceFactory]);
+    domain.factory("eventService", ["$resource", EventServiceFactory]);
 
-    /**
-     *
-     * @param $http
-     * @constructor
-     */
-    function UserService($http) {
-        this.register = function (firstName, lastName, userName, password) {
-            var model = {
-                firstName: firstName,
-                lastName: lastName,
-                password: password,
-                username: userName
-            };
-            return $http.post("./registration", model);
-        }
+    function UserServiceFactory($resource) {
+        return $resource("./users");
     }
 
-    function SurveyService($http, rx) {
-        var surveys$ = new rx.BehaviorSubject([]);
-        this.loadAll = function () {
-            dispatch($http.get("./surveys"), surveys$);
-            return surveys$;
-        };
-
-        this.createSurveyAsDraft = function(survey, options) {
-            return createSurveyWithStatusAndOptions(survey, "PRIVATE", options);
-        };
-
-        this.createSurvey = function (survey, options) {
-            return createSurveyWithStatusAndOptions(survey, "OPEN", options);
-        };
-
-        this.loadSurveyWithId = function (identifier) {
-            var survey$ = new rx.BehaviorSubject({});
-            dispatch($http.get("./surveys/"+identifier), survey$);
-            return survey$;
-        };
-
-        this.loadAllOptionsForSurveyWithId = function (surveyId) {
-            var options$ = new rx.BehaviorSubject([]);
-            dispatch($http.get("./surveys/"+surveyId+"/options"), options$);
-            return options$;
-        };
-
-        this.loadAllParticipationsForSurveyWithId = function (surveyId) {
-            var participations$ = new rx.BehaviorSubject([]);
-            dispatch($http.get("./surveys/"+surveyId+"/participations"), participations$);
-            return participations$;
-        };
-
-        this.saveParticipationforSurvey = function (participation, survey) {
-            return $http.put("./surveys/"+ survey.id+"/participations", participation);
-        };
-
-        function createSurveyWithStatusAndOptions(survey, status, options) {
-            survey.options = options;
-            survey.surveyStatus = status;
-            return $http.post("./surveys", survey);
-        }
-
-        function dispatch(promise, subject$) {
-            promise.then(function (success) {
-                subject$.onNext(success.data);
-            }, function (error) {
-                subject$.onNext([]);
-            });
-        }
+    function SurveyServiceFactory($resource) {
+        return $resource(
+            "./surveys/:survey",
+            {survey: "@survey"},
+            {update: {method: "PUT"}})
     }
+
+    function ParticipationServiceFactory($resource) {
+        return $resource(
+            "./surveys/:survey/participations",
+            {survey: "@survey"},
+            {save: {method: "PUT", isArray: true}})
+    }
+
+    function OptionServiceFactory($resource) {
+        return $resource(
+            "./surveys/:survey/options",
+            {survey: "@survey"})
+    }
+
+    function NotificationServiceFactory($resource) {
+        return $resource("./users/me/notifications/:notification", {notification: "@notification"})
+    }
+
+    function EventServiceFactory($resource) {
+        return $resource("./users/me/events/:event", {event: "@event"})
+    }
+
 }());

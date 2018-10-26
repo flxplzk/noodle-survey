@@ -7,9 +7,17 @@
         "ngMaterial"
     ]);
 
-    detail.controller("detailController", ["$scope", "$stateParams", "surveyService", "appService", "notificationService", DetailController]);
+    detail.controller("detailController",
+        ["$scope",
+            "$stateParams",
+            "appService",
+            "notificationService",
+            "surveyService",
+            "optionService",
+            "participationService",
+            DetailController]);
 
-    function DetailController($scope, $stateParams, surveyService, appService, notificationService) {
+    function DetailController($scope, $stateParams, appService, notificationService, surveyService, optionService, participationService) {
         var currentUser = appService.getAuthenticatedUser();
         var vm = this;
         $scope.survey = {};
@@ -21,21 +29,14 @@
         init();
 
         function init() {
-            surveyService.loadSurveyWithId($stateParams.surveyId)
-                .subscribeOnNext(function (survey) {
-                    $scope.survey = survey;
-                });
+            $scope.survey = surveyService.get({survey: $stateParams.surveyId});
+            $scope.options = optionService.query({survey: $stateParams.surveyId});
+            var query = participationService.query({survey: $stateParams.surveyId});
+            query.$promise.then(function (data) {
+                $scope.participations = data;
+                filterOwnParticipation();
+            })
 
-            surveyService.loadAllOptionsForSurveyWithId($stateParams.surveyId)
-                .subscribeOnNext(function (options) {
-                    $scope.options = options;
-                });
-
-            surveyService.loadAllParticipationsForSurveyWithId($stateParams.surveyId)
-                .subscribeOnNext(function (participations) {
-                    $scope.participations = participations;
-                    filterOwnParticipation();
-                });
         }
 
         this.participates = function (participation, option) {

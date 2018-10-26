@@ -5,7 +5,6 @@
         "de.nordakademie.iaa.survey.dashboard",
         "de.nordakademie.iaa.survey.detail",
         "de.nordakademie.iaa.survey.editor"
-
     ]);
 
     app.config(function ($stateProvider) {
@@ -46,6 +45,7 @@
             templateUrl: "js/components/dashboard/dashboard.template.html",
             onEnter: enteringGuard
         };
+
         $stateProvider.state(loginState);
         $stateProvider.state(registerState);
         $stateProvider.state(dashboardState);
