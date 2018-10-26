@@ -13,12 +13,21 @@
     function _getId() {
         return this._id;
     }
+
     function withIdGetter(service) {
         angular.extend(service.prototype, {
             getId: _getId
         });
         return service;
     }
+
+    function withEquals(service, comperator) {
+        angular.extend(service.prototype, {
+            equals: comperator
+        });
+        return service;
+    }
+
     function UserServiceFactory($resource) {
         return $resource("./users");
     }
@@ -36,7 +45,7 @@
         var service = $resource(
             "./surveys/:survey/participations",
             {survey: "@survey"},
-            {save: {method: "PUT", isArray: true}});
+            {save: {method: "PUT"}});
         withIdGetter(service);
         return service
     }
@@ -44,8 +53,24 @@
     function OptionServiceFactory($resource) {
         var service = $resource(
             "./surveys/:survey/options",
-            {survey: "@survey"});
+            {survey: "@survey"},
+            {
+                query: {
+                    method: "GET",
+                    isArray: true,
+                    transformResponse: function (data, header) {
+                        var options = angular.fromJson(data);
+                        options.forEach(function (option) {
+                            option.dateTime = new Date(option.dateTime)
+                        });
+                        return options;
+                    }
+                }
+            });
         withIdGetter(service);
+        withEquals(service, function (other) {
+            return other !== null && this.dateTime === other.dateTime
+        });
         return service
     }
 

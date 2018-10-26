@@ -28,11 +28,11 @@ public class NotificationServiceImpl implements NotificationService{
     @Override
     public void notifyUsersWithNotificationType(@NotNull NotificationType type,
                                                 @NotNull Survey targetSurvey) {
-       throw new UnsupportedOperationException();
+       // TODO
     }
 
     @Override
     public void deleteAllNotificationsForSurvey(Survey survey) {
-        throw new UnsupportedOperationException();
-    }
+        // TODO
+  }
 }

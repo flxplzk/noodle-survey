@@ -41,7 +41,7 @@ public class SurveyController {
         return surveyService.createSurvey(survey, getAuthenticatedUser());
     }
 
-    @RequestMapping(value = PATH_SURVEYS,
+    @RequestMapping(value = PATH_SURVEYS + "/{" + PATH_V_IDENTIFIER + "}",
             method = RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

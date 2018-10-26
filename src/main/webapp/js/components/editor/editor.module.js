@@ -16,14 +16,6 @@
             transclude: false,
             controller: "floatingEditorController",
             controllerAs: "dialogManager",
-            link: function (scope) {
-                scope.$watch('surveyId', function (newVal, oldVal) {
-                    console.log("inner", newVal, oldVal);
-                });
-                scope.$parent.$watch('surveyId', function (newVal, oldVal) {
-                    scope.surveyId = oldVal;
-                })
-            },
             scope: {
                 surveyId: "=",
                 icon: "@"
@@ -79,22 +71,20 @@
             };
 
             function saveWithStatus(status) {
-                var survey = {
-                    title: $scope.survey.title,
-                    description: $scope.survey.description,
-                    surveyStatus: status,
-                    options: $scope.options
-                };
+                var survey = $scope.survey;
+                survey.surveyStatus = status;
+                survey.options = $scope.options;
                 if ($scope.createNew) {
-                    surveyService.save(survey).$promise
-                        .then(successHandler, errorHandler);
+                    survey.$save(successHandler, errorHandler);
                 } else {
-                    surveyService.update({survey: survey.id}, survey).$promise
-                        .then(successHandler, errorHandler);
+                    survey.$update({survey: survey.getId()}, successHandler, errorHandler)
                 }
             }
 
             function validOptions() {
+                if (angular.isUndefined($scope.options) || $scope.options.length === 0) {
+                    return false;
+                }
                 for (var i = 0; i < $scope.options.length; i++) {
                     if ($scope.options[i].dateTime === "") {
                         return false;
@@ -104,7 +94,8 @@
             }
 
             this.valid = function () {
-                return $scope.survey.title !== ""
+                return angular.isDefined($scope.survey)
+                    && $scope.survey.title !== ""
                     && $scope.survey.description !== ""
                     && validOptions();
             };
@@ -113,12 +104,11 @@
             };
 
             function initialize() {
-                $scope.busy = true;
                 if ($scope.createNew) {
-                    $scope.survey = {
+                    $scope.survey = new surveyService({
                         title: "",
                         description: ""
-                    };
+                    });
                     $scope.options = [
                         {
                             dateTime: new Date()
@@ -139,7 +129,7 @@
             }
 
             function successHandler(survey) {
-                $state.go("detail", {surveyId: survey.id});
+                $state.go("detail", {surveyId: survey.getId()});
                 vm.cancel()
             }
 

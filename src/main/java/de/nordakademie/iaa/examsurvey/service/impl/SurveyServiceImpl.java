@@ -75,13 +75,13 @@ public class SurveyServiceImpl extends AbstractAuditModelService<Survey> impleme
         requireInitiator(authenticatedUser, persistedSurvey);
         requireValidStatus(persistedSurvey.getSurveyStatus());
 
-        optionService.deleteAllOptionsForSurvey(survey);
         participationService.deleteAllParticipationsForSurvey(survey);
+        optionService.deleteAllOptionsForSurvey(survey);
         optionService.saveOptionsForSurvey(survey.getOptions(), survey);
         notificationService.notifyUsersWithNotificationType(NotificationType.SURVEY_CHANGE, survey);
 
         if (isSurveyClose(survey, persistedSurvey)) {
-           throw new PermissionDeniedException("Manual Closing of survey prohibited");
+           throw new PermissionDeniedException("Manual closing of survey prohibited");
         }
 
         return surveyRepository.save(survey);
