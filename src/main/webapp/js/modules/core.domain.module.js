@@ -10,36 +10,55 @@
     domain.factory("userNotificationService", ["$resource", NotificationServiceFactory]);
     domain.factory("eventService", ["$resource", EventServiceFactory]);
 
+    function _getId() {
+        return this._id;
+    }
+    function withIdGetter(service) {
+        angular.extend(service.prototype, {
+            getId: _getId
+        });
+        return service;
+    }
     function UserServiceFactory($resource) {
         return $resource("./users");
     }
 
     function SurveyServiceFactory($resource) {
-        return $resource(
+        var service = $resource(
             "./surveys/:survey",
             {survey: "@survey"},
-            {update: {method: "PUT"}})
+            {update: {method: "PUT"}});
+        withIdGetter(service);
+        return service
     }
 
     function ParticipationServiceFactory($resource) {
-        return $resource(
+        var service = $resource(
             "./surveys/:survey/participations",
             {survey: "@survey"},
-            {save: {method: "PUT", isArray: true}})
+            {save: {method: "PUT", isArray: true}});
+        withIdGetter(service);
+        return service
     }
 
     function OptionServiceFactory($resource) {
-        return $resource(
+        var service = $resource(
             "./surveys/:survey/options",
-            {survey: "@survey"})
+            {survey: "@survey"});
+        withIdGetter(service);
+        return service
     }
 
     function NotificationServiceFactory($resource) {
-        return $resource("./users/me/notifications/:notification", {notification: "@notification"})
+        var service = $resource("./users/me/notifications/:notification", {notification: "@notification"});
+        withIdGetter(service);
+        return service
     }
 
     function EventServiceFactory($resource) {
-        return $resource("./users/me/events/:event", {event: "@event"})
+        var service = $resource("./users/me/events/:event", {event: "@event"});
+        withIdGetter(service);
+        return service
     }
 
 }());

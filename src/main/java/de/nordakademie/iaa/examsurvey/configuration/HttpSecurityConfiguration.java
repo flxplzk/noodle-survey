@@ -1,5 +1,6 @@
 package de.nordakademie.iaa.examsurvey.configuration;
 
+import de.nordakademie.iaa.examsurvey.controller.UserController;
 import de.nordakademie.iaa.examsurvey.secrurity.SurveyBasicAuthenticationEntryPoint;
 import de.nordakademie.iaa.examsurvey.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class HttpSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // permitting required resources
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, ANT_REGISTRATION).permitAll()
+                .antMatchers(HttpMethod.POST, UserController.PATH_USERS).permitAll()
                 .antMatchers(HttpMethod.GET, ANT_INDEX_HTML, ANT_ROOT, ANT_CSS, ANT_JS,
                         ANT_FRONTEND_DEPENDENCIES).permitAll()
                 .anyRequest().authenticated()

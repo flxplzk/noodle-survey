@@ -24,7 +24,7 @@
         });
 
         this.viewDetails = function (survey) {
-            $state.go("detail", {surveyId: survey.id})
+            $state.go("detail", {surveyId: survey.getId()})
         };
 
         $scope.initiatorOfSurveyShort = function (survey) {
