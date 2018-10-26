@@ -138,8 +138,8 @@
 
             }
 
-            function successHandler(success) {
-                $state.go("detail", {surveyId: success.id});
+            function successHandler(survey) {
+                $state.go("detail", {surveyId: survey.id});
                 vm.cancel()
             }
 

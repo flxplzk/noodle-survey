@@ -28,18 +28,6 @@ public interface SurveyService {
                         @NotNull final User initiator);
 
     /**
-     * Creates Option for survey
-     *
-     * @param options    to create
-     * @param identifier of the survey
-     * @param user       initiator of the survey
-     * @return persistent Options
-     */
-    List<Option> saveOptionsForSurvey(@NotNull final List<Option> options,
-                                      final Long identifier,
-                                      @NotNull final User user);
-
-    /**
      * retrieves all {@link Option}'s which are visible for the authenticated User.
      *
      * @param title             of the Survey
@@ -81,6 +69,10 @@ public interface SurveyService {
                                                                   Long identifier,
                                                                   @NotNull User authenticatedUser);
 
-    Survey loadSurveyWithUser(Long identifier,
+    Survey loadSurveyWithUser(@NotNull Long identifier,
                               @NotNull User authenticatedUser);
+
+    Survey update(@NotNull Survey survey, @NotNull User authenticatedUser);
+
+    void closeSurvey(final Survey surveyToClose, User authenticatedUser);
 }

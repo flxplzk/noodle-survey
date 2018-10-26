@@ -42,6 +42,16 @@ public class SurveyController {
     }
 
     @RequestMapping(value = PATH_SURVEYS,
+            method = RequestMethod.PUT,
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Survey createSurvey(@PathVariable(name = PATH_V_IDENTIFIER) Long id,
+                               @RequestBody Survey survey) {
+        survey.setId(id);
+        return surveyService.update(survey, getAuthenticatedUser());
+    }
+
+    @RequestMapping(value = PATH_SURVEYS,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Survey> loadSurveys() {
@@ -53,15 +63,6 @@ public class SurveyController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Survey loadSurvey(@PathVariable(value = PATH_V_IDENTIFIER) final Long identifier) {
         return surveyService.loadSurveyWithUser(identifier, getAuthenticatedUser());
-    }
-
-    @RequestMapping(value = PATH_SURVEY_OPTIONS,
-            method = RequestMethod.PUT,
-            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Option> saveOptions(@PathVariable(value = PATH_V_IDENTIFIER) Long identifier,
-                                    @RequestBody List<Option> options) {
-        return surveyService.saveOptionsForSurvey(options, identifier, getAuthenticatedUser());
     }
 
     @RequestMapping(value = PATH_SURVEY_OPTIONS,
