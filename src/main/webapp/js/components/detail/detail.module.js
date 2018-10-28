@@ -21,7 +21,7 @@
                               SurveyResource, OptionResource, ParticipationResource) {
         var currentUser = appService.getAuthenticatedUser();
         var vm = this;
-        $scope.ownParticipation = {options: []};
+        $scope.ownParticipation = new ParticipationResource({options: []});
         $scope.surveyId = $stateParams.surveyId;
 
         init();
@@ -78,7 +78,8 @@
 
         this.save = function () {
             $scope.computing = true;
-            SurveyResource.saveParticipationforSurvey($scope.ownParticipation, $scope.survey)
+            $scope.ownParticipation.survey = $scope.survey;
+            $scope.ownParticipation.$save()
                 .then(function (value) {
                     $scope.computing = false;
                     init();
