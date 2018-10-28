@@ -1,89 +1,155 @@
 (function () {
+
+    // ########################## MODULE DECLARATION #####################################
+
+    /**
+     * @name "de.nordakademie.iaa.survey.core.domain"
+     *
+     * This module provides domain Objects for this application.
+     * Domain Objects are:
+     *      {@link UserResource}
+     *      {@link SurveyResource}
+     *      {@link ParticipationResource}
+     *      {@link OptionResource}
+     *      {@link NotificationResource}
+     *      {@link EventResource}
+     *
+     * @author Felix Plazek
+     * @author Bengt Lasse Arndt
+     * @author Robert Peters
+     * @author Sascha Pererva
+     *
+     * @type {angular.Module}
+     */
     var domain = angular.module("de.nordakademie.iaa.survey.core.domain", [
         "ngResource"
     ]);
 
-    domain.factory("userService", ["$resource", UserServiceFactory]);
-    domain.factory("surveyService", ["$resource", SurveyServiceFactory]);
-    domain.factory("participationService", ["$resource", ParticipationServiceFactory]);
-    domain.factory("optionService", ["$resource", OptionServiceFactory]);
-    domain.factory("userNotificationService", ["$resource", NotificationServiceFactory]);
-    domain.factory("eventService", ["$resource", EventServiceFactory]);
+    domain.factory("UserResource", ["$resource", UserServiceFactory]);
+    domain.factory("SurveyResource", ["$resource", SurveyResourceFactory]);
+    domain.factory("ParticipationResource", ["$resource", ParticipationResourceFactory]);
+    domain.factory("OptionResource", ["$resource", OptionResourceFactory]);
+    domain.factory("NotificationResource", ["$resource", NotificationResourceFactory]);
+    domain.factory("EventResource", ["$resource", EventResourceFactory]);
 
-    function _getId() {
-        return this._id;
-    }
-
-    function withIdGetter(service) {
-        angular.extend(service.prototype, {
-            getId: _getId
-        });
-        return service;
-    }
-
-    function withEquals(service, comperator) {
-        angular.extend(service.prototype, {
-            equals: comperator
-        });
-        return service;
-    }
+    // ########################## FACTORY FUNCTIONS #####################################
 
     function UserServiceFactory($resource) {
-        return $resource("./users");
+        var resource = $resource("./users");
+        angular.extend(resource, user);
+        return resource;
     }
 
-    function SurveyServiceFactory($resource) {
-        var service = $resource(
+    function SurveyResourceFactory($resource) {
+        var resource = $resource(
             "./surveys/:survey",
             {survey: "@survey"},
             {update: {method: "PUT"}});
-        withIdGetter(service);
-        return service
+        angular.extend(resource, survey);
+        return survey
     }
 
-    function ParticipationServiceFactory($resource) {
-        var service = $resource(
+    function ParticipationResourceFactory($resource) {
+        var resource = $resource(
             "./surveys/:survey/participations",
             {survey: "@survey"},
             {save: {method: "PUT"}});
-        withIdGetter(service);
-        return service
+        angular.extend(resource, participation);
+        return resource
     }
 
-    function OptionServiceFactory($resource) {
-        var service = $resource(
+    function OptionResourceFactory($resource) {
+        var resource = $resource(
             "./surveys/:survey/options",
             {survey: "@survey"},
             {
                 query: {
                     method: "GET",
                     isArray: true,
-                    transformResponse: function (data, header) {
-                        var options = angular.fromJson(data);
-                        options.forEach(function (option) {
-                            option.dateTime = new Date(option.dateTime)
-                        });
-                        return options;
-                    }
+                    transformResponse: transformOptions
+                }
+            },
+            {
+                get: {
+                    method: "GET",
+                    isArray: false,
+                    transformResponse: transformOptions
                 }
             });
-        withIdGetter(service);
-        withEquals(service, function (other) {
-            return other !== null && this.dateTime === other.dateTime
-        });
-        return service
+        angular.extend(resource, option);
+        return resource
     }
 
-    function NotificationServiceFactory($resource) {
-        var service = $resource("./users/me/notifications/:notification", {notification: "@notification"});
-        withIdGetter(service);
-        return service
+    function NotificationResourceFactory($resource) {
+        var resource = $resource("./users/me/notifications/:notification", {notification: "@notification"});
+        angular.extend(resource, notification);
+        return resource
     }
 
-    function EventServiceFactory($resource) {
-        var service = $resource("./users/me/events/:event", {event: "@event"});
-        withIdGetter(service);
-        return service
+    function EventResourceFactory($resource) {
+        var resource = $resource("./users/me/events/:event", {event: "@event"});
+        angular.extend(resource, event);
+        return resource
     }
 
+    // ########################## DOMAIN OBJECTS #####################################
+
+    var survey = {
+        getId: _getId,
+        isValid: function () {
+            return this.title !== ""
+                && this.description !== ""
+        }
+    };
+
+    var option = {
+        getId: _getId,
+        isValid: function () {
+            return this.dateTime > new Date()
+        },
+        equals: function (other) {
+            return other !== null &&
+                this.dateTime.getTime() === other.dateTime.getTime()
+        }
+    };
+
+    var participation = {
+        getId: _getId
+    };
+
+    var user = {
+        getId: _getId,
+        isValid: function () {
+            return this.firstName && this.lastName && this.username && this.password
+                && this.firstName !== "" && this.lastName !== ""
+                && this.username !== "" && this.password !== ""
+        }
+    };
+
+    var notification = {
+        getId: _getId
+    };
+
+    var event = {
+        getId: _getId
+    };
+
+    // ########################## HELPER FUNCTIONS #####################################
+
+    function _getId() {
+        return this._id;
+    }
+
+    function transformOptions(data, header) {
+        var options = angular.fromJson(data);
+        if (angular.isArray(options)) {
+            options.forEach(transformDateTime);
+        } else {
+            transformDateTime(options);
+        }
+        return options;
+    }
+    function transformDateTime(option) {
+        option.dateTime = new Date(option.dateTime)
+    }
 }());
