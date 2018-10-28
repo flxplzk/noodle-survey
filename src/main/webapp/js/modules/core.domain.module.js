@@ -56,11 +56,12 @@
 
     function ParticipationResourceFactory($resource) {
         var resource = $resource(
-            "./surveys/:survey/participations",
-            {survey: "@survey"},
+            "./surveys/:survey/participations/:participation",
+            {survey: "@survey", participation: "@participation"},
             {
                 query: requestWithResponseTransformation("GET", true, transformParticipations, $resource),
-                save: requestWithResponseTransformation("PUT", false, transformParticipations, $resource),
+                save: requestWithResponseTransformation("POST", false, transformParticipations, $resource),
+                update: requestWithResponseTransformation("PUT", false, transformParticipations, $resource),
                 get: requestWithResponseTransformation("GET", false, transformParticipations, $resource)
             }
         );
@@ -118,7 +119,14 @@
     };
 
     var participation = {
-        getId: _getId
+        getId: _getId,
+        $persist: function (surveyId, success, error) {
+            if (angular.isDefined(this.getId())) {
+                return this.$update({survey: surveyId, participation: this.getId()}, success, error)
+            } else {
+                return this.$save({survey: surveyId}, success, error)
+            }
+        }
     };
 
     var user = {
@@ -143,7 +151,18 @@
     };
 
     // ########################## HELPER FUNCTIONS #####################################
-    function transform(resource, data, isArray, transformer) {
+
+    function requestWithResponseTransformation(method, isResponseArray, transformer, $resource) {
+        return {
+            method: method,
+            isArray: isResponseArray,
+            transformResponse: function (data, header) {
+                return transform($resource, data, isResponseArray, transformer)
+            }
+        }
+    }
+
+    function  transform(resource, data, isArray, transformer) {
         var transformedJson = angular.fromJson(data);
         return transformer(transformedJson, resource, isArray);
     }
@@ -205,16 +224,6 @@
                 lastName: initiator.lastName,
                 username: initiator.username
             })
-        }
-    }
-
-    function requestWithResponseTransformation(method, isResponseArray, transformer, $resource) {
-        return {
-            method: method,
-            isArray: isResponseArray,
-            transformResponse: function (data, header) {
-                return transform($resource, data, isResponseArray, transformer)
-            }
         }
     }
 }());

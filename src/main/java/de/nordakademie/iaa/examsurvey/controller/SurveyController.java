@@ -80,13 +80,22 @@ public class SurveyController {
     }
 
     @RequestMapping(value = PATH_SURVEY_PARTICIPATIONS,
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public Participation createParticipationForSurvey(@RequestBody Participation participation,
+                                                    @PathVariable(name = PATH_V_IDENTIFIER) Long surveyIdentifier) {
+        return surveyService.saveParticipationForSurveyWithAuthenticatedUser(participation, surveyIdentifier, getAuthenticatedUser());
+    }
+
+    @RequestMapping(value = PATH_SURVEY_PARTICIPATIONS + "/{participation}",
             method = RequestMethod.PUT,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Participation saveParticipationForSurvey(@RequestBody Participation participation,
-                                                    @PathVariable(name = PATH_V_IDENTIFIER) Long identifier) {
-        return surveyService.saveParticipationForSurveyWithAuthenticatedUser(participation, identifier, getAuthenticatedUser());
+                                                        @PathVariable(name = PATH_V_IDENTIFIER) Long surveyIdentifier,
+                                                      @PathVariable(name = "participation") Long participationIdentifier) {
+        participation.setId(participationIdentifier);
+        return surveyService.saveParticipationForSurveyWithAuthenticatedUser(participation, surveyIdentifier, getAuthenticatedUser());
     }
-
     private User getAuthenticatedUser() {
         return authenticationService.getCurrentAuthenticatedUser();
     }

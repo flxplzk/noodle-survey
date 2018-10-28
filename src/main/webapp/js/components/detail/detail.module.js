@@ -79,7 +79,7 @@
         this.save = function () {
             $scope.computing = true;
             $scope.ownParticipation.survey = $scope.survey;
-            $scope.ownParticipation.$save()
+            $scope.ownParticipation.$persist($scope.surveyId)
                 .then(function (value) {
                     $scope.computing = false;
                     init();
