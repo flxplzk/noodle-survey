@@ -17,7 +17,10 @@ public class OptionServiceImpl implements OptionService {
 
     @Override
     public void saveOptionsForSurvey(List<Option> options, Survey survey) {
-        options.forEach(option -> option.setSurvey(survey));
+        options.forEach(option -> {
+            option.setSurvey(survey);
+            option.setId(null);
+        });
         repository.saveAll(options);
     }
 

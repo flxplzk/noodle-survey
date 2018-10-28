@@ -33,7 +33,7 @@
             $mdDialog.show({
                 locals: {surveyId: $scope.surveyId},
                 templateUrl: "/js/components/editor/editor.dialog.template.html",
-                controller: ["$scope", "$mdDialog", "surveyService", "optionService", "$state", "notificationService", "surveyId", EditorController],
+                controller: ["$scope", "$mdDialog", "SurveyResource", "OptionResource", "$state", "notificationService", "surveyId", EditorController],
                 controllerAs: "surveyEditorController",
                 parent: angular.element(document.body),
                 targetEvent: ev,
@@ -42,7 +42,7 @@
             })
         };
 
-        function EditorController($scope, $mdDialog, surveyService, optionService, $state, notificationService, surveyId) {
+        function EditorController($scope, $mdDialog, SurveyResource, OptionResource, $state, notificationService, surveyId) {
             var vm = this;
             $scope.createNew = angular.isUndefined(surveyId);
             $scope.caption = $scope.createNew ? "EDITOR_TITLE_NEW" : "EDITOR_TITLE_UPDATE";
@@ -50,12 +50,12 @@
             initialize();
 
             this.addEmptyOption = function () {
-                $scope.options.push({dateTime: new Date()})
+                $scope.options.push(new OptionResource({dateTime: new Date()}));
             };
 
             this.removeOption = function (optionToRemove) {
                 $scope.options = $scope.options.filter(function (value) {
-                    return value.dateTime !== optionToRemove.dateTime
+                    return value.equals(optionToRemove);
                 });
                 if ($scope.options.length === 0) {
                     this.addEmptyOption();
@@ -75,28 +75,44 @@
                 survey.surveyStatus = status;
                 survey.options = $scope.options;
                 if ($scope.createNew) {
-                    survey.$save(successHandler, errorHandler);
+                    survey.$save(successHandler, createErrorHandler);
                 } else {
-                    survey.$update({survey: survey.getId()}, successHandler, errorHandler)
+                    survey.$update({survey: survey.getId()}, successHandler, createErrorHandler)
                 }
             }
 
             function validOptions() {
-                if (angular.isUndefined($scope.options) || $scope.options.length === 0) {
-                    return false;
-                }
+                return optionsDefined && optionsValid() && optionsUnique()
+            }
+
+            function optionsDefined() {
+                return angular.isUndefined($scope.options) || $scope.options.length === 0
+            }
+
+            function optionsValid() {
                 for (var i = 0; i < $scope.options.length; i++) {
-                    if ($scope.options[i].dateTime === "") {
+                    if (!$scope.options[i].isValid()) {
                         return false;
                     }
                 }
                 return true;
             }
 
+            function optionsUnique() {
+                var valueSoFar = Object.create(null);
+                for (var i = 0; i < $scope.options.length; i++) {
+                    var value = $scope.options[i];
+                    if (value.dateTime in valueSoFar) {
+                        return false;
+                    }
+                    valueSoFar[value.dateTime] = true;
+                }
+                return true;
+            }
+
             this.valid = function () {
                 return angular.isDefined($scope.survey)
-                    && $scope.survey.title !== ""
-                    && $scope.survey.description !== ""
+                    && $scope.survey.isValid()
                     && validOptions();
             };
             this.cancel = function () {
@@ -105,27 +121,14 @@
 
             function initialize() {
                 if ($scope.createNew) {
-                    $scope.survey = new surveyService({
-                        title: "",
-                        description: ""
-                    });
-                    $scope.options = [
-                        {
-                            dateTime: new Date()
-                        }
-                    ];
+                    $scope.survey = new SurveyResource({title: "", description: ""});
+                    $scope.options = [new OptionResource({dateTime: new Date()})];
                     $scope.busy = false;
                     return;
                 }
                 var requestParam = {survey: surveyId};
-                surveyService.get(requestParam).$promise.then(function (survey) {
-                    $scope.survey = survey;
-                });
-
-                var query = optionService.query(requestParam).$promise.then(function (options) {
-                    $scope.options = options;
-                });
-
+                $scope.survey = SurveyResource.get(requestParam);
+                $scope.options = OptionResource.query(requestParam);
             }
 
             function successHandler(survey) {
@@ -133,7 +136,18 @@
                 vm.cancel()
             }
 
-            function errorHandler(error) {
+            function createErrorHandler(error) {
+                if (error.status === 409) {
+                    notificationService.showNotification("EDITOR_CONFLICT")
+                } else if (error.status === 404) {
+                    notificationService.showNotification("EDITOR_NOT_FOUND");
+                    vm.cancel()
+                } else {
+                    notificationService.showNotification("EDITOR_NETWORK")
+                }
+            }
+
+            function updateErrorHandler(error) {
                 if (error.status === 409) {
                     notificationService.showNotification("EDITOR_CONFLICT")
                 } else if (error.status === 404) {

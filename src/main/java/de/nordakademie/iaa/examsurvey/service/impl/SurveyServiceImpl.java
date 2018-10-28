@@ -74,7 +74,7 @@ public class SurveyServiceImpl extends AbstractAuditModelService<Survey> impleme
         final Survey persistedSurvey = getExistent(survey);
         requireInitiator(authenticatedUser, persistedSurvey);
         requireValidStatus(persistedSurvey.getSurveyStatus());
-
+        survey.setInitiator(authenticatedUser);
         participationService.deleteAllParticipationsForSurvey(survey);
         optionService.deleteAllOptionsForSurvey(survey);
         optionService.saveOptionsForSurvey(survey.getOptions(), survey);

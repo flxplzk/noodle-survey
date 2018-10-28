@@ -15,7 +15,7 @@
      *      {@link EventResource}
      *
      * @author Felix Plazek
-     * @author Bengt Lasse Arndt
+     * @author Bengt-Lasse Arndt
      * @author Robert Peters
      * @author Sascha Pererva
      *
@@ -36,7 +36,7 @@
 
     function UserServiceFactory($resource) {
         var resource = $resource("./users");
-        angular.extend(resource, user);
+        angular.extend(resource.prototype, user);
         return resource;
     }
 
@@ -44,17 +44,27 @@
         var resource = $resource(
             "./surveys/:survey",
             {survey: "@survey"},
-            {update: {method: "PUT"}});
-        angular.extend(resource, survey);
-        return survey
+            {
+                query: requestWithResponseTransformation("GET", true, transformSurveys, $resource),
+                update: requestWithResponseTransformation("PUT", false, transformSurveys, $resource),
+                get: requestWithResponseTransformation("GET", false, transformSurveys, $resource)
+            }
+        );
+        angular.extend(resource.prototype, survey);
+        return resource
     }
 
     function ParticipationResourceFactory($resource) {
         var resource = $resource(
             "./surveys/:survey/participations",
             {survey: "@survey"},
-            {save: {method: "PUT"}});
-        angular.extend(resource, participation);
+            {
+                query: requestWithResponseTransformation("GET", true, transformParticipations, $resource),
+                save: requestWithResponseTransformation("PUT", false, transformParticipations, $resource),
+                get: requestWithResponseTransformation("GET", false, transformParticipations, $resource)
+            }
+        );
+        angular.extend(resource.prototype, participation);
         return resource
     }
 
@@ -63,32 +73,23 @@
             "./surveys/:survey/options",
             {survey: "@survey"},
             {
-                query: {
-                    method: "GET",
-                    isArray: true,
-                    transformResponse: transformOptions
-                }
-            },
-            {
-                get: {
-                    method: "GET",
-                    isArray: false,
-                    transformResponse: transformOptions
-                }
-            });
-        angular.extend(resource, option);
+                query: requestWithResponseTransformation("GET", true, transformOptions, $resource),
+                get: requestWithResponseTransformation("GET", false, transformOptions, $resource)
+            }
+        );
+        angular.extend(resource.prototype, option);
         return resource
     }
 
     function NotificationResourceFactory($resource) {
         var resource = $resource("./users/me/notifications/:notification", {notification: "@notification"});
-        angular.extend(resource, notification);
+        angular.extend(resource.prototype, notification);
         return resource
     }
 
     function EventResourceFactory($resource) {
         var resource = $resource("./users/me/events/:event", {event: "@event"});
-        angular.extend(resource, event);
+        angular.extend(resource.prototype, event);
         return resource
     }
 
@@ -96,6 +97,9 @@
 
     var survey = {
         getId: _getId,
+        isOpen: function () {
+            return this.surveyStatus && this.surveyStatus === "OPEN"
+        },
         isValid: function () {
             return this.title !== ""
                 && this.description !== ""
@@ -109,7 +113,7 @@
         },
         equals: function (other) {
             return other !== null &&
-                this.dateTime.getTime() === other.dateTime.getTime()
+                this._id === other._id
         }
     };
 
@@ -123,6 +127,10 @@
             return this.firstName && this.lastName && this.username && this.password
                 && this.firstName !== "" && this.lastName !== ""
                 && this.username !== "" && this.password !== ""
+        },
+        equals: function (other) {
+            return this.username && other
+                && this.username === other.username;
         }
     };
 
@@ -135,21 +143,78 @@
     };
 
     // ########################## HELPER FUNCTIONS #####################################
+    function transform(resource, data, isArray, transformer) {
+        var transformedJson = angular.fromJson(data);
+        return transformer(transformedJson, resource, isArray);
+    }
 
     function _getId() {
         return this._id;
     }
 
-    function transformOptions(data, header) {
-        var options = angular.fromJson(data);
-        if (angular.isArray(options)) {
+    function transformOptions(options, $resource, isArray) {
+        if (isArray) {
             options.forEach(transformDateTime);
         } else {
             transformDateTime(options);
         }
         return options;
     }
+
     function transformDateTime(option) {
         option.dateTime = new Date(option.dateTime)
+    }
+
+    function transformParticipations(participations, resource, isArray) {
+        if (isArray) {
+            participations.forEach(participationTransformer(resource))
+        } else {
+            participationTransformer(resource)
+        }
+        return participations;
+    }
+
+    function participationTransformer(resource) {
+        var optionResource = OptionResourceFactory(resource);
+        return function (participation) {
+            participation.options.forEach(function (option, index) {
+                transformDateTime(option);
+                participation.options[index] = new optionResource({
+                    _id: option._id,
+                    dateTime: option.dateTime
+                })
+            })
+        }
+    }
+
+    function transformSurveys(surveys, resource, isArray) {
+        if (isArray) {
+            surveys.forEach(surveyTransformer(resource));
+        } else {
+            surveyTransformer(resource)(surveys);
+        }
+        return surveys;
+    }
+
+    function surveyTransformer(resource) {
+        var userResource = UserServiceFactory(resource);
+        return function transformSurvey(surveysOrSurvey) {
+            var initiator = surveysOrSurvey.initiator;
+            surveysOrSurvey.initiator = new userResource({
+                firstName: initiator.firstName,
+                lastName: initiator.lastName,
+                username: initiator.username
+            })
+        }
+    }
+
+    function requestWithResponseTransformation(method, isResponseArray, transformer, $resource) {
+        return {
+            method: method,
+            isArray: isResponseArray,
+            transformResponse: function (data, header) {
+                return transform($resource, data, isResponseArray, transformer)
+            }
+        }
     }
 }());

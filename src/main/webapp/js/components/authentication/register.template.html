@@ -12,14 +12,14 @@
                     <input type="text"
                            id="inputFirstName"
                            placeholder="{{'AUTH_REGISTER_FIRST_NAME_LABEL'|translate}}"
-                           ng-model="firstName"
+                           ng-model="user.firstName"
                            autofocus required>
                 </md-input-container>
                 <md-input-container class="md-block">
                     <label for="inputLastName">{{"AUTH_REGISTER_LAST_NAME_LABEL"|translate}}</label>
                     <input type="text"
                            id="inputLastName"
-                           ng-model="lastName"
+                           ng-model="user.lastName"
                            placeholder="{{'AUTH_REGISTER_FIRST_NAME_LABEL'|translate}}"
                            required>
                 </md-input-container>
@@ -30,7 +30,7 @@
                            id="inputEmail"
                            placeholder="{{'AUTH_LOGIN_EMAIL_LABEL'|translate}}"
                            name="email"
-                           ng-model="username"
+                           ng-model="user.username"
                            minlength="10" maxlength="100"
                            required>
                     <div ng-messages="register.inputEmail.$error">
@@ -46,7 +46,7 @@
                            id="inputPassword"
                            name="inputPassword"
                            placeholder="{{'AUTH_LOGIN_PASSWORD_LABEL'|translate}}"
-                           ng-model="password"
+                           ng-model="user.password"
                            ng-pattern="/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/"
                            minlength="8"
                            required>

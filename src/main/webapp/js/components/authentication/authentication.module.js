@@ -8,8 +8,7 @@
     ]);
 
     app.controller("loginController", ["$scope", "appService", LoginController]);
-
-    app.controller("registerController", ["$scope", "$state", "userService", "notificationService", RegistrationController]);
+    app.controller("registerController", ["$scope", "$state", "UserResource", "notificationService", RegistrationController]);
 
     function LoginController($scope, appService) {
         $scope.username = "";
@@ -20,25 +19,18 @@
         }
     }
 
-    function RegistrationController($scope, $state, userService, errorService) {
-        $scope.firstName = "";
-        $scope.lastName = "";
-        $scope.username = "";
-        $scope.password = "";
+    function RegistrationController($scope, $state, UserResource, errorService) {
+        $scope.user = new UserResource({
+            firstName: "",
+            lastName: "",
+            username: "",
+            password: ""
+        });
         $scope.passwordRepetition = "";
-        $scope.passwordError = "";
 
         this.register = function () {
-            if ($scope.password === $scope.passwordRepetition) {
-                $scope.passwordError = null;
-                var user = {
-                    firstName: $scope.firstName,
-                    lastName: $scope.lastName,
-                    username: $scope.username,
-                    password: $scope.password
-                };
-                var saveRequest = userService.save(user);
-                saveRequest.$promise.then(successHandler, usernameAlreadyExistsHandler);
+            if ($scope.user.password === $scope.passwordRepetition) {
+                $scope.user.$save($scope.user, successHandler, usernameAlreadyExistsHandler);
             } else {
                 errorService.showNotification("AUTH_REGISTER_PASSWORD_NON_MATCH");
             }
