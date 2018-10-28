@@ -15,4 +15,6 @@ import java.util.List;
 public interface ParticipationService {
 
     List<Participation> loadAllParticipationsForSurvey(@NotNull final Survey survey);
+
+    void deleteAllParticipationsForSurvey(Survey survey);
 }

@@ -10,7 +10,6 @@ import de.nordakademie.iaa.examsurvey.persistence.specification.NotificationSpec
 import de.nordakademie.iaa.examsurvey.service.NotificationService;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationServiceImpl implements NotificationService{
@@ -28,10 +27,12 @@ public class NotificationServiceImpl implements NotificationService{
 
     @Override
     public void notifyUsersWithNotificationType(@NotNull NotificationType type,
-                                                @NotNull List<User> users,
                                                 @NotNull Survey targetSurvey) {
-        for (final User user : users) {
-            notificationRepository.save(new Notification(user, targetSurvey, type));
-        }
+       // TODO
     }
+
+    @Override
+    public void deleteAllNotificationsForSurvey(Survey survey) {
+        // TODO
+  }
 }

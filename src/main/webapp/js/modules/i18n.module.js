@@ -76,6 +76,9 @@
             DASHBOARD_OPEN_DETAILS: "Open",
             DASHBOARD_TITLE: "All surveys",
             EDITOR_TITLE: "Create new Survey",
+            EDITOR_TITLE_NEW:  "Create new Survey",
+            EDITOR_TITLE_UPDATE:  "Update Survey",
+            EDITOR_NOT_FOUND: "The requested entity could does not exist anymore :( ",
 
             EDITOR_SAVE: "Save and publish",
             EDITOR_CANCEL: "Cancel",

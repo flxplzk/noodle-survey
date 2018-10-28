@@ -27,7 +27,7 @@
                 "    <div class=\"md-toolbar-tools\">\n" +
                 "        <h2 md-truncate>{{\"APP_HEADLINE\"|translate}}</h2>\n" +
                 "        <span flex></span>" +
-                "        <survey-editor-action-button ng-show=\"toolBarCrtl.authenticated\">" +
+                "        <survey-editor-action-button icon='add' ng-show=\"toolBarCrtl.authenticated\">" +
                 "        </survey-editor-action-button>" +
                 "        <md-button ng-show=\"toolBarCrtl.authenticated\" ng-click=\"toolBarCrtl.logout()\"\n" +
                 "                   class=\"md-icon-button\">\n" +

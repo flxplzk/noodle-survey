@@ -1,5 +1,6 @@
 package de.nordakademie.iaa.examsurvey.configuration;
 
+import de.nordakademie.iaa.examsurvey.controller.UserController;
 import de.nordakademie.iaa.examsurvey.secrurity.SurveyBasicAuthenticationEntryPoint;
 import de.nordakademie.iaa.examsurvey.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationEn
 @EnableWebSecurity
 public class HttpSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private static final String REALM = "SURVEY_REALM";
-    private static final String ANT_REGISTRATION = "/registration";
+    private static final String ANT_REGISTRATION = "/users";
     private static final String ANT_INDEX_HTML = "/index.html";
     private static final String ANT_ROOT = "/";
     private static final String ANT_CSS = "/css/**";
@@ -51,7 +52,7 @@ public class HttpSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // permitting required resources
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, ANT_REGISTRATION).permitAll()
+                .antMatchers(HttpMethod.POST, UserController.PATH_USERS).permitAll()
                 .antMatchers(HttpMethod.GET, ANT_INDEX_HTML, ANT_ROOT, ANT_CSS, ANT_JS,
                         ANT_FRONTEND_DEPENDENCIES).permitAll()
                 .anyRequest().authenticated()

@@ -78,7 +78,7 @@
         this.showNotification = function (errorMessageKey) {
             var toast = $mdToast.simple()
                 .content($translate.instant(errorMessageKey))
-                .position('left bottom right');
+                .position('bottom right');
             $mdToast.show(toast);
         }
     }
@@ -95,7 +95,7 @@
             // Try to log in
             var encodedCredentials = encoder.encode(username + ":" + password);
             setAuthorizationHeaders("Basic " + encodedCredentials);
-            return $http.get("./authentication");
+            return $http.get("./users/me");
         };
         this.removeAuthorization = function () {
             setAuthorizationHeaders(null);

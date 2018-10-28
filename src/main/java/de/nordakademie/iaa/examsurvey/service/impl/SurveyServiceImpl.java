@@ -1,11 +1,13 @@
 package de.nordakademie.iaa.examsurvey.service.impl;
 
 import com.google.common.collect.Lists;
+import de.nordakademie.iaa.examsurvey.domain.NotificationType;
 import de.nordakademie.iaa.examsurvey.domain.Option;
 import de.nordakademie.iaa.examsurvey.domain.Participation;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.SurveyStatus;
 import de.nordakademie.iaa.examsurvey.domain.User;
+import de.nordakademie.iaa.examsurvey.exception.MissingInformationException;
 import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
 import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
 import de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException;
@@ -14,6 +16,10 @@ import de.nordakademie.iaa.examsurvey.persistence.OptionRepository;
 import de.nordakademie.iaa.examsurvey.persistence.ParticipationRepository;
 import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
 import de.nordakademie.iaa.examsurvey.persistence.specification.OptionSpecifications;
+import de.nordakademie.iaa.examsurvey.service.EventService;
+import de.nordakademie.iaa.examsurvey.service.NotificationService;
+import de.nordakademie.iaa.examsurvey.service.OptionService;
+import de.nordakademie.iaa.examsurvey.service.ParticipationService;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
 
 import java.util.List;
@@ -34,38 +40,65 @@ public class SurveyServiceImpl extends AbstractAuditModelService<Survey> impleme
     private final SurveyRepository surveyRepository;
     private final OptionRepository optionRepository;
     private final ParticipationRepository participationRepository;
+    private final NotificationService notificationService;
+    private final OptionService optionService;
+    private final ParticipationService participationService;
 
     public SurveyServiceImpl(final SurveyRepository surveyRepository,
                              final OptionRepository optionRepository,
-                             final ParticipationRepository participationRepository) {
+                             final ParticipationRepository participationRepository,
+                             final NotificationService notificationService,
+                             OptionService optionService,
+                             ParticipationService participationService) {
         this.surveyRepository = surveyRepository;
         this.optionRepository = optionRepository;
         this.participationRepository = participationRepository;
+        this.notificationService = notificationService;
+        this.optionService = optionService;
+        this.participationService = participationService;
     }
 
     @Override
     public Survey createSurvey(Survey survey, User initiator) {
         requireNonNullUser(initiator);
         requireNonExistent(survey);
-
         survey.setInitiator(initiator);
-
         Survey createdSurvey = surveyRepository.save(survey);
-        saveOptionsForSurvey(survey.getOptions(), createdSurvey);
-
+        optionService.saveOptionsForSurvey(survey.getOptions(), createdSurvey);
         return createdSurvey;
     }
 
     @Override
-    public List<Option> saveOptionsForSurvey(List<Option> options, Long surveyTitle, User requestingUser) {
-        requireNonNullUser(requestingUser);
-        Survey survey = requireSurveyWithInitiator(surveyTitle, requestingUser);
-        return saveOptionsForSurvey(options, survey);
+    public Survey update(Survey survey, User authenticatedUser) {
+        requireNonNullUser(authenticatedUser);
+        final Survey persistedSurvey = getExistent(survey);
+        requireInitiator(authenticatedUser, persistedSurvey);
+        requireValidStatus(persistedSurvey.getSurveyStatus());
+        survey.setInitiator(authenticatedUser);
+        participationService.deleteAllParticipationsForSurvey(survey);
+        optionService.deleteAllOptionsForSurvey(survey);
+        optionService.saveOptionsForSurvey(survey.getOptions(), survey);
+        notificationService.notifyUsersWithNotificationType(NotificationType.SURVEY_CHANGE, survey);
+
+        if (isSurveyClose(survey, persistedSurvey)) {
+           throw new PermissionDeniedException("Manual closing of survey prohibited");
+        }
+
+        return surveyRepository.save(survey);
+    }
+
+    @Override
+    public void closeSurvey(Survey surveyToClose, User authenticatedUser) {
+        requireNonNullUser(authenticatedUser);
+        Survey existentSurvey = getExistent(surveyToClose);
+        requireInitiator(authenticatedUser, existentSurvey);
+        existentSurvey.setSurveyStatus(SurveyStatus.CLOSED);
+        surveyRepository.save(existentSurvey);
     }
 
     @Override
     public List<Option> loadAllOptionsOfSurveyForUser(Long surveyTitle, User authenticatedUser) {
-        Survey survey = requireSurveyVisibleForUser(surveyTitle, authenticatedUser);
+        Survey survey = getSurveyVisibleForUser(surveyTitle, authenticatedUser);
         return Lists.newArrayList(optionRepository.findAll(OptionSpecifications.hasSurvey(survey)));
     }
 
@@ -77,7 +110,7 @@ public class SurveyServiceImpl extends AbstractAuditModelService<Survey> impleme
 
     @Override
     public List<Participation> loadAllParticipationsOfSurveyForUser(Long identifier, User authenticatedUser) {
-        Survey survey = requireSurveyVisibleForUser(identifier, authenticatedUser);
+        Survey survey = getSurveyVisibleForUser(identifier, authenticatedUser);
         return participationRepository.findAll(withSurvey(survey));
     }
 
@@ -86,7 +119,7 @@ public class SurveyServiceImpl extends AbstractAuditModelService<Survey> impleme
                                                                          Long surveyId,
                                                                          User authenticatedUser) {
         requireNonNullUser(authenticatedUser);
-        final Survey survey = requireSurveyVisibleForUser(surveyId, authenticatedUser);
+        final Survey survey = getSurveyVisibleForUser(surveyId, authenticatedUser);
         requireNonInitiator(survey, authenticatedUser);
 
         requireOpenForParticipation(survey);
@@ -98,15 +131,38 @@ public class SurveyServiceImpl extends AbstractAuditModelService<Survey> impleme
     @Override
     public Survey loadSurveyWithUser(Long identifier, User authenticatedUser) {
         requireNonNullUser(authenticatedUser);
-        return requireSurveyVisibleForUser(identifier, authenticatedUser);
-    }
-
-    private List<Option> saveOptionsForSurvey(List<Option> options, Survey survey) {
-        options.forEach(option -> option.setSurvey(survey));
-        return Lists.newArrayList(optionRepository.saveAll(options));
+        return getSurveyVisibleForUser(identifier, authenticatedUser);
     }
 
     // ########################################## VALIDATION METHODS ###################################################
+
+
+    /**
+     * @param survey with new data
+     * @param persistedSurvey to be overwritten
+     * @return true if survey.getSurveyStatus() == CLOSED and persitedSurvey.getSurveyStatus() != CLOSED
+     */
+    private boolean isSurveyClose(Survey survey, Survey persistedSurvey) { // TODO clear
+        return SurveyStatus.CLOSED.equals(survey.getSurveyStatus())
+                && !SurveyStatus.CLOSED.equals(persistedSurvey.getSurveyStatus());
+    }
+
+    private void requireValidStatus(SurveyStatus persistedState) {
+        if (SurveyStatus.CLOSED.equals(persistedState)) {
+            throw new PermissionDeniedException("Surveys with status CLOSED may not be modified. Surveys must be closed us");
+        }
+    }
+
+    private Survey getExistent(Survey survey) {
+        return surveyRepository.findById(survey.getId())
+                .orElseThrow(SurveyNotFoundException::new);
+    }
+
+    private void requireSelectedOption(Survey survey) {
+        if (survey.getEvent() == null){
+            throw new MissingInformationException("When closing a survey, selected Opten must not be null");
+        }
+    }
 
     private void requireNonInitiator(Survey survey, User authenticatedUser) {
         if (survey.getInitiator().equals(authenticatedUser)) {
@@ -124,15 +180,9 @@ public class SurveyServiceImpl extends AbstractAuditModelService<Survey> impleme
     }
 
 
-    private Survey requireSurveyVisibleForUser(final Long identifier, final User authenticatedUser) {
+    private Survey getSurveyVisibleForUser(final Long identifier, final User authenticatedUser) {
         return surveyRepository.findOne(hasIdAndVisibleForUser(identifier, authenticatedUser))
                 .orElseThrow(SurveyNotFoundException::new);
-    }
-
-    private Survey requireSurveyWithInitiator(final Long identifier, final User authenticatedUser) {
-        Survey survey = requireSurveyVisibleForUser(identifier, authenticatedUser);
-        requireInitiator(authenticatedUser, survey);
-        return survey;
     }
 
     private void requireNonExistent(final Survey survey) {

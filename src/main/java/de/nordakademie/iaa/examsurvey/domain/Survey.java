@@ -3,12 +3,15 @@ package de.nordakademie.iaa.examsurvey.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.NaturalId;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
@@ -27,7 +30,7 @@ public class Survey extends AuditModel {
     private String title;
     private String description;
     private User initiator;
-    private Option event;
+    private Event event;
     private SurveyStatus surveyStatus;
     private List<Option> options;
 
@@ -59,15 +62,6 @@ public class Survey extends AuditModel {
         this.initiator = initiator;
     }
 
-    @ManyToOne
-    @Deprecated
-    public Option getEvent() {
-        return event;
-    }
-    public void setEvent(Option event) {
-        this.event = event;
-    }
-
     @Column(name = "survey_status", nullable = false)
     @Enumerated(value = EnumType.STRING)
     public SurveyStatus getSurveyStatus() {
@@ -84,5 +78,14 @@ public class Survey extends AuditModel {
     }
     public void setOptions(List<Option> options) {
         this.options = options;
+    }
+
+    @OneToOne(mappedBy = "survey", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
+    public Event getEvent() {
+        return event;
+    }
+    public void setEvent(Event event) {
+        this.event = event;
     }
 }

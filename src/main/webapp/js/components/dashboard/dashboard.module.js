@@ -6,9 +6,9 @@
         "ngMaterial"
     ]);
 
-    dashboard.controller("dashboardController", ["$scope", "surveyService", "$state", "$mdDialog", DashboardController]);
+    dashboard.controller("dashboardController", ["$scope", "SurveyResource", "$state", "$mdDialog", DashboardController]);
 
-    function DashboardController($scope, surveyService, $state, $mdDialog) {
+    function DashboardController($scope, SurveyResource, $state, $mdDialog) {
         $scope.model = {
             surveys: [],
             loading: true,
@@ -17,13 +17,14 @@
         };
 
         // On init load all surveys from backend.
-        surveyService.loadAll().subscribeOnNext(function (surveys) {
+        var query = SurveyResource.query();
+        query.$promise.then(function (surveys) {
             $scope.model.surveys = surveys;
             $scope.model.loading = false;
         });
 
         this.viewDetails = function (survey) {
-            $state.go("detail", {surveyId: survey.id})
+            $state.go("detail", {surveyId: survey.getId()})
         };
 
         $scope.initiatorOfSurveyShort = function (survey) {
@@ -40,7 +41,5 @@
                 fullscreen: false
             })
         };
-
     }
-
 }());

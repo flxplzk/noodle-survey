@@ -30,12 +30,11 @@ public interface NotificationService {
     /**
      * creates new notifications for the given user with the {@link NotificationType}
      * for the passed users.
-     *
-     * @param type         of the notification
-     * @param users        to notify
+     *  @param type         of the notification
      * @param targetSurvey on which the user will be notified
      */
     void notifyUsersWithNotificationType(@NotNull NotificationType type,
-                                         @NotNull List<User> users,
                                          @NotNull Survey targetSurvey);
+
+    void deleteAllNotificationsForSurvey(Survey survey);
 }

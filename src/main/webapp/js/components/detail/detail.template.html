@@ -13,9 +13,7 @@
                     </span>
             </md-card-title-text>
             <md-card-actions layout="row" layout-align="end center" ng-show="detailCrtl.isOwnSurvey()">
-                <md-button class="md-primary md-raised md-icon-button">
-                    <i class="material-icons">build</i>
-                </md-button>
+                <survey-editor-action-button icon="build" survey-id="surveyId"></survey-editor-action-button>
                 <md-button class="md-primary md-raised">{{"DETAIL_TERMINATE_SURVEY"|translate}}</md-button>
                 <md-button class="md-primary md-raised md-accent md-icon-button">
                     <i class="material-icons">delete</i>
@@ -62,7 +60,7 @@
                 </div>
             </md-content>
             <md-list layout="column" flex style="margin-bottom: 0; padding-bottom: 0">
-                <md-list-item class="md-3-line" ng-show="!detailCrtl.isOwnSurvey() && detailCrtl.isSurveyOpen()">
+                <md-list-item class="md-3-line" ng-show="!detailCrtl.isOwnSurvey() && survey.isOpen()">
                     <div style="width: 200px">
                         {{"DETAIL_YOU"|translate}}
                     </div>
@@ -82,7 +80,7 @@
             </md-list>
         </md-card-content>
         <md-card-actions layout="row" layout-align="end center"
-                         ng-show="!detailCrtl.isOwnSurvey() && detailCrtl.isSurveyOpen()">
+                         ng-show="!detailCrtl.isOwnSurvey() && survey.isOpen()">
             <md-button class="md-raised md-accent" ng-click="detailCrtl.save()">{{"DETAIL_SEND"|translate}}</md-button>
         </md-card-actions>
     </md-card>

@@ -1,44 +1,46 @@
 (function () {
     var detail = angular.module("de.nordakademie.iaa.survey.detail", [
+        "de.nordakademie.iaa.survey.editor",
         "de.nordakademie.iaa.survey.core.domain",
         "de.nordakademie.iaa.survey.core",
         "de.nordakademie.iaa.i18n",
         "ngMaterial"
     ]);
 
-    detail.controller("detailController", ["$scope", "$stateParams", "surveyService", "appService", "notificationService", DetailController]);
+    detail.controller("detailController",
+        ["$scope",
+            "$stateParams",
+            "appService",
+            "notificationService",
+            "SurveyResource",
+            "OptionResource",
+            "ParticipationResource",
+            DetailController]);
 
-    function DetailController($scope, $stateParams, surveyService, appService, notificationService) {
+    function DetailController($scope, $stateParams, appService, notificationService,
+                              SurveyResource, OptionResource, ParticipationResource) {
         var currentUser = appService.getAuthenticatedUser();
         var vm = this;
-        $scope.survey = {};
-        $scope.options = [];
-        $scope.participations = [];
-        $scope.ownParticipation = {options: []};
+        $scope.ownParticipation = new ParticipationResource({options: []});
+        $scope.surveyId = $stateParams.surveyId;
 
         init();
 
         function init() {
-            surveyService.loadSurveyWithId($stateParams.surveyId)
-                .subscribeOnNext(function (survey) {
-                    $scope.survey = survey;
-                });
+            $scope.survey = SurveyResource.get({survey: $stateParams.surveyId});
+            $scope.options = OptionResource.query({survey: $stateParams.surveyId});
+            var query = ParticipationResource.query({survey: $stateParams.surveyId});
+            query.$promise.then(function (data) {
+                $scope.participations = data;
+                filterOwnParticipation();
+            })
 
-            surveyService.loadAllOptionsForSurveyWithId($stateParams.surveyId)
-                .subscribeOnNext(function (options) {
-                    $scope.options = options;
-                });
-
-            surveyService.loadAllParticipationsForSurveyWithId($stateParams.surveyId)
-                .subscribeOnNext(function (participations) {
-                    $scope.participations = participations;
-                    filterOwnParticipation();
-                });
         }
 
         this.participates = function (participation, option) {
+            if (!isInitialized()) { return; }
             for (var i = 0; i < participation.options.length; i++) {
-                if (option.id === participation.options[i].id) {
+                if (option.equals(participation.options[i])) {
                     return true;
                 }
             }
@@ -46,10 +48,11 @@
         };
 
         this.sumParticipationsForOption = function (option) {
+            if (!isInitialized()) { return 0; }
             var sum = 0;
             $scope.participations.forEach(function (participation) {
                 participation.options.forEach(function (entry) {
-                    if (entry.id === option.id) {
+                    if (option.equals(entry)) {
                         sum++;
                     }
                 })
@@ -62,24 +65,21 @@
                 $scope.ownParticipation.options.push(option);
             } else {
                 $scope.ownParticipation.options = $scope.ownParticipation.options.filter(function (value) {
-                    return value.id !== option.id;
+                    return value.equals(option);
                 })
             }
         };
 
         this.isOwnSurvey = function () {
-            return $scope.survey.initiator
-                && $scope.survey.initiator.username === currentUser.principal.username;
-        };
-
-        this.isSurveyOpen = function () {
-            return $scope.survey.surveyStatus &&
-                $scope.survey.surveyStatus === "OPEN";
+            if (!isInitialized()) { return; }
+            return angular.isDefined($scope.survey.initiator) && angular.isDefined(currentUser)
+                && $scope.survey.initiator.equals(currentUser.principal);
         };
 
         this.save = function () {
             $scope.computing = true;
-            surveyService.saveParticipationforSurvey($scope.ownParticipation, $scope.survey)
+            $scope.ownParticipation.survey = $scope.survey;
+            $scope.ownParticipation.$persist($scope.surveyId)
                 .then(function (value) {
                     $scope.computing = false;
                     init();
@@ -98,6 +98,12 @@
                 }
                 return true;
             });
+        }
+
+        function isInitialized() {
+            return angular.isDefined($scope.survey) &&
+                angular.isDefined($scope.options) &&
+                angular.isDefined($scope.participations)
         }
     }
 }());
