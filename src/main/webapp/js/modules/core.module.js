@@ -50,12 +50,26 @@
         };
 
         this.logout = function () {
+            authService.logout();
             this.$authenticated
                 .onNext(authService.removeAuthorization());
         };
         this.isAuthenticated = function () {
             return isAuthenticated;
         };
+
+        this.testAuthentication = function (success, reject) {
+            if (this.isAuthenticated()) {
+                success();
+                return;
+            }
+           authService.testAuth(function (success) {
+               vm.authenticatedUser = success.data;
+               vm.$authenticated.onNext(true);
+               success();
+           }, reject)
+        };
+
         this.getAuthenticatedUser = function () {
             return this.authenticatedUser;
         }
@@ -100,6 +114,15 @@
         this.removeAuthorization = function () {
             setAuthorizationHeaders(null);
             return false;
+        };
+
+        this.logout = function () {
+            this.removeAuthorization();
+            $http.post("logout");
+        };
+
+        this.testAuth = function (success, reject) {
+            $http.get("./users/me").then(success, reject);
         };
 
         function setAuthorizationHeaders(header) {

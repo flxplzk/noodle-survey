@@ -32,7 +32,7 @@ public class NotificationServiceImpl implements NotificationService{
     }
 
     @Override
-    public void deleteAllNotificationsForSurvey(Survey survey) {
+    public void deleteAllNotificationsForSurvey(@NotNull Survey survey) {
         // TODO
   }
 }

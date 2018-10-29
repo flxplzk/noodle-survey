@@ -82,7 +82,7 @@ public class Survey extends AuditModel {
     }
 
     @OneToOne(mappedBy = "survey", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
+            fetch = FetchType.LAZY, orphanRemoval = true)
     public Event getEvent() {
         return event;
     }

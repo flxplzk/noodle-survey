@@ -75,4 +75,6 @@ public interface SurveyService {
     Survey update(@NotNull Survey survey, @NotNull User authenticatedUser);
 
     void closeSurvey(final Survey surveyToClose, User authenticatedUser);
+
+    void deleteSurvey(Long id, User authenticatedUser);
 }

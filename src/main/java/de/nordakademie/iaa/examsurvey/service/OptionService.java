@@ -12,11 +12,6 @@ public interface OptionService {
     void saveOptionsForSurvey(Set<Option> options, Survey survey);
 
     void updateOptionsForSurvey(Survey survey);
-}
 
-/**
- * private void saveOptionsForSurvey(List<Option> options, Survey survey) {
- * options.forEach(option -> option.setSurvey(survey));
- * return Lists.newArrayList(optionRepository.saveAll(options));
- * }
- */
+    void deleteAllOptionsForSurvey(Survey existentSurvey);
+}

@@ -11,10 +11,10 @@
         var enteringGuard = function ($transition$, $state$) {
             var appService = $transition$.injector().get("appService");
             var stateService = $transition$.injector().get("$state");
-            if (!appService.isAuthenticated()) {
+            appService.testAuthentication(function (success) {}, function (reject) {
                 $transition$.abort();
                 stateService.go("login");
-            }
+            });
         };
 
         var loginState = {
