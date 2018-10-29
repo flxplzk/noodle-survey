@@ -14,7 +14,8 @@
                     <md-input-container class="md-block">
                         <label for="inputPassword">{{"AUTH_LOGIN_PASSWORD_LABEL" | translate}}</label>
                         <input type="password" id="inputPassword" name="inputPassword"
-                               ng-model="password" placeholder="{{'AUTH_LOGIN_PASSWORD_LABEL' | translate}}">
+                               ng-model="password" placeholder="{{'AUTH_LOGIN_PASSWORD_LABEL' | translate}}"
+                               ng-keydown="!loginForm.$valid && [13].includes($event.keyCode) && crtl.login()">
                     </md-input-container>
                     <div layout="row">
                         <md-button layout="column"
