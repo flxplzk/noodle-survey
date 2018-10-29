@@ -16,7 +16,6 @@ import de.nordakademie.iaa.examsurvey.persistence.OptionRepository;
 import de.nordakademie.iaa.examsurvey.persistence.ParticipationRepository;
 import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
 import de.nordakademie.iaa.examsurvey.persistence.specification.OptionSpecifications;
-import de.nordakademie.iaa.examsurvey.service.EventService;
 import de.nordakademie.iaa.examsurvey.service.NotificationService;
 import de.nordakademie.iaa.examsurvey.service.OptionService;
 import de.nordakademie.iaa.examsurvey.service.ParticipationService;
@@ -24,6 +23,7 @@ import de.nordakademie.iaa.examsurvey.service.SurveyService;
 
 import java.util.List;
 
+import static de.nordakademie.iaa.examsurvey.persistence.specification.OptionSpecifications.hasSurvey;
 import static de.nordakademie.iaa.examsurvey.persistence.specification.ParticipationSpecifications.withSurvey;
 import static de.nordakademie.iaa.examsurvey.persistence.specification.ParticipationSpecifications.withSurveyAndUser;
 import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.hasIdAndVisibleForUser;
@@ -76,15 +76,38 @@ public class SurveyServiceImpl extends AbstractAuditModelService<Survey> impleme
         requireValidStatus(persistedSurvey.getSurveyStatus());
         survey.setInitiator(authenticatedUser);
         participationService.deleteAllParticipationsForSurvey(survey);
-        optionService.deleteAllOptionsForSurvey(survey);
-        optionService.saveOptionsForSurvey(survey.getOptions(), survey);
+
+        List<Option> persisted = optionRepository.findAll(hasSurvey(survey));
+        optionRepository.deleteAll(persisted);
+        // Thanks Hibernate still not getting why cascading from
+        // survey entity does not work as expected.
+        survey.getOptions().forEach(option -> {
+            option.setId(null);
+            option.setSurvey(persistedSurvey);
+        });
+        try {
+
+        optionRepository.saveAll(survey.getOptions());
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
         notificationService.notifyUsersWithNotificationType(NotificationType.SURVEY_CHANGE, survey);
 
         if (isSurveyClose(survey, persistedSurvey)) {
-           throw new PermissionDeniedException("Manual closing of survey prohibited");
+            throw new PermissionDeniedException("Manual closing of survey prohibited");
         }
 
-        return surveyRepository.save(survey);
+        return surveyRepository.save(persistedSurvey);
+    }
+
+    private void updateOptionsForSurvey(Survey survey) {
+        List<Option> persisted = optionRepository.findAll(hasSurvey(survey));
+        optionRepository.deleteAll(persisted);
+        // Thanks Hibernate still not getting why cascading from
+        // survey entity does not work as expected.
+        survey.getOptions().forEach(option -> option.setId(null));
+        optionRepository.saveAll(survey.getOptions());
     }
 
     @Override
@@ -138,7 +161,7 @@ public class SurveyServiceImpl extends AbstractAuditModelService<Survey> impleme
 
 
     /**
-     * @param survey with new data
+     * @param survey          with new data
      * @param persistedSurvey to be overwritten
      * @return true if survey.getSurveyStatus() == CLOSED and persitedSurvey.getSurveyStatus() != CLOSED
      */
@@ -159,7 +182,7 @@ public class SurveyServiceImpl extends AbstractAuditModelService<Survey> impleme
     }
 
     private void requireSelectedOption(Survey survey) {
-        if (survey.getEvent() == null){
+        if (survey.getEvent() == null) {
             throw new MissingInformationException("When closing a survey, selected Opten must not be null");
         }
     }

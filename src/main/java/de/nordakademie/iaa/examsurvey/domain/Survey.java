@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Set;
 
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
 
@@ -32,7 +33,7 @@ public class Survey extends AuditModel {
     private User initiator;
     private Event event;
     private SurveyStatus surveyStatus;
-    private List<Option> options;
+    private Set<Option> options;
 
     @NaturalId
     @Size(max = 50)
@@ -73,10 +74,10 @@ public class Survey extends AuditModel {
 
     @Transient
     @JsonProperty(access = WRITE_ONLY)
-    public List<Option> getOptions() {
+    public Set<Option> getOptions() {
         return options;
     }
-    public void setOptions(List<Option> options) {
+    public void setOptions(Set<Option> options) {
         this.options = options;
     }
 

@@ -162,7 +162,7 @@
         }
     }
 
-    function  transform(resource, data, isArray, transformer) {
+    function transform(resource, data, isArray, transformer) {
         var transformedJson = angular.fromJson(data);
         return transformer(transformedJson, resource, isArray);
     }
@@ -220,6 +220,7 @@
         return function transformSurvey(surveysOrSurvey) {
             var initiator = surveysOrSurvey.initiator;
             surveysOrSurvey.initiator = new userResource({
+                _id: initiator._id,
                 firstName: initiator.firstName,
                 lastName: initiator.lastName,
                 username: initiator.username
