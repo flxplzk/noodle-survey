@@ -1,7 +1,7 @@
 package de.nordakademie.iaa.examsurvey.configuration;
 
 import de.nordakademie.iaa.examsurvey.controller.UserController;
-import de.nordakademie.iaa.examsurvey.secrurity.SurveyBasicAuthenticationEntryPoint;
+import de.nordakademie.iaa.examsurvey.security.SurveyBasicAuthenticationEntryPoint;
 import de.nordakademie.iaa.examsurvey.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

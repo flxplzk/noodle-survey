@@ -1,4 +1,4 @@
-package de.nordakademie.iaa.examsurvey.secrurity;
+package de.nordakademie.iaa.examsurvey.security;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
