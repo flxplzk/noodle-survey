@@ -67,8 +67,8 @@
                     <div ng-repeat="option in options" style="width: 100px">
                         <md-input-container style="padding-left: 25%">
                             <md-checkbox ng-disabled="detailCrtl.isOpen()"
-                                         ng-click="detailCrtl.participate(option)" ng-model="option.checked"
-                                         name="tos"></md-checkbox>
+                                         ng-model="option.checked"
+                                         name="tos" aria-label="participate"></md-checkbox>
                     </div>
                 </md-list-item>
                 <md-list-item class="md-3-line">

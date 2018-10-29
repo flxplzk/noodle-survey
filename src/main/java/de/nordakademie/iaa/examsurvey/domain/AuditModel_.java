@@ -9,8 +9,8 @@ import java.util.Date;
 @StaticMetamodel(AuditModel.class)
 public class AuditModel_ {
     protected AuditModel_() {
-
     }
+
     public static volatile SingularAttribute<AuditModel, Long> id;
     public static volatile SingularAttribute<Date, Long> updatedAt;
     public static volatile SingularAttribute<Date, Long> createdAt;

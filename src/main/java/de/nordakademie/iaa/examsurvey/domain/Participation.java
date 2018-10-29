@@ -8,6 +8,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Base Entity for User Answers to a survey.
@@ -19,7 +20,7 @@ import java.util.List;
 public class Participation extends AuditModel {
     private User user;
     private Survey survey;
-    private List<Option> options;
+    private Set<Option> options;
 
     @ManyToOne
     @NaturalId
@@ -42,11 +43,11 @@ public class Participation extends AuditModel {
     }
 
     @ManyToMany(fetch = FetchType.LAZY)
-    public List<Option> getOptions() {
+    public Set<Option> getOptions() {
         return options;
     }
 
-    public void setOptions(List<Option> options) {
+    public void setOptions(Set<Option> options) {
         this.options = options;
     }
 }

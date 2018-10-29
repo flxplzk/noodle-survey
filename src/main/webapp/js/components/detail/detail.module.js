@@ -60,16 +60,6 @@
             return sum;
         };
 
-        this.participate = function (option) {
-            if (!option.checked) {
-                $scope.ownParticipation.options.push(option);
-            } else {
-                $scope.ownParticipation.options = $scope.ownParticipation.options.filter(function (value) {
-                    return value.equals(option);
-                })
-            }
-        };
-
         this.isOwnSurvey = function () {
             if (!isInitialized()) { return; }
             return angular.isDefined($scope.survey.initiator) && angular.isDefined(currentUser)
@@ -79,6 +69,9 @@
         this.save = function () {
             $scope.computing = true;
             $scope.ownParticipation.survey = $scope.survey;
+            $scope.ownParticipation.options = $scope.options.filter(function (option) {
+                    return option.checked;
+            });
             $scope.ownParticipation.$persist($scope.surveyId)
                 .then(function (value) {
                     $scope.computing = false;

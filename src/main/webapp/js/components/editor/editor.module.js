@@ -55,7 +55,7 @@
 
             this.removeOption = function (optionToRemove) {
                 $scope.options = $scope.options.filter(function (value) {
-                    return value.equals(optionToRemove);
+                    return !value.equals(optionToRemove);
                 });
                 if ($scope.options.length === 0) {
                     this.addEmptyOption();

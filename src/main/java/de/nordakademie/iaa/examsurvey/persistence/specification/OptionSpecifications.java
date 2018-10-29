@@ -5,6 +5,8 @@ import de.nordakademie.iaa.examsurvey.domain.Option_;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.Date;
+
 public class OptionSpecifications {
     private OptionSpecifications() {
         // prevent instantiation
@@ -12,5 +14,10 @@ public class OptionSpecifications {
     public static Specification<Option> hasSurvey(final Survey survey) {
         return (Specification<Option>) (root, query, criteriaBuilder) ->
                  criteriaBuilder.equal(root.get(Option_.survey), survey);
+    }
+
+    public static Specification<Option> hasDateTime(final Date dateTime){
+        return (Specification<Option>) (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get(Option_.dateTime), dateTime);
     }
 }

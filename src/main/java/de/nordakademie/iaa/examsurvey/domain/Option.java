@@ -5,9 +5,11 @@ import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -27,7 +29,6 @@ public class Option extends AuditModel{
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    @NaturalId
     public Date getDateTime() {
         return dateTime;
     }
@@ -35,9 +36,9 @@ public class Option extends AuditModel{
         this.dateTime = dateTime;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "survey_id")
     @JsonIgnore
-    @NaturalId
     public Survey getSurvey() {
         return survey;
     }
