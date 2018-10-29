@@ -1,5 +1,6 @@
 (function () {
     var editor = angular.module("de.nordakademie.iaa.survey.editor", [
+        "de.nordakademie.iaa.survey.core.domain",
         "de.nordakademie.iaa.survey.core",
         "de.nordakademie.iaa.i18n",
         "ngMaterial",
@@ -8,7 +9,10 @@
     ]);
 
     editor.directive("surveyEditorActionButton", FloatingActionButtonDirective);
+    editor.directive("deleteSurveyActionButton", DeleteButtonDirective);
     editor.controller("floatingEditorController", ["$mdDialog", "$scope", FloatingActionButtonController]);
+    editor.controller("deleteSurveyController", ["SurveyResource", "$mdDialog", "$translate",
+        "$scope", "$state", "notificationService", DeleteSurveyController]);
 
     function FloatingActionButtonDirective() {
         return {
@@ -25,6 +29,53 @@
                 " ng-click=\"dialogManager.showEditorDialog($event)\">" +
                 "<i class=\"material-icons\"> {{icon}} </i></md-button>" +
                 "</div>"
+        }
+    }
+
+    function DeleteButtonDirective() {
+        return {
+            restrict: "E",
+            transclude: false,
+            controller: "deleteSurveyController",
+            controllerAs: "deleteCrtl",
+            scope: {
+                surveyId: "=",
+                icon: "@"
+            },
+            template: "<div>" +
+                "<md-button class=\"md-primary md-raised md-accent md-icon-button\"" +
+                " ng-click=\"deleteCrtl.delete($event)\">" +
+                "<i class=\"material-icons\"> {{icon}} </i></md-button>" +
+                "</div>"
+        }
+    }
+
+    function DeleteSurveyController(SurveyResource, $mdDialog, $translate, $scope, $state, notificationService) {
+        this.delete = function (event) {
+            var confirm = $mdDialog.confirm()
+                .title($translate.instant("EDITOR_CONFIRM_DELETE_TITLE"))
+                .textContent($translate.instant("EDITOR_CONFIRM_DELETE_CONTENT"))
+                .targetEvent(event)
+                .ok($translate.instant("EDITOR_CONFIRM_DELETE_OK"))
+                .cancel($translate.instant("EDITOR_CONFIRM_DELETE_CANCEL"));
+
+            $mdDialog.show(confirm).then(function () {
+                SurveyResource.delete({survey: $scope.surveyId}, success, reject);
+
+                function success(value) {
+                    $state.go("dashboard");
+                    $mdDialog.cancel();
+                }
+
+                function reject(error) {
+                    notificationService.showNotification(error.status === 409
+                        ? "EDITOR_ERROR_DELETE_PERMISSION"
+                        : "EDITOR_ERROR_DELETE_UNKNOWN");
+                    $mdDialog.cancel();
+                }
+            }, function () {
+                $mdDialog.cancel();
+            });
         }
     }
 

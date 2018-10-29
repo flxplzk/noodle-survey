@@ -18,6 +18,12 @@ public class OptionServiceImpl implements OptionService {
     }
 
     @Override
+    public void updateOptionsForSurvey(Survey survey) {
+        this.deleteAllOptionsForSurvey(survey);
+        this.saveOptionsForSurvey(survey.getOptions(), survey);
+    }
+
+    @Override
     public void saveOptionsForSurvey(Set<Option> options, Survey survey) {
         options.forEach(option -> {
             option.setSurvey(survey);
@@ -27,15 +33,8 @@ public class OptionServiceImpl implements OptionService {
     }
 
     @Override
-    public void updateOptionsForSurvey(Survey survey) {
-        List<Option> persisted = repository.findAll(hasSurvey(survey));
+    public void deleteAllOptionsForSurvey(Survey existentSurvey) {
+        List<Option> persisted = repository.findAll(hasSurvey(existentSurvey));
         repository.deleteAll(persisted);
-        // Thanks Hibernate still not getting why cascading from
-        // survey entity does not work as expected.
-        survey.getOptions().forEach(option -> {
-            option.setSurvey(survey);
-            option.setId(null);
-        });
-        repository.saveAll(survey.getOptions());
     }
 }

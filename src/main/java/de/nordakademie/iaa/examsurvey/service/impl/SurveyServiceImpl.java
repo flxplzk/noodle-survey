@@ -22,6 +22,7 @@ import de.nordakademie.iaa.examsurvey.service.ParticipationService;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
 
 import java.util.List;
+import java.util.Optional;
 
 import static de.nordakademie.iaa.examsurvey.persistence.specification.OptionSpecifications.hasSurvey;
 import static de.nordakademie.iaa.examsurvey.persistence.specification.ParticipationSpecifications.withSurvey;
@@ -87,7 +88,7 @@ public class SurveyServiceImpl extends AbstractAuditModelService<Survey> impleme
         });
         try {
 
-        optionRepository.saveAll(survey.getOptions());
+            optionRepository.saveAll(survey.getOptions());
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -117,6 +118,18 @@ public class SurveyServiceImpl extends AbstractAuditModelService<Survey> impleme
         requireInitiator(authenticatedUser, existentSurvey);
         existentSurvey.setSurveyStatus(SurveyStatus.CLOSED);
         surveyRepository.save(existentSurvey);
+    }
+
+    @Override
+    public void deleteSurvey(Long id, User authenticatedUser) {
+        requireNonNullUser(authenticatedUser);
+        Survey existentSurvey = surveyRepository.findById(id)
+                .orElseThrow(SurveyNotFoundException::new);
+        requireInitiator(authenticatedUser, existentSurvey);
+        participationService.deleteAllParticipationsForSurvey(existentSurvey);
+        optionService.deleteAllOptionsForSurvey(existentSurvey);
+        notificationService.deleteAllNotificationsForSurvey(existentSurvey);
+        surveyRepository.delete(existentSurvey);
     }
 
     @Override

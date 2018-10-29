@@ -45,10 +45,16 @@ public class SurveyController {
             method = RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Survey createSurvey(@PathVariable(name = PATH_V_IDENTIFIER) Long id,
+    public Survey updateSurvey(@PathVariable(name = PATH_V_IDENTIFIER) Long id,
                                @RequestBody Survey survey) {
         survey.setId(id);
         return surveyService.update(survey, getAuthenticatedUser());
+    }
+
+    @RequestMapping(value = PATH_SURVEYS + "/{" + PATH_V_IDENTIFIER + "}",
+            method = RequestMethod.DELETE)
+    public void deleteSurvey(@PathVariable(name = PATH_V_IDENTIFIER) Long id) {
+        surveyService.deleteSurvey(id, getAuthenticatedUser());
     }
 
     @RequestMapping(value = PATH_SURVEYS,

@@ -47,6 +47,12 @@
             EDITOR_SAVE_AS_DRAFT: "Entwurf speichern",
             EDITOR_CONFLICT: "Bitte wähle einen anderen Titel für deine Umfrage!",
             EDITOR_NETWORK: "Bitte versuche es später erneut!",
+            EDITOR_CONFIRM_DELETE_TITLE: "",
+            EDITOR_CONFIRM_DELETE_CONTENT: "",
+            EDITOR_CONFIRM_DELETE_OK: "",
+            EDITOR_CONFIRM_DELETE_CANCEL: "",
+            EDITOR_ERROR_DELETE_PERMISSION: "",
+            EDITOR_ERROR_DELETE_UNKNOWN: "",
 
             DETAIL_SEND: "Teilnahme speichern"
         });
@@ -96,6 +102,12 @@
             EDITOR_SAVE_AS_DRAFT: "Save draft",
             EDITOR_CONFLICT: "Please choose a new title for your survey, yours is already in use",
             EDITOR_NETWORK: "Please try again later!",
+            EDITOR_CONFIRM_DELETE_TITLE: "Confirm ...",
+            EDITOR_CONFIRM_DELETE_CONTENT: "You are delting your survey. With doing so all associated notifications, event, and participations will be deleted for ever and ever an ever.",
+            EDITOR_CONFIRM_DELETE_OK: "Do it!",
+            EDITOR_CONFIRM_DELETE_CANCEL: "Cancel",
+            EDITOR_ERROR_DELETE_PERMISSION: "You can NOT delete a survey when you are not the initiator",
+            EDITOR_ERROR_DELETE_UNKNOWN: "Survey has been deleted",
 
             DETAIL_SEND: "Save",
             DETAIL_YOU: "You",
