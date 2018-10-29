@@ -1,5 +1,6 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.NaturalId;
 
@@ -81,6 +82,7 @@ public class Survey extends AuditModel {
         this.options = options;
     }
 
+    @JsonIgnore
     @OneToOne(mappedBy = "survey", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY, orphanRemoval = true)
     public Event getEvent() {
