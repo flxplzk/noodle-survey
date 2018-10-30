@@ -94,18 +94,55 @@ public class SurveyControllerTest {
 
     @Test
     public void updateSurvey() {
-        // TODO
+        //Given
+        Long id = -1L;
+        Survey mockedSurvey = mock(Survey.class);
+        User user = mock(User.class);
+
+        when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
+        when(surveyService.update(mockedSurvey, user)).thenReturn(mockedSurvey);
+
+        //WHEN
+        Survey surveyReturn = controllerUnderTest.updateSurvey(id, mockedSurvey);
+
+        //THEN
+        assertThat(mockedSurvey, is(surveyReturn));
+        verify(authenticationService, times(1)).getCurrentAuthenticatedUser();
     }
 
     @Test
     public void deleteSurvey() {
-        // TODO
+        //GIVEN
+        Long id = -1L;
+        User user = mock(User.class);
 
+        when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
+
+        //WHEN
+        controllerUnderTest.deleteSurvey(id);
+
+        //THEN
+        verify(authenticationService, times(1)).getCurrentAuthenticatedUser();
+        verify(surveyService, times(1)).deleteSurvey(id, user);
     }
 
     @Test
     public void loadSurveys1() {
-        // TODO
+        //GIVEN
+        User user = mock(User.class);
+        List<Survey> mockSurveys = Lists.newArrayList(mock(Survey.class), mock(Survey.class), mock(Survey.class));
+
+
+        when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
+        when(surveyService.loadAllSurveysWithUser(user)).thenReturn(mockSurveys);
+
+        //WHEN
+        List<Survey> surveys = controllerUnderTest.loadSurveys();
+
+        //THEN
+        verify(authenticationService, times(1)).getCurrentAuthenticatedUser();
+        verify(surveyService, times(1)).loadAllSurveysWithUser(user);
+        assertThat(mockSurveys, is(surveys));
 
     }
 
