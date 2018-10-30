@@ -1,4 +1,13 @@
 (function () {
+    /**
+     * @name "de.nordakademie.iaa.survey.editor"
+     *
+     * EditorModule
+     * @author Felix Plazek
+     * @author Sascha Pererva
+     *
+     * @type {angular.Module}
+     */
     var editor = angular.module("de.nordakademie.iaa.survey.editor", [
         "de.nordakademie.iaa.survey.core.domain",
         "de.nordakademie.iaa.survey.core",
@@ -78,17 +87,19 @@
             $mdDialog.cancel();
         };
 
-        function success(success) {
-            $mdDialog.cancel();
-            $state.go("dashboard")
-        }
 
-        function reject(error) {
-
-        }
         this.save = function () {
             var selectedDate = new Date(angular.fromJson($scope.selected).dateTime);
-            EventResource.save({title: $scope.survey.title, survey: $scope.survey, time:selectedDate}, success, reject)
+            var saveRequest = EventResource.save({title: $scope.survey.title, survey: $scope.survey, time:selectedDate});
+            saveRequest.$promise.then(success, reject);
+            function success(success) {
+                $state.go($state.current, {}, {reload: true});
+                $mdDialog.cancel();
+            }
+
+            function reject(error) {
+
+            }
         };
 
         this.valid = function () {

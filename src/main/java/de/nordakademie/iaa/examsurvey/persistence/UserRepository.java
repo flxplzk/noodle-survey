@@ -12,5 +12,4 @@ import java.util.Optional;
  * @author Felix Plazek
  */
 public interface UserRepository extends CrudRepository<User, Long>, JpaSpecificationExecutor<User> {
-
 }

@@ -2,6 +2,8 @@ package de.nordakademie.iaa.examsurvey.integration;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import de.nordakademie.iaa.examsurvey.domain.Option;
+import de.nordakademie.iaa.examsurvey.domain.Participation;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.SurveyStatus;
 import org.junit.Before;
@@ -19,8 +21,11 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsIn.isIn;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -31,8 +36,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 public class SurveyIntegrationTest {
-    private static final Type TYPE_LIST_OF_SURVEYS = new TypeToken<List<Survey>>() {
-    }.getType();
+    private static final Type TYPE_LIST_OF_SURVEYS =
+            new TypeToken<List<Survey>>() {
+            }.getType();
+    private static final Type TYPE_LIST_OF_OPTIONS =
+            new TypeToken<List<Option>>() {
+            }.getType();
+    private static final Type TYPE_LIST_OF_PARTICIPATIONS =
+            new TypeToken<List<Participation>>() {
+            }.getType();
     private static final String SURVEYS_API_PATH = "/surveys";
     private static final String SURVEYS_OPTIONS_API_PATH = "/surveys/%s/options";
     private static final String SURVEYS_PARTICIPATIONS_API_PATH = "/surveys/%s/participations";
@@ -43,6 +55,7 @@ public class SurveyIntegrationTest {
     private static final long SURVEY_FELIX_OPEN = -9;
     private static final long SURVEY_FELIX_CLOSED = -8;
     private static final long SURVEY_FELIX_PRIVATE = -14;
+    public static final Gson GSON = new Gson();
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -109,16 +122,20 @@ public class SurveyIntegrationTest {
     @Test
     @WithMockUser(USER_FELIX)
     public void loadAllOptions_forPrivateSurveyWithInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, SURVEY_FELIX_PRIVATE))
+        MvcResult mvcResult = mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, SURVEY_FELIX_PRIVATE))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();
+
+        List<Option> options = convertResponseToListOfOptions(mvcResult);
+        assertThat(options.size(), is(0));
     }
+
 
     @Test
     @WithMockUser(USER_STEFAN)
     public void loadAllOptions_forPrivateSurveyWithNonInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, SURVEY_FELIX_PRIVATE))
+        MvcResult mvcResult = mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, SURVEY_FELIX_PRIVATE))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isNotFound())
                 .andReturn();
@@ -127,52 +144,62 @@ public class SurveyIntegrationTest {
     @Test
     @WithMockUser(USER_STEFAN)
     public void loadAllOptions_forOpenSurveyWithNonInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, SURVEY_FELIX_OPEN))
+        MvcResult mvcResult = mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, SURVEY_FELIX_OPEN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();
+        List<Option> options = convertResponseToListOfOptions(mvcResult);
+        assertThat(options.size(), is(5));
     }
 
     @Test
     @WithMockUser(USER_FELIX)
     public void loadAllOptions_forOpenSurveyWithInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, SURVEY_FELIX_OPEN))
+        MvcResult mvcResult = mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, SURVEY_FELIX_OPEN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();
+        List<Option> options = convertResponseToListOfOptions(mvcResult);
+        assertThat(options.size(), is(5));
     }
 
     @Test
     @WithMockUser(USER_FELIX)
     public void loadAllOptions_forClosedSurveyWithInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, SURVEY_FELIX_CLOSED))
+        MvcResult mvcResult = mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, SURVEY_FELIX_CLOSED))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();
+        List<Option> options = convertResponseToListOfOptions(mvcResult);
+        assertThat(options.size(), is(5));
     }
 
     @Test
     @WithMockUser(USER_STEFAN)
     public void loadAllOptions_forClosedSurveyWithNonInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, SURVEY_FELIX_OPEN))
+        MvcResult mvcResult = mockMvc.perform(get(String.format(SURVEYS_OPTIONS_API_PATH, SURVEY_FELIX_OPEN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();
+        List<Option> options = convertResponseToListOfOptions(mvcResult);
+        assertThat(options.size(), is(5));
     }
 
     @Test
     @WithMockUser(USER_FELIX)
     public void loadAllParticipations_forPrivateSurveyWithInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, SURVEY_FELIX_PRIVATE))
+        MvcResult mvcResult = mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, SURVEY_FELIX_PRIVATE))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();
+        List<Participation> surveys = convertResponseToListOfParticipations(mvcResult);
+        assertThat(surveys.size(), is(0));
     }
 
     @Test
     @WithMockUser(USER_STEFAN)
     public void loadAllParticipations_forPrivateSurveyWithNonInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, SURVEY_FELIX_PRIVATE))
+        MvcResult mvcResult = mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, SURVEY_FELIX_PRIVATE))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isNotFound())
                 .andReturn();
@@ -181,42 +208,97 @@ public class SurveyIntegrationTest {
     @Test
     @WithMockUser(USER_STEFAN)
     public void loadAllParticipations_forOpenSurveyWithNonInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, SURVEY_FELIX_OPEN))
+        MvcResult mvcResult = mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, SURVEY_FELIX_OPEN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();
+        List<Participation> surveys = convertResponseToListOfParticipations(mvcResult);
+        assertThat(surveys.size(), is(2));
     }
 
     @Test
     @WithMockUser(USER_FELIX)
     public void loadAllParticipations_forOpenSurveyWithInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, SURVEY_FELIX_OPEN))
+        MvcResult mvcResult = mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, SURVEY_FELIX_OPEN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();
+        List<Participation> surveys = convertResponseToListOfParticipations(mvcResult);
+        assertThat(surveys.size(), is(2));
     }
 
     @Test
     @WithMockUser(USER_FELIX)
     public void loadAllParticipations_forClosedSurveyWithInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, SURVEY_FELIX_OPEN))
+        MvcResult mvcResult = mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, SURVEY_FELIX_OPEN))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();
+        List<Participation> surveys = convertResponseToListOfParticipations(mvcResult);
+        assertThat(surveys.size(), is(2));
     }
 
     @Test
     @WithMockUser(USER_STEFAN)
     public void loadAllParticipations_forClosedSurveyWithNonInitiator() throws Exception {
-        mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, SURVEY_FELIX_CLOSED))
+        MvcResult mvcResult = mockMvc.perform(get(String.format(SURVEYS_PARTICIPATIONS_API_PATH, SURVEY_FELIX_CLOSED))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();
+        List<Participation> surveys = convertResponseToListOfParticipations(mvcResult);
+        assertThat(surveys.size(), is(2));
     }
 
+    @Test
+    @WithMockUser()
+    public void createSurvey() throws Exception {
+        // TODO
+    }
+
+    @Test
+    @WithMockUser()
+    public void createSurvey_twice() throws Exception {
+        // TODO
+    }
+
+    @Test
+    @WithMockUser()
+    public void updateSurvey_withInitiator() throws Exception {
+        // TODO
+    }
+
+    @Test
+    @WithMockUser()
+    public void updateSurvey_withNonInitiator() throws Exception {
+        // TODO
+    }
+
+    @Test
+    @WithMockUser()
+    public void updateSurvey__notFound() throws Exception {
+        // TODO
+    }
+
+    @Test
+    @WithMockUser()
+    public void deleteSurvey_withNonInitiator() throws Exception {
+        // TODO
+    }
+
+    @Test
+    @WithMockUser()
+    public void deleteSurvey_withInitiator() throws Exception {
+        // TODO
+    }
+
+    @Test
+    @WithMockUser()
+    public void deleteSurvey_notFound() throws Exception {
+        // TODO
+    }
     private void requireAllowedSurveys(List<Survey> surveys, String user) {
         for (Survey survey : surveys) {
-            if (survey.getInitiator().getUsername().equals(user)) {
+            if (user.equals(survey.getInitiator().getUsername())) {
                 assertThat(survey.getSurveyStatus(), isIn(ALLOWED_FOR_INITIATOR));
             } else {
                 assertThat(survey.getSurveyStatus(), isIn(ALLOWED_FOR_NON_INITIATOR));
@@ -224,8 +306,18 @@ public class SurveyIntegrationTest {
         }
     }
 
+    private List<Participation> convertResponseToListOfParticipations(MvcResult mvcResult) throws UnsupportedEncodingException {
+        String jsonString = mvcResult.getResponse().getContentAsString();
+        return GSON.fromJson(jsonString, TYPE_LIST_OF_PARTICIPATIONS);
+    }
+
+    private List<Option> convertResponseToListOfOptions(MvcResult mvcResult) throws UnsupportedEncodingException {
+        String jsonString = mvcResult.getResponse().getContentAsString();
+        return GSON.fromJson(jsonString, TYPE_LIST_OF_OPTIONS);
+    }
+
     private List<Survey> convertResponseToListOfSurveys(MvcResult mvcResult) throws UnsupportedEncodingException {
         String jsonString = mvcResult.getResponse().getContentAsString();
-        return new Gson().fromJson(jsonString, TYPE_LIST_OF_SURVEYS);
+        return GSON.fromJson(jsonString, TYPE_LIST_OF_SURVEYS);
     }
 }

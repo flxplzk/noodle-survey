@@ -1,4 +1,13 @@
 (function () {
+    /**
+     * @name "de.nordakademie.iaa.survey.detail"
+     *
+     * ToolBarModule
+     * @author Felix Plazek
+     * @author Sascha Pererva
+     *
+     * @type {angular.Module}
+     */
     var detail = angular.module("de.nordakademie.iaa.survey.detail", [
         "de.nordakademie.iaa.survey.editor",
         "de.nordakademie.iaa.survey.core.domain",
@@ -28,8 +37,9 @@
 
         function init() {
             $scope.survey = SurveyResource.get({survey: $stateParams.surveyId});
-            $scope.options = OptionResource.query({survey: $stateParams.surveyId});
-            var query = ParticipationResource.query({survey: $stateParams.surveyId});
+            $scope.options = OptionResource.query({survey: $stateParams.surveyId}, filterOwnParticipation);
+            $scope.participations  = [];
+            var query = ParticipationResource.query({survey: $stateParams.surveyId}, filterOwnParticipation);
             query.$promise.then(function (data) {
                 $scope.participations = data;
                 filterOwnParticipation();

@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 public class UserServiceImplTest {
 
     @Test
-    public void save() {
+    public void save() {  // TODO
         // GIVEN
 
         // WHEN
@@ -16,7 +16,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void loadUserByUsername() {
+    public void loadUserByUsername() {  // TODO
         // GIVEN
 
         // WHEN

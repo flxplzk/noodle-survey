@@ -80,4 +80,9 @@ public class UserControllerTest {
         assertThat(notifications, is(returnNotifications));
         verify(authenticationService, times(1)).getCurrentAuthenticatedUser();
     }
+
+    @Test
+    public void createEvent() {
+        // TODO
+    }
 }

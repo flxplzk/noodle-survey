@@ -1,4 +1,17 @@
 (function() {
+    // ########################## MODULE DECLARATION #####################################
+
+    /**
+     * @name "de.nordakademie.iaa.survey"
+     *
+     * this is the app
+     * @author Felix Plazek
+     * @author Bengt-Lasse Arndt
+     * @author Robert Peters
+     * @author Sascha Pererva
+     *
+     * @type {angular.Module}
+     */
     var app = angular.module("de.nordakademie.iaa.survey", [
         "de.nordakademie.iaa.survey.authentication",
         "de.nordakademie.iaa.survey.toolbar",
@@ -11,9 +24,13 @@
         var enteringGuard = function ($transition$, $state$) {
             var appService = $transition$.injector().get("appService");
             var stateService = $transition$.injector().get("$state");
-            appService.testAuthentication(function (success) {}, function (reject) {
+            appService.testAuthentication(function (success) {
+                console.log("user authenticated; access granted!");
+            }, function (reject) {
                 $transition$.abort();
                 stateService.go("login");
+                console.log("user not authenticated; redirected to login!");
+
             });
         };
 

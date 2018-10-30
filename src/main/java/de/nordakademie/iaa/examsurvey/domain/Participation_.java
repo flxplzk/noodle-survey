@@ -5,6 +5,11 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import java.util.Set;
 
+/**
+ * {@link StaticMetamodel} for type {@link Participation}
+ *
+ * @author felix plazek
+ */
 @StaticMetamodel(Participation.class)
 public class Participation_ extends AuditModel_ {
     protected Participation_() {

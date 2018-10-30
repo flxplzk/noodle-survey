@@ -26,6 +26,9 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User createUser(User user) {
         requireNonExistent(user);
@@ -34,6 +37,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return findUserByUsername(username)

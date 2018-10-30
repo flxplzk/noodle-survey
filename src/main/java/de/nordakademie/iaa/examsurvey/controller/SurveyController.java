@@ -5,6 +5,8 @@ import de.nordakademie.iaa.examsurvey.domain.Participation;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.service.AuthenticationService;
+import de.nordakademie.iaa.examsurvey.service.OptionService;
+import de.nordakademie.iaa.examsurvey.service.ParticipationService;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -26,11 +28,18 @@ public class SurveyController {
 
     private final SurveyService surveyService;
     private final AuthenticationService authenticationService;
+    private final OptionService optionService;
+    private final ParticipationService participationService;
 
     @Autowired
-    public SurveyController(SurveyService surveyService, AuthenticationService authenticationService) {
+    public SurveyController(final SurveyService surveyService,
+                            final AuthenticationService authenticationService,
+                            final OptionService optionService,
+                            final ParticipationService participationService) {
         this.surveyService = surveyService;
         this.authenticationService = authenticationService;
+        this.optionService = optionService;
+        this.participationService = participationService;
     }
 
     @RequestMapping(value = PATH_SURVEYS,
@@ -75,33 +84,34 @@ public class SurveyController {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Option> loadOptions(@PathVariable(value = PATH_V_IDENTIFIER) Long identifier) {
-        return surveyService.loadAllOptionsOfSurveyForUser(identifier, getAuthenticatedUser());
+        return optionService.loadAllOptionsOfSurveyForUser(identifier, getAuthenticatedUser());
     }
 
     @RequestMapping(value = PATH_SURVEY_PARTICIPATIONS,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Participation> loadParticipations(@PathVariable(name = PATH_V_IDENTIFIER) Long identifier) {
-        return surveyService.loadAllParticipationsOfSurveyForUser(identifier, getAuthenticatedUser());
+        return participationService.loadAllParticipationsOfSurveyForUser(identifier, getAuthenticatedUser());
     }
 
     @RequestMapping(value = PATH_SURVEY_PARTICIPATIONS,
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Participation createParticipationForSurvey(@RequestBody Participation participation,
-                                                    @PathVariable(name = PATH_V_IDENTIFIER) Long surveyIdentifier) {
-        return surveyService.saveParticipationForSurveyWithAuthenticatedUser(participation, surveyIdentifier, getAuthenticatedUser());
+                                                      @PathVariable(name = PATH_V_IDENTIFIER) Long surveyIdentifier) {
+        return participationService.saveParticipationForSurveyWithAuthenticatedUser(participation, surveyIdentifier, getAuthenticatedUser());
     }
 
     @RequestMapping(value = PATH_SURVEY_PARTICIPATIONS + "/{participation}",
             method = RequestMethod.PUT,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Participation saveParticipationForSurvey(@RequestBody Participation participation,
-                                                        @PathVariable(name = PATH_V_IDENTIFIER) Long surveyIdentifier,
-                                                      @PathVariable(name = "participation") Long participationIdentifier) {
+                                                    @PathVariable(name = PATH_V_IDENTIFIER) Long surveyIdentifier,
+                                                    @PathVariable(name = "participation") Long participationIdentifier) {
         participation.setId(participationIdentifier);
-        return surveyService.saveParticipationForSurveyWithAuthenticatedUser(participation, surveyIdentifier, getAuthenticatedUser());
+        return participationService.saveParticipationForSurveyWithAuthenticatedUser(participation, surveyIdentifier, getAuthenticatedUser());
     }
+
     private User getAuthenticatedUser() {
         return authenticationService.getCurrentAuthenticatedUser();
     }

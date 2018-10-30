@@ -13,11 +13,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 
+/**
+ * Spring SecurityConfiguration
+ *
+ * @author felix plazek
+ */
 @Configuration
 @EnableWebSecurity
 public class HttpSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private static final String REALM = "SURVEY_REALM";
-    private static final String ANT_REGISTRATION = "/users";
     private static final String ANT_INDEX_HTML = "/index.html";
     private static final String ANT_ROOT = "/";
     private static final String ANT_CSS = "/css/**";

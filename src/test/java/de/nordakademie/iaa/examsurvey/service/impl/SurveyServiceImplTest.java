@@ -48,7 +48,7 @@ public class SurveyServiceImplTest {
         notificationService = mock(NotificationService.class);
         optionService = mock(OptionService.class);
         participationService = mock(ParticipationService.class);
-        surveyService = new SurveyServiceImpl(surveyRepository, optionRepository, participationRepository,
+        surveyService = new SurveyServiceImpl(surveyRepository,
                 notificationService, optionService, participationService);
     }
 
@@ -126,6 +126,37 @@ public class SurveyServiceImplTest {
 
     }
 
+    @Test
+    public void createSurvey() {
+        // TODO
+    }
+
+    @Test
+    public void update() {
+        // TODO
+    }
+
+    @Test
+    public void closeSurvey() {
+        // TODO
+    }
+
+    @Test
+    public void deleteSurvey() {
+        // TODO
+    }
+
+    @Test
+    public void loadAllSurveysWithUser() {
+        // TODO
+    }
+
+    @Test
+    public void loadSurveyWithUser() {
+        // TODO
+    }
+
+     /* TODO
     @Test(expected = SurveyNotFoundException.class)
     public void saveOptionForSurvey_notFound() {
         // GIVEN
@@ -158,7 +189,7 @@ public class SurveyServiceImplTest {
     }
 
 
-     /* TODO
+
     @Test(expected = PermissionDeniedException.class)
     public void saveOptionForSurvey_PermissionDenied() {
         // GIVEN

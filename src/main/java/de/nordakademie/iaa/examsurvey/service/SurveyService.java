@@ -1,10 +1,11 @@
 package de.nordakademie.iaa.examsurvey.service;
 
-import de.nordakademie.iaa.examsurvey.domain.Option;
 import de.nordakademie.iaa.examsurvey.domain.Participation;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
+import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
 import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
+import de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,7 +13,10 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * @author Robert Peters, Bengt-Lasse Arndt, Felix Plazek
+ * @author felix plazek
+ * @author robert peters
+ * @author bengt-lasse arndt
+ * @author sascha pererva
  */
 @Transactional(propagation = Propagation.REQUIRED)
 public interface SurveyService {
@@ -28,16 +32,6 @@ public interface SurveyService {
                         @NotNull final User initiator);
 
     /**
-     * retrieves all {@link Option}'s which are visible for the authenticated User.
-     *
-     * @param title             of the Survey
-     * @param authenticatedUser which requests
-     * @return list of options belonging to the survey
-     */
-    List<Option> loadAllOptionsOfSurveyForUser(final Long title,
-                                               @NotNull final User authenticatedUser);
-
-    /**
      * Loads all surveys which are relevant for the given {@link User}.
      * Means: all surveys with {@link de.nordakademie.iaa.examsurvey.domain.SurveyStatus#OPEN}
      * or {@link de.nordakademie.iaa.examsurvey.domain.SurveyStatus#CLOSED} and all
@@ -50,31 +44,50 @@ public interface SurveyService {
     List<Survey> loadAllSurveysWithUser(@NotNull final User requestingUser);
 
     /**
-     * TODO
-     * @param identifier
-     * @param authenticatedUser
-     * @return
+     * Loads the requested Survey with id = {@param identifier} for
+     * {@param authenticatedUser}.
+     *
+     * @param identifier        of the requested Survey
+     * @param authenticatedUser requesting User
+     * @return requested Survey
+     * @throws SurveyNotFoundException if the Survey was not found or is Private and
+     *                                 therefore only visible for its initiator
      */
-    List<Participation> loadAllParticipationsOfSurveyForUser(Long identifier,
-                                                             @NotNull User authenticatedUser);
+    Survey loadSurveyWithUser(@NotNull final Long identifier,
+                              @NotNull final User authenticatedUser);
 
     /**
-     * TODO
-     * @param participation
-     * @param identifier
-     * @param authenticatedUser
-     * @return
+     * Updates the existing survey plus resets all corresponding {@link Participation}'s of the survey.
+     * With Updating all participating user will be notified and then can participate again.
+     *
+     * @param survey            to be updated
+     * @param authenticatedUser of the request
+     * @return the updated {@link Survey}
+     * @throws PermissionDeniedException if {@param authenticatedUser} is {@code null} or not the
+     *                                   initiator of the {@link Survey}
      */
-    Participation saveParticipationForSurveyWithAuthenticatedUser(@NotNull Participation participation,
-                                                                  Long identifier,
-                                                                  @NotNull User authenticatedUser);
+    Survey update(@NotNull final Survey survey,
+                  @NotNull final User authenticatedUser);
 
-    Survey loadSurveyWithUser(@NotNull Long identifier,
-                              @NotNull User authenticatedUser);
+    /**
+     * Sets and persists the Survey with {@link de.nordakademie.iaa.examsurvey.domain.SurveyStatus#CLOSED}
+     * Survey with status CLOSED can not be changed anymore
+     *
+     * @param survey            to close
+     * @param authenticatedUser that requests
+     * @throws PermissionDeniedException if {@param authenticatedUser} is {@code null} or not the
+     *                                   initiator of the {@link Survey}
+     */
+    void closeSurvey(@NotNull final Survey survey,
+                     @NotNull final User authenticatedUser);
 
-    Survey update(@NotNull Survey survey, @NotNull User authenticatedUser);
-
-    void closeSurvey(final Survey surveyToClose, User authenticatedUser);
-
-    void deleteSurvey(Long id, User authenticatedUser);
+    /**
+     * Deletes the {@link Survey} that corresponds to the given {@param id} if the authenticated user
+     * equals the {@link Survey#getInitiator()}
+     *
+     * @throws PermissionDeniedException if {@param authenticatedUser} is {@code null} or not the
+     *                                   initiator of the {@link Survey}
+     */
+    void deleteSurvey(@NotNull final Long id,
+                      @NotNull final User authenticatedUser);
 }

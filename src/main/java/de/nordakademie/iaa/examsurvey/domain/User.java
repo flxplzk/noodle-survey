@@ -2,6 +2,7 @@ package de.nordakademie.iaa.examsurvey.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.Objects;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -109,5 +110,28 @@ public class User extends AuditModel implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptyList(); // not needed so far implementation may be useful in future stories
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        User user = (User) o;
+        return Objects.equal(firstName, user.firstName) &&
+                Objects.equal(lastName, user.lastName) &&
+                Objects.equal(password, user.password) &&
+                Objects.equal(username, user.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(super.hashCode(), firstName, lastName, password, username);
     }
 }

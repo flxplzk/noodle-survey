@@ -1,5 +1,10 @@
 package de.nordakademie.iaa.examsurvey.exception;
 
+/**
+ * ParentException for this application all {@link RuntimeException}'s will be thrown as type of this Exception
+ *
+ * @author Felix Plazek
+ */
 public class SurveyApplicationException extends RuntimeException {
     public SurveyApplicationException() {
     }

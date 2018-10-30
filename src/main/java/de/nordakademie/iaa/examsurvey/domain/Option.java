@@ -1,6 +1,7 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.Objects;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.Column;
@@ -19,7 +20,8 @@ import java.util.Date;
 /**
  * Base Entity for Date-Options toDateTime choose from within a Survey.
  *
- * @author Bengt-Lasse Arndt, Robert Peters
+ * @author Bengt-Lasse Arndt
+ * @author Robert Peters
  */
 @Entity
 @Table(name = "options")
@@ -44,5 +46,26 @@ public class Option extends AuditModel{
     }
     public void setSurvey(Survey survey) {
         this.survey = survey;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        Option option = (Option) o;
+        return Objects.equal(dateTime, option.dateTime) &&
+                Objects.equal(survey, option.survey);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(super.hashCode(), dateTime, survey);
     }
 }

@@ -1,4 +1,17 @@
 (function () {
+    // ########################## MODULE DECLARATION #####################################
+
+    /**
+     * @name "de.nordakademie.iaa.i18n"
+     *
+     * This module provides i18n messages for the frontend application
+     * @author Felix Plazek
+     * @author Bengt-Lasse Arndt
+     * @author Robert Peters
+     * @author Sascha Pererva
+     *
+     * @type {angular.Module}
+     */
     var app = angular.module("de.nordakademie.iaa.i18n", [
         "pascalprecht.translate"
     ]);
@@ -129,6 +142,7 @@
 
         });
 
-        $translateProvider.preferredLanguage("de_DE");
+        $translateProvider.preferredLanguage("en_US");
+        $translateProvider.useSanitizeValueStrategy('escape');
     })
 }());
