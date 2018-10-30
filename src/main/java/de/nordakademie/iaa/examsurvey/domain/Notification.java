@@ -1,6 +1,7 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.Objects;
 
 import javax.persistence.*;
 
@@ -54,5 +55,27 @@ public class Notification extends AuditModel {
     }
     public void setNotificationType(NotificationType notificationType) {
         this.notificationType = notificationType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        Notification that = (Notification) o;
+        return Objects.equal(user, that.user) &&
+                Objects.equal(survey, that.survey) &&
+                notificationType == that.notificationType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(super.hashCode(), user, survey, notificationType);
     }
 }

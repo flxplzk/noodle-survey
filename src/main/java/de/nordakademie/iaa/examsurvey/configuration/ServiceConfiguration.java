@@ -42,7 +42,8 @@ public class ServiceConfiguration {
 
     @Bean
     @Scope(value = "singleton")
-    public UserService userService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService userService(final UserRepository userRepository,
+                                   final PasswordEncoder passwordEncoder) {
         return new UserServiceImpl(userRepository, passwordEncoder);
     }
 
@@ -57,7 +58,7 @@ public class ServiceConfiguration {
 
     @Bean
     @Scope(value = "singleton")
-    public AuthenticationService authenticationService(UserService userService) {
+    public AuthenticationService authenticationService(final UserService userService) {
         return new AuthenticationServiceImpl(userService);
     }
 
@@ -84,9 +85,10 @@ public class ServiceConfiguration {
 
     @Bean
     @Scope(value = "singleton")
-    public EventService eventService(SurveyService surveyService,
-                                     EventRepository eventRespository,
-                                     NotificationService notificationService) {
-        return new EventServiceImpl(surveyService, eventRespository, notificationService);
+    public EventService eventService(final SurveyService surveyService,
+                                     final EventRepository eventRespository,
+                                     final NotificationService notificationService,
+                                     final ParticipationRepository participationRepository) {
+        return new EventServiceImpl(surveyService, eventRespository, notificationService, participationRepository);
     }
 }

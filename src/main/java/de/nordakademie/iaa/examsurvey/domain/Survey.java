@@ -2,6 +2,7 @@ package de.nordakademie.iaa.examsurvey.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.Objects;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.CascadeType;
@@ -16,7 +17,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
-import java.util.List;
 import java.util.Set;
 
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
@@ -97,5 +97,30 @@ public class Survey extends AuditModel {
 
     public void setEvent(Event event) {
         this.event = event;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        Survey survey = (Survey) o;
+        return Objects.equal(title, survey.title) &&
+                Objects.equal(description, survey.description) &&
+                Objects.equal(initiator, survey.initiator) &&
+                Objects.equal(event, survey.event) &&
+                surveyStatus == survey.surveyStatus &&
+                Objects.equal(options, survey.options);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(super.hashCode(), title, description, initiator, event, surveyStatus, options);
     }
 }

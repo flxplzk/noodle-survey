@@ -74,7 +74,7 @@ public class SurveyControllerTest {
     }
 
     @Test
-    public void saveOptions() {
+    public void loadOptionsForSurvey() {
         // GIVEN
         Long id = -1L;
         List<Option> mockedOptions = Lists.newArrayList(mock(Option.class), mock(Option.class));
@@ -92,4 +92,50 @@ public class SurveyControllerTest {
 
     }
 
+    @Test
+    public void updateSurvey() {
+        // TODO
+    }
+
+    @Test
+    public void deleteSurvey() {
+        // TODO
+
+    }
+
+    @Test
+    public void loadSurveys1() {
+        // TODO
+
+    }
+
+    @Test
+    public void loadSurvey() {
+        // TODO
+
+    }
+
+    @Test
+    public void loadOptions() {
+        // TODO
+
+    }
+
+    @Test
+    public void loadParticipations() {
+        // TODO
+
+    }
+
+    @Test
+    public void createParticipationForSurvey() {
+        // TODO
+
+    }
+
+    @Test
+    public void saveParticipationForSurvey() {
+        // TODO
+
+    }
 }

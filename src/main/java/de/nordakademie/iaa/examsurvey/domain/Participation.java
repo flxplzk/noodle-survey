@@ -1,5 +1,6 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
+import com.google.common.base.Objects;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.Entity;
@@ -50,5 +51,27 @@ public class Participation extends AuditModel {
 
     public void setOptions(Set<Option> options) {
         this.options = options;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        Participation that = (Participation) o;
+        return Objects.equal(user, that.user) &&
+                Objects.equal(survey, that.survey) &&
+                Objects.equal(options, that.options);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(super.hashCode(), user, survey, options);
     }
 }
