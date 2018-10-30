@@ -1,4 +1,18 @@
 (function () {
+    // ########################## MODULE DECLARATION #####################################
+
+    /**
+     * @name "de.nordakademie.iaa.survey.core"
+     *
+     * Core functionalities of the frontend
+     *
+     * @author Felix Plazek
+     * @author Bengt-Lasse Arndt
+     * @author Robert Peters
+     * @author Sascha Pererva
+     *
+     * @type {angular.Module}
+     */
     var core = angular.module("de.nordakademie.iaa.survey.core", [
         "de.nordakademie.iaa.i18n",
         "rx",

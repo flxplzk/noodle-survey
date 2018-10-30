@@ -1,4 +1,13 @@
 (function () {
+    /**
+     * @name "de.nordakademie.iaa.survey.editor"
+     *
+     * EditorModule
+     * @author Felix Plazek
+     * @author Sascha Pererva
+     *
+     * @type {angular.Module}
+     */
     var editor = angular.module("de.nordakademie.iaa.survey.editor", [
         "de.nordakademie.iaa.survey.core.domain",
         "de.nordakademie.iaa.survey.core",

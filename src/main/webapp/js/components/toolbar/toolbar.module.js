@@ -1,4 +1,14 @@
 (function () {
+    // ########################## MODULE DECLARATION #####################################
+
+    /**
+     * @name "de.nordakademie.iaa.survey.toolbar"
+     *
+     * ToolBarModule
+     * @author Felix Plazek
+     *
+     * @type {angular.Module}
+     */
     var toolbar = angular.module("de.nordakademie.iaa.survey.toolbar", [
         "de.nordakademie.iaa.survey.core",
         "de.nordakademie.iaa.i18n",

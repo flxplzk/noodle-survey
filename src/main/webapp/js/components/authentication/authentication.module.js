@@ -1,4 +1,13 @@
 (function () {
+
+    /**
+     * @name "de.nordakademie.iaa.survey.detail"
+     *
+     * ToolBarModule
+     * @author Felix Plazek
+     *
+     * @type {angular.Module}
+     */
     var app = angular.module("de.nordakademie.iaa.survey.authentication", [
         "de.nordakademie.iaa.survey.core.domain",
         "de.nordakademie.iaa.survey.core",
