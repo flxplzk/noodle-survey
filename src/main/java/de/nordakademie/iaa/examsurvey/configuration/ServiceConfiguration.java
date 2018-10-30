@@ -26,6 +26,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * Bean Service Configuration
+ *
+ * @author Felix Plazek
+ */
 @Configuration
 public class ServiceConfiguration {
 
@@ -58,8 +63,9 @@ public class ServiceConfiguration {
 
     @Bean
     @Scope(value = "singleton")
-    public NotificationService notificationService(NotificationRepository notificationRepository) {
-        return new NotificationServiceImpl(notificationRepository);
+    public NotificationService notificationService(final NotificationRepository notificationRepository,
+                                                   final ParticipationRepository participationRespository) {
+        return new NotificationServiceImpl(notificationRepository, participationRespository);
     }
 
     @Bean

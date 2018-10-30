@@ -24,7 +24,8 @@ import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
 /**
  * Base Entity for Survey, containing basic information.
  *
- * @author Bengt-Lasse Arndt, Robert Peters
+ * @author Bengt-Lasse Arndt
+ * @author Robert Peters
  */
 @Entity
 @Table(name = "surveys")
@@ -42,6 +43,7 @@ public class Survey extends AuditModel {
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -51,6 +53,7 @@ public class Survey extends AuditModel {
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -60,6 +63,7 @@ public class Survey extends AuditModel {
     public User getInitiator() {
         return initiator;
     }
+
     public void setInitiator(User initiator) {
         this.initiator = initiator;
     }
@@ -69,6 +73,7 @@ public class Survey extends AuditModel {
     public SurveyStatus getSurveyStatus() {
         return surveyStatus;
     }
+
     public void setSurveyStatus(SurveyStatus surveyStatus) {
         this.surveyStatus = surveyStatus;
     }
@@ -78,6 +83,7 @@ public class Survey extends AuditModel {
     public Set<Option> getOptions() {
         return options;
     }
+
     public void setOptions(Set<Option> options) {
         this.options = options;
     }
@@ -88,6 +94,7 @@ public class Survey extends AuditModel {
     public Event getEvent() {
         return event;
     }
+
     public void setEvent(Event event) {
         this.event = event;
     }

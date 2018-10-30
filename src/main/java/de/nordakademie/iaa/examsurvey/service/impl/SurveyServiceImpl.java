@@ -21,8 +21,10 @@ import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpe
 /**
  * UserService implementation.
  *
- * @author Robert Peters
- * @author Felix Plazek
+ * @author felix plazek
+ * @author robert peters
+ * @author bengt-lasse arndt
+ * @author sascha pererva
  */
 public class SurveyServiceImpl extends AbstractAuditModelService implements SurveyService {
     private final NotificationService notificationService;
@@ -39,6 +41,9 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
         this.participationService = participationService;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Survey createSurvey(Survey survey, User initiator) {
         requireNonNullUser(initiator);
@@ -49,6 +54,9 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
         return createdSurvey;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Survey update(Survey survey, User authenticatedUser) {
         final Survey persistedSurvey = findModifiableSurveyWithInitiator(survey, authenticatedUser);
@@ -61,6 +69,56 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
         return surveyRepository.save(persistedSurvey);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void closeSurvey(Survey surveyToClose, User authenticatedUser) {
+        final Survey persistedSurvey = findModifiableSurveyWithInitiator(surveyToClose, authenticatedUser);
+        persistedSurvey.setSurveyStatus(SurveyStatus.CLOSED);
+        surveyRepository.save(persistedSurvey);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteSurvey(Long id, User authenticatedUser) {
+        final Survey existentSurvey = findDeletableSurveyWithInitiator(id, authenticatedUser);
+        participationService.deleteAllParticipationsForSurvey(existentSurvey);
+        optionService.deleteAllOptionsForSurvey(existentSurvey);
+        notificationService.deleteAllNotificationsForSurvey(existentSurvey);
+        surveyRepository.delete(existentSurvey);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Survey> loadAllSurveysWithUser(User requestingUser) {
+        requireNonNullUser(requestingUser);
+        return surveyRepository.findAll(isVisibleForUser(requestingUser));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Survey loadSurveyWithUser(Long identifier, User authenticatedUser) {
+        requireNonNullUser(authenticatedUser);
+        return getSurveyVisibleForUser(identifier, authenticatedUser);
+    }
+
+    // ########################################## VALIDATION METHODS ###################################################
+
+    private Survey findDeletableSurveyWithInitiator(Long id, User authenticatedUser) {
+        requireNonNullUser(authenticatedUser);
+        Survey existentSurvey = surveyRepository.findById(id)
+                .orElseThrow(SurveyNotFoundException::new);
+        requireInitiator(authenticatedUser, existentSurvey);
+        return existentSurvey;
+    }
+
     private Survey findModifiableSurveyWithInitiator(Survey survey, User authenticatedUser) {
         requireNonNullUser(authenticatedUser);
         final Survey persistedSurvey = getExistent(survey);
@@ -71,44 +129,6 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
         }
         return persistedSurvey;
     }
-
-    @Override
-    public void closeSurvey(Survey surveyToClose, User authenticatedUser) {
-        final Survey persistedSurvey = findModifiableSurveyWithInitiator(surveyToClose, authenticatedUser);
-        persistedSurvey.setSurveyStatus(SurveyStatus.CLOSED);
-        surveyRepository.save(persistedSurvey);
-    }
-
-    @Override
-    public void deleteSurvey(Long id, User authenticatedUser) {
-        final Survey existentSurvey = findDeletableSurveyWithInitiator(id, authenticatedUser);
-        participationService.deleteAllParticipationsForSurvey(existentSurvey);
-        optionService.deleteAllOptionsForSurvey(existentSurvey);
-        notificationService.deleteAllNotificationsForSurvey(existentSurvey);
-        surveyRepository.delete(existentSurvey);
-    }
-
-    private Survey findDeletableSurveyWithInitiator(Long id, User authenticatedUser) {
-        requireNonNullUser(authenticatedUser);
-        Survey existentSurvey = surveyRepository.findById(id)
-                .orElseThrow(SurveyNotFoundException::new);
-        requireInitiator(authenticatedUser, existentSurvey);
-        return existentSurvey;
-    }
-
-    @Override
-    public List<Survey> loadAllSurveysWithUser(User requestingUser) {
-        requireNonNullUser(requestingUser);
-        return surveyRepository.findAll(isVisibleForUser(requestingUser));
-    }
-
-    @Override
-    public Survey loadSurveyWithUser(Long identifier, User authenticatedUser) {
-        requireNonNullUser(authenticatedUser);
-        return getSurveyVisibleForUser(identifier, authenticatedUser);
-    }
-
-    // ########################################## VALIDATION METHODS ###################################################
 
     private boolean isSurveyClose(Survey survey, Survey persistedSurvey) {
         return SurveyStatus.CLOSED.equals(survey.getSurveyStatus())

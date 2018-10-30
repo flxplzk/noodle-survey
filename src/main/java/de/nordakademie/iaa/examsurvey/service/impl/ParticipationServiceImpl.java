@@ -10,12 +10,17 @@ import de.nordakademie.iaa.examsurvey.persistence.ParticipationRepository;
 import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
 import de.nordakademie.iaa.examsurvey.service.ParticipationService;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 import static de.nordakademie.iaa.examsurvey.persistence.specification.ParticipationSpecifications.withSurvey;
 import static de.nordakademie.iaa.examsurvey.persistence.specification.ParticipationSpecifications.withSurveyAndUser;
 
+/**
+ * @author felix plazek
+ * @author robert peters
+ * @author bengt-lasse arndt
+ * @author sascha pererva
+ */
 public class ParticipationServiceImpl extends AbstractAuditModelService implements ParticipationService {
     private final ParticipationRepository participationRepository;
 
@@ -25,18 +30,27 @@ public class ParticipationServiceImpl extends AbstractAuditModelService implemen
         this.participationRepository = repository;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteAllParticipationsForSurvey(Survey survey) {
         List<Participation> participationsToDelete = participationRepository.findAll(withSurvey(survey));
         participationRepository.deleteAll(participationsToDelete);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Participation> loadAllParticipationsOfSurveyForUser(Long identifier, User authenticatedUser) {
         Survey survey = getSurveyVisibleForUser(identifier, authenticatedUser);
         return participationRepository.findAll(withSurvey(survey));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Participation saveParticipationForSurveyWithAuthenticatedUser(Participation participation,
                                                                          Long surveyId,

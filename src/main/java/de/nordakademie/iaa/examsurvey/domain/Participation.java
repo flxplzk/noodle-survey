@@ -13,7 +13,8 @@ import java.util.Set;
 /**
  * Base Entity for User Answers to a survey.
  *
- * @author Bengt-Lasse Arndt, Robert Peters
+ * @author Bengt-Lasse Arndt
+ * @author Robert Peters
  */
 @Entity
 @Table(name = "participations")

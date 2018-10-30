@@ -10,7 +10,10 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * Service for operations concerning {@link Participation}
+ * @author felix plazek
+ * @author robert peters
+ * @author bengt-lasse arndt
+ * @author sascha pererva
  */
 @Transactional(propagation = Propagation.REQUIRED)
 public interface ParticipationService {

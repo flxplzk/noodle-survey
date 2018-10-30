@@ -10,6 +10,12 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author felix plazek
+ * @author robert peters
+ * @author bengt-lasse arndt
+ * @author sascha pererva
+ */
 @Transactional(propagation = Propagation.REQUIRED)
 public interface OptionService {
     /**

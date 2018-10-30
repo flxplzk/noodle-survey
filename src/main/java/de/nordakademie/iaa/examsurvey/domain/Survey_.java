@@ -3,6 +3,11 @@ package de.nordakademie.iaa.examsurvey.domain;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
+/**
+ * {@link StaticMetamodel} for type {@link Survey}
+ *
+ * @author felix plazek
+ */
 @StaticMetamodel(Survey.class)
 public class Survey_ extends AuditModel_{
     protected Survey_() {

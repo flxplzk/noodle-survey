@@ -6,6 +6,11 @@ import de.nordakademie.iaa.examsurvey.domain.Survey_;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import org.springframework.data.jpa.domain.Specification;
 
+/**
+ * Specifications for {@link Survey}.
+ *
+ * @author Felix Plazek
+ */
 public class SurveySpecifications {
     private SurveySpecifications() {
         // prevent instantiation

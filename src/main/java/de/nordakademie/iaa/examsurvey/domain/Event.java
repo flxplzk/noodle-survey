@@ -10,6 +10,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
 
+/**
+ * BAse Entity for Events
+ *
+ * @author Felix Plazek
+ */
 @Entity
 @Table(name = "event")
 public class Event extends AuditModel {

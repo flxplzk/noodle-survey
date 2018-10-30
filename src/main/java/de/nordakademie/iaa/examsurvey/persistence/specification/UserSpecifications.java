@@ -4,6 +4,11 @@ import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.domain.User_;
 import org.springframework.data.jpa.domain.Specification;
 
+/**
+ * Specifications for {@link User}.
+ *
+ * @author Felix Plazek
+ */
 public class UserSpecifications {
     private UserSpecifications() {
         // prevent instantiation

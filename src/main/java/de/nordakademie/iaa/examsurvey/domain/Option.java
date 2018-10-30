@@ -19,7 +19,8 @@ import java.util.Date;
 /**
  * Base Entity for Date-Options toDateTime choose from within a Survey.
  *
- * @author Bengt-Lasse Arndt, Robert Peters
+ * @author Bengt-Lasse Arndt
+ * @author Robert Peters
  */
 @Entity
 @Table(name = "options")

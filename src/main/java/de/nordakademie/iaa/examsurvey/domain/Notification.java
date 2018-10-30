@@ -7,7 +7,8 @@ import javax.persistence.*;
 /**
  * Base Entity for notifications.
  *
- * @author Bengt-Lasse Arndt, Robert Peters
+ * @author Bengt-Lasse Arndt
+ * @author Robert Peters
  */
 
 @Entity
