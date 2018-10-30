@@ -10,7 +10,9 @@
 
     editor.directive("surveyEditorActionButton", FloatingActionButtonDirective);
     editor.directive("deleteSurveyActionButton", DeleteButtonDirective);
+    editor.directive("closeSurveyActionButton", CloseButtonDirective);
     editor.controller("floatingEditorController", ["$mdDialog", "$scope", FloatingActionButtonController]);
+    editor.controller("closeActionButtonController", ["$mdDialog", "$scope", "EventResource", CloseActionButtonController]);
     editor.controller("deleteSurveyController", ["SurveyResource", "$mdDialog", "$translate",
         "$scope", "$state", "notificationService", DeleteSurveyController]);
 
@@ -29,6 +31,68 @@
                 " ng-click=\"dialogManager.showEditorDialog($event)\">" +
                 "<i class=\"material-icons\"> {{icon}} </i></md-button>" +
                 "</div>"
+        }
+    }
+
+    function CloseButtonDirective() {
+        return {
+            restrict: "E",
+            transclude: false,
+            controller: "closeActionButtonController",
+            controllerAs: "closeCrtl",
+            scope: {
+                surveyId: "=",
+                icon: "@"
+            },
+            template: "<div>" +
+                "<md-button class=\"md-primary md-raised md-accent md-icon-button\"" +
+                " ng-click=\"closeCrtl.close($event)\">" +
+                "<i class=\"material-icons\"> {{icon}} </i></md-button>" +
+                "</div>"
+        }
+    }
+
+    function CloseActionButtonController($mdDialog, $scope) {
+        this.close = function (ev) {
+            $mdDialog.show({
+                locals: {surveyId: $scope.surveyId},
+                templateUrl: "/js/components/editor/close.dialog.template.html",
+                controller: ["$mdDialog", "$scope", "EventResource", "SurveyResource",
+                    "OptionResource", "$state", "surveyId", SurveyCloseController],
+                controllerAs: "surveyCloseCrtl",
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: false,
+                fullscreen: true
+            })
+        };
+    }
+
+    function SurveyCloseController($mdDialog, $scope, EventResource, SurveyResource, OptionResource, $state, surveyId) {
+        $scope.caption = "EDITOR_CLOSE_TITLE";
+        $scope.survey = SurveyResource.get({survey: surveyId});
+        $scope.options = OptionResource.query({survey: surveyId});
+        $scope.selected = null;
+
+        this.cancel = function () {
+            $mdDialog.cancel();
+        };
+
+        function success(success) {
+            $mdDialog.cancel();
+            $state.go("dashboard")
+        }
+
+        function reject(error) {
+
+        }
+        this.save = function () {
+            var selectedDate = new Date(angular.fromJson($scope.selected).dateTime);
+            EventResource.save({title: $scope.survey.title, survey: $scope.survey, time:selectedDate}, success, reject)
+        };
+
+        this.valid = function () {
+            return $scope.selected != null;
         }
     }
 
@@ -183,7 +247,11 @@
             }
 
             function successHandler(survey) {
-                $state.go("detail", {surveyId: survey.getId()});
+                if ($scope.createNew) {
+                    $state.go("detail", {surveyId: survey.getId()});
+                } else {
+                    initialize();
+                }
                 vm.cancel()
             }
 

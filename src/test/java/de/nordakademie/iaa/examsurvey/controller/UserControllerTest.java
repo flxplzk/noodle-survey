@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import de.nordakademie.iaa.examsurvey.domain.Notification;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.service.AuthenticationService;
+import de.nordakademie.iaa.examsurvey.service.EventService;
 import de.nordakademie.iaa.examsurvey.service.NotificationService;
 import de.nordakademie.iaa.examsurvey.service.UserService;
 import org.junit.Before;
@@ -24,13 +25,15 @@ public class UserControllerTest {
     private UserService userService;
     private AuthenticationService authenticationService;
     private NotificationService notificationService;
+    private EventService eventService;
 
     @Before
     public void setUp() throws Exception {
         userService = mock(UserService.class);
         authenticationService = mock(AuthenticationService.class);
         notificationService = mock(NotificationService.class);
-        controllerUnderTest = new UserController(userService, authenticationService, notificationService);
+        eventService = mock(EventService.class);
+        controllerUnderTest = new UserController(userService, authenticationService, notificationService, eventService);
     }
 
     @Test

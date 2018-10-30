@@ -115,6 +115,8 @@
             EDITOR_CONFIRM_DELETE_CANCEL: "Cancel",
             EDITOR_ERROR_DELETE_PERMISSION: "You can NOT delete a survey when you are not the initiator",
             EDITOR_ERROR_DELETE_UNKNOWN: "Survey has been deleted",
+            EDITOR_CLOSE_TITLE: "Close survey ...",
+            EDITOR_SURVEY_CLOSE: "Please select one of the below options or your event. All Users will be notified. This action can not be changed",
 
             DETAIL_SEND: "Save",
             DETAIL_YOU: "You",
