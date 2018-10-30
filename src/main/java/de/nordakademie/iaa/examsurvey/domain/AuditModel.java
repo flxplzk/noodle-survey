@@ -1,6 +1,5 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -30,11 +29,11 @@ public abstract class AuditModel implements Serializable {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
 
-    @JsonIgnore
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false, updatable = false)
@@ -46,7 +45,6 @@ public abstract class AuditModel implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    @JsonIgnore
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)

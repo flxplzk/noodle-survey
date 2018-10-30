@@ -5,6 +5,8 @@ import de.nordakademie.iaa.examsurvey.domain.Option;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.service.AuthenticationService;
+import de.nordakademie.iaa.examsurvey.service.OptionService;
+import de.nordakademie.iaa.examsurvey.service.ParticipationService;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +14,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -22,12 +24,16 @@ public class SurveyControllerTest {
     private SurveyController controllerUnderTest;
     private SurveyService surveyService;
     private AuthenticationService authenticationService;
+    private ParticipationService participationService;
+    private OptionService optionService;
 
     @Before
     public void setUp() throws Exception {
         surveyService = mock(SurveyService.class);
         authenticationService = mock(AuthenticationService.class);
-        controllerUnderTest = new SurveyController(surveyService, authenticationService);
+        participationService = mock(ParticipationService.class);
+        optionService = mock(OptionService.class);
+        controllerUnderTest = new SurveyController(surveyService, authenticationService, optionService, participationService);
     }
 
     @Test
@@ -75,7 +81,7 @@ public class SurveyControllerTest {
         User user = mock(User.class);
 
         when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
-        when(surveyService.loadAllOptionsOfSurveyForUser(id, user)).thenReturn(mockedOptions);
+        when(optionService.loadAllOptionsOfSurveyForUser(id, user)).thenReturn(mockedOptions);
 
         // WHEN
         List<Option> options = controllerUnderTest.loadOptions(id);

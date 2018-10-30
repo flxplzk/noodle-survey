@@ -43,14 +43,11 @@ public class ServiceConfiguration {
 
     @Bean
     @Scope(value = "singleton")
-    public SurveyService surveyService(SurveyRepository surveyRepository,
-                                       OptionRepository optionRepository,
-                                       ParticipationRepository participationRepository,
-                                       NotificationService notificationService,
-                                       OptionService optionService,
-                                       ParticipationService participationService) {
-        return new SurveyServiceImpl(surveyRepository, optionRepository, participationRepository,
-                notificationService, optionService, participationService);
+    public SurveyService surveyService(final SurveyRepository surveyRepository,
+                                       final NotificationService notificationService,
+                                       final OptionService optionService,
+                                       final ParticipationService participationService) {
+        return new SurveyServiceImpl(surveyRepository, notificationService, optionService, participationService);
     }
 
     @Bean
@@ -67,21 +64,23 @@ public class ServiceConfiguration {
 
     @Bean
     @Scope(value = "singleton")
-    public OptionService optionService(OptionRepository repository){
-        return new OptionServiceImpl(repository);
+    public OptionService optionService(final OptionRepository optionRepository,
+                                       final SurveyRepository surveyRepository) {
+        return new OptionServiceImpl(surveyRepository, optionRepository);
     }
 
     @Bean
     @Scope(value = "singleton")
-    public  ParticipationService participationService(ParticipationRepository repository){
-        return new ParticipationServiceImpl(repository);
+    public ParticipationService participationService(final ParticipationRepository participationRepository,
+                                                     final SurveyRepository surveyRepository) {
+        return new ParticipationServiceImpl(surveyRepository, participationRepository);
     }
 
     @Bean
     @Scope(value = "singleton")
     public EventService eventService(SurveyService surveyService,
                                      EventRepository eventRespository,
-                                     NotificationService notificationService){
+                                     NotificationService notificationService) {
         return new EventServiceImpl(surveyService, eventRespository, notificationService);
     }
 }

@@ -10,12 +10,12 @@ import de.nordakademie.iaa.examsurvey.service.SurveyService;
 
 public class EventServiceImpl implements EventService {
     private final SurveyService surveyService;
-    private final EventRepository eventRespository;
+    private final EventRepository eventRepository;
     private final NotificationService notificationService;
 
     public EventServiceImpl(SurveyService surveyService, EventRepository eventRespository, NotificationService notificationService) {
         this.surveyService = surveyService;
-        this.eventRespository = eventRespository;
+        this.eventRepository = eventRespository;
         this.notificationService = notificationService;
     }
 
@@ -23,6 +23,6 @@ public class EventServiceImpl implements EventService {
     public Event createEvent(Event event, User authenticatedUser) {
         surveyService.closeSurvey(event.getSurvey(), authenticatedUser);
         notificationService.notifyUsersWithNotificationType(NotificationType.EVENT_PLANNED, event.getSurvey());
-        return eventRespository.save(event);
+        return eventRepository.save(event);
     }
 }

@@ -11,9 +11,13 @@
         var enteringGuard = function ($transition$, $state$) {
             var appService = $transition$.injector().get("appService");
             var stateService = $transition$.injector().get("$state");
-            appService.testAuthentication(function (success) {}, function (reject) {
+            appService.testAuthentication(function (success) {
+                console.log("user authenticated; access granted!");
+            }, function (reject) {
                 $transition$.abort();
                 stateService.go("login");
+                console.log("user not authenticated; redirected to login!");
+
             });
         };
 

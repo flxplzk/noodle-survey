@@ -28,8 +28,9 @@
 
         function init() {
             $scope.survey = SurveyResource.get({survey: $stateParams.surveyId});
-            $scope.options = OptionResource.query({survey: $stateParams.surveyId});
-            var query = ParticipationResource.query({survey: $stateParams.surveyId});
+            $scope.options = OptionResource.query({survey: $stateParams.surveyId}, filterOwnParticipation);
+            $scope.participations  = [];
+            var query = ParticipationResource.query({survey: $stateParams.surveyId}, filterOwnParticipation);
             query.$promise.then(function (data) {
                 $scope.participations = data;
                 filterOwnParticipation();
