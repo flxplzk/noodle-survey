@@ -4,10 +4,10 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class AuthenticationServiceImplTest {
+public class EventServiceImplTest {
 
     @Test
-    public void getCurrentAuthenticatedUser() {
+    public void createEvent() {
         // TODO
     }
 }

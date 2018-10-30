@@ -126,6 +126,36 @@ public class SurveyServiceImplTest {
 
     }
 
+    @Test
+    public void createSurvey() {
+        // TODO
+    }
+
+    @Test
+    public void update() {
+        // TODO
+    }
+
+    @Test
+    public void closeSurvey() {
+        // TODO
+    }
+
+    @Test
+    public void deleteSurvey() {
+        // TODO
+    }
+
+    @Test
+    public void loadAllSurveysWithUser() {
+        // TODO
+    }
+
+    @Test
+    public void loadSurveyWithUser() {
+        // TODO
+    }
+
      /* TODO
     @Test(expected = SurveyNotFoundException.class)
     public void saveOptionForSurvey_notFound() {

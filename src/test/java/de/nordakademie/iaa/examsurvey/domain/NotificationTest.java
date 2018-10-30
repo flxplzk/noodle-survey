@@ -3,8 +3,6 @@ package de.nordakademie.iaa.examsurvey.domain;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class NotificationTest {
 
     @Test
