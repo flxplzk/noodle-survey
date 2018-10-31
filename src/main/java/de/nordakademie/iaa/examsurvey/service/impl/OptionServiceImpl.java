@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import de.nordakademie.iaa.examsurvey.domain.Option;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
+import de.nordakademie.iaa.examsurvey.exception.MissingDataException;
 import de.nordakademie.iaa.examsurvey.persistence.OptionRepository;
 import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
 import de.nordakademie.iaa.examsurvey.persistence.specification.OptionSpecifications;
@@ -37,6 +38,9 @@ public class OptionServiceImpl
      */
     @Override
     public void updateOptionsForSurvey(Survey survey) {
+        if (survey.getOptions() == null) {
+            throw new MissingDataException("User must provide at least one Option for a survey; aborted update!");
+        }
         final Set<Long> updatedOptions = survey.getOptions().stream()
                 .map(Option::getId)
                 .collect(Collectors.toSet());

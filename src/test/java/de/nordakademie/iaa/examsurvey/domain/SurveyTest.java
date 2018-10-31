@@ -3,23 +3,26 @@ package de.nordakademie.iaa.examsurvey.domain;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;
 
+import java.util.GregorianCalendar;
+
 public class SurveyTest {
 
     @Test
     public void equalsAndHashcode() {
-        Survey first = new Survey();
-        first.setTitle("lalala");
-        Survey seccond = new Survey();
-        seccond.setTitle("lololo");
-        Event firstEvent = new Event();
-        firstEvent.setTitle("lalalalala");
-        Event black = new Event();
-        black.setTitle("lalalalalallalala");
+        final Option option1 = new Option();
+        option1.setDateTime(
+                new GregorianCalendar(2018, 11, 1, 12, 0).getTime()
+        );
+
+        final Option option2 = new Option();
+        option2.setDateTime(
+                new GregorianCalendar(2018, 12, 1, 12, 0).getTime()
+        );
 
         EqualsVerifier.forClass(Survey.class)
                 .withRedefinedSuperclass()
-                .withPrefabValues(Survey.class, first, seccond)
-                .withPrefabValues(Event.class, firstEvent, black)
+                .withPrefabValues(Option.class, option1, option2)
+                .withIgnoredFields("options")
                 .usingGetClass()
                 .verify();
     }

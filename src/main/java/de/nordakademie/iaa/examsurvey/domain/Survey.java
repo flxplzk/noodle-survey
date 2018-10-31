@@ -33,7 +33,6 @@ public class Survey extends AuditModel {
     private String title;
     private String description;
     private User initiator;
-    private Event event;
     private SurveyStatus surveyStatus;
     private Set<Option> options;
 
@@ -78,6 +77,11 @@ public class Survey extends AuditModel {
         this.surveyStatus = surveyStatus;
     }
 
+    /**
+     * This field is only used for data transfer purpose. When Saving the option are saved separately to options table
+     *
+     * @return set of Options or {@code null} when loading from database
+     */
     @Transient
     @JsonProperty(access = WRITE_ONLY)
     public Set<Option> getOptions() {
@@ -86,17 +90,6 @@ public class Survey extends AuditModel {
 
     public void setOptions(Set<Option> options) {
         this.options = options;
-    }
-
-    @JsonIgnore
-    @OneToOne(mappedBy = "survey", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, orphanRemoval = true)
-    public Event getEvent() {
-        return event;
-    }
-
-    public void setEvent(Event event) {
-        this.event = event;
     }
 
     @Override
@@ -114,13 +107,11 @@ public class Survey extends AuditModel {
         return Objects.equal(title, survey.title) &&
                 Objects.equal(description, survey.description) &&
                 Objects.equal(initiator, survey.initiator) &&
-                Objects.equal(event, survey.event) &&
-                surveyStatus == survey.surveyStatus &&
-                Objects.equal(options, survey.options);
+                surveyStatus == survey.surveyStatus;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(super.hashCode(), title, description, initiator, event, surveyStatus, options);
+        return Objects.hashCode(super.hashCode(), title, description, initiator, surveyStatus);
     }
 }
