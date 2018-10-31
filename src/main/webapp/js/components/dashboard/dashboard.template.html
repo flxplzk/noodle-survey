@@ -1,19 +1,28 @@
 <md-content flex layout-padding ng-controller="dashboardController as dashboardCrtl" layout="column" ng-cloak>
-    <div layout="row">
-        <h2>{{ "DASHBOARD_TITLE" | translate }}</h2>
-    </div>
+    <md-tabs md-dynamic-height flex md-border-bottom>
+        <md-tab label="{{ 'DASHBOARD_TITLE_ALL' | translate }}">
+            <md-content>
+                <md-list>
+                    <md-list-item class="md-2-line" ng-repeat="survey in model.surveys"
+                                  ng-click="dashboardCrtl.viewDetails(survey)">
+                        <div class="md-list-item-text">
+                            <h3>{{survey.title}}</h3>
+                            <h4>{{survey.description}}</h4>
+                        </div>
+                        <md-button class="md-raised md-accent md-hue-3" ng-click="dashboardCrtl.viewDetails(survey)">
+                            {{ "DASHBOARD_OPEN_DETAILS" | translate }}
+                        </md-button>
+                        <md-divider ng-if="!$last"></md-divider>
+                    </md-list-item>
+                </md-list>
+            </md-content>
+        </md-tab>
+        <md-tab label="{{'DASHBOARD_TITLE_OWN' | translate }}">
+            TODO
+        </md-tab>
+        <md-tab label="{{'DASHBOARD_TITLE_OPEN' | translate }}">
+            TODO
+        </md-tab>
+    </md-tabs>
 
-    <md-list layout="column" flex>
-        <md-list-item class="md-2-line" ng-repeat="survey in model.surveys"
-                      ng-click="dashboardCrtl.viewDetails(survey)">
-            <div class="md-list-item-text">
-                <h3>{{survey.title}}</h3>
-                <h4>{{survey.description}}</h4>
-            </div>
-            <md-button class="md-raised md-accent md-hue-3" ng-click="dashboardCrtl.viewDetails(survey)">
-                {{ "DASHBOARD_OPEN_DETAILS" | translate }}
-            </md-button>
-            <md-divider ng-if="!$last"></md-divider>
-        </md-list-item>
-    </md-list>
 </md-content>

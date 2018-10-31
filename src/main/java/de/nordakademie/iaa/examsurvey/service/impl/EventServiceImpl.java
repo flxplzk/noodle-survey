@@ -4,14 +4,19 @@ import de.nordakademie.iaa.examsurvey.domain.Event;
 import de.nordakademie.iaa.examsurvey.domain.NotificationType;
 import de.nordakademie.iaa.examsurvey.domain.Participation;
 import de.nordakademie.iaa.examsurvey.domain.User;
+import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
 import de.nordakademie.iaa.examsurvey.persistence.EventRepository;
 import de.nordakademie.iaa.examsurvey.persistence.ParticipationRepository;
+import de.nordakademie.iaa.examsurvey.persistence.specification.EventSpecifications;
 import de.nordakademie.iaa.examsurvey.service.EventService;
 import de.nordakademie.iaa.examsurvey.service.NotificationService;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
 
+import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.stream.Collectors;
 
+import static de.nordakademie.iaa.examsurvey.persistence.specification.EventSpecifications.byUser;
 import static de.nordakademie.iaa.examsurvey.persistence.specification.ParticipationSpecifications.bySurvey;
 
 /**
@@ -47,5 +52,17 @@ public class EventServiceImpl implements EventService {
                         .collect(Collectors.toSet())
         );
         return eventRepository.save(event);
+    }
+
+    @Override
+    public List<Event> loadAllEventsForAuthenticatedUser(@NotNull User authenticatedUser) {
+        requireNonNullUser(authenticatedUser);
+        return eventRepository.findAll(byUser(authenticatedUser));
+    }
+
+    private void requireNonNullUser(final User user) {
+        if (user == null) {
+            throw new PermissionDeniedException("initiator must be non null");
+        }
     }
 }

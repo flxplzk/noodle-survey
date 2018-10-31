@@ -33,8 +33,7 @@
     function ToolBarDirective() {
         return {
             restrict: "E",
-            template: "<md-toolbar ng-controller=\"mainController as toolBarCrtl\">\n" +
-                "    <div class=\"md-toolbar-tools\">\n" +
+            template: "<md-toolbar ng-controller=\"mainController as toolBarCrtl\" layout=\"row\" class=\"md-toolbar-tools\">\n" +
                 "        <h2 md-truncate>{{\"APP_HEADLINE\"|translate}}</h2>\n" +
                 "        <span flex></span>" +
                 "        <survey-editor-action-button icon='add' ng-show=\"toolBarCrtl.authenticated\">" +
@@ -44,7 +43,6 @@
                 "            <i class=\"material-icons\">power_settings_new</i>" +
                 "           <md-tooltip >{{\"APP_LOGOUT\"|translate}}</md-tooltip>\n" +
                 "        </md-button>\n" +
-                "    </div>\n" +
                 "</md-toolbar>"
         }
     }

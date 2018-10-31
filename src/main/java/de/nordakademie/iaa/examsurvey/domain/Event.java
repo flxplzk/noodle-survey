@@ -46,7 +46,7 @@ public class Event extends AuditModel {
         this.time = time;
     }
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "survey_id")
     public Survey getSurvey() {
         return survey;

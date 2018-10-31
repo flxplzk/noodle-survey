@@ -65,6 +65,13 @@ public class UserController {
     }
 
     @RequestMapping(value = PATH_USERS_EVENTS,
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public List<Event> loadEventsForUser(){
+        return eventService.loadAllEventsForAuthenticatedUser(authenticationService.getCurrentAuthenticatedUser());
+    }
+
+    @RequestMapping(value = PATH_USERS_EVENTS,
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)

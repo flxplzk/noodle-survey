@@ -16,6 +16,33 @@
     ]);
 
     dashboard.controller("dashboardController", ["$scope", "SurveyResource", "$state", "$mdDialog", DashboardController]);
+    dashboard.controller("dashboardSideNavController", ["$scope", "NotificationResource", "EventResource", "appService", DashboardSideNavController]);
+    dashboard.directive("dashboardSideNav", DashboardSideNavDirective);
+
+    function DashboardSideNavController($scope, NotificationResource, EventResource, appService) {
+        $scope.loggedIn = appService.isAuthenticated();
+        $scope.events = EventResource.query();
+        var query = NotificationResource.query();
+        query.$promise.then(function (success) {
+            $scope.notifications = success;
+        });
+        appService.$authenticated.subscribeOnNext(function (authenticationStatus) {
+            $scope.loggedIn = authenticationStatus;
+            if (!authenticationStatus) {
+                $scope.events = [];
+                $scope.notifications = [];
+            }
+        })
+    }
+
+    function DashboardSideNavDirective() {
+        return {
+            restrict: "E",
+            templateUrl: "/js/components/dashboard/dashboard.side.nav.template.html",
+            controller: "dashboardSideNavController",
+            controllerAs: "sideNavCrtl"
+        }
+    }
 
     function DashboardController($scope, SurveyResource, $state, $mdDialog) {
         $scope.model = {

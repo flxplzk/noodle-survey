@@ -13,7 +13,6 @@ import java.util.Set;
 @StaticMetamodel(Event.class)
 public class Event_  extends AuditModel_ {
     public static volatile SingularAttribute<Event, String> title;
-    public static volatile SingularAttribute<Event, User> user;
     public static volatile SingularAttribute<Event, Survey> survey;
     public static volatile PluralAttribute<Event, Set, User> participants;
 }
