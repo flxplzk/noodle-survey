@@ -4,8 +4,8 @@ import de.nordakademie.iaa.examsurvey.domain.Participation;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
+import de.nordakademie.iaa.examsurvey.exception.ResourceNotFoundException;
 import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
-import de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,7 +50,7 @@ public interface SurveyService {
      * @param identifier        of the requested Survey
      * @param authenticatedUser requesting User
      * @return requested Survey
-     * @throws SurveyNotFoundException if the Survey was not found or is Private and
+     * @throws ResourceNotFoundException if the Survey was not found or is Private and
      *                                 therefore only visible for its initiator
      */
     Survey loadSurveyWithUser(@NotNull final Long identifier,

@@ -33,6 +33,7 @@
         $scope.ownParticipation = new ParticipationResource({options: []});
         $scope.surveyId = $stateParams.surveyId;
         $scope.participations = [];
+        $scope.options = [];
 
         init();
 

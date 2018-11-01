@@ -4,7 +4,7 @@
             <md-card-title-text>
                     <span class="md-headline">
                         {{survey.title}}
-                        <i class="material-icons md-48 green">
+                        <i class="material-icons">
                             {{ survey.isOpen() ? "lock_open" : "lock_closed"}}
                         </i>
                     </span>
@@ -13,7 +13,7 @@
                     </span>
             </md-card-title-text>
             <md-card-actions layout="row" layout-align="end center" ng-show="detailCrtl.isOwnSurvey()">
-                <survey-editor-action-button icon="build" survey-id="surveyId"></survey-editor-action-button>
+                <survey-editor-action-button ng-show="!survey.isClosed()" icon="build" survey-id="surveyId"></survey-editor-action-button>
                 <delete-survey-action-button icon="delete" survey-id="surveyId"></delete-survey-action-button>
                 <close-survey-action-button ng-show="survey.isOpen()" icon="event" survey-id="surveyId"></close-survey-action-button>
             </md-card-actions>

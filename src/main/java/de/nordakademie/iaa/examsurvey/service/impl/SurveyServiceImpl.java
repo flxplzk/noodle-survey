@@ -6,7 +6,7 @@ import de.nordakademie.iaa.examsurvey.domain.SurveyStatus;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
 import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
-import de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException;
+import de.nordakademie.iaa.examsurvey.exception.ResourceNotFoundException;
 import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
 import de.nordakademie.iaa.examsurvey.service.NotificationService;
 import de.nordakademie.iaa.examsurvey.service.OptionService;
@@ -114,7 +114,7 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
     private Survey findDeletableSurveyWithInitiator(Long id, User authenticatedUser) {
         requireNonNullUser(authenticatedUser);
         Survey existentSurvey = surveyRepository.findById(id)
-                .orElseThrow(SurveyNotFoundException::new);
+                .orElseThrow(ResourceNotFoundException::new);
         requireInitiator(authenticatedUser, existentSurvey);
         return existentSurvey;
     }
@@ -143,7 +143,7 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
 
     private Survey getExistent(Survey survey) {
         return surveyRepository.findById(survey.getId())
-                .orElseThrow(SurveyNotFoundException::new);
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     private void requireNonExistent(final Survey survey) {

@@ -1,16 +1,13 @@
 package de.nordakademie.iaa.examsurvey.service.impl;
 
 import com.google.common.collect.Lists;
-import de.nordakademie.iaa.examsurvey.domain.Option;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
 import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
-import de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException;
 import de.nordakademie.iaa.examsurvey.persistence.OptionRepository;
 import de.nordakademie.iaa.examsurvey.persistence.ParticipationRepository;
 import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
-import de.nordakademie.iaa.examsurvey.service.EventService;
 import de.nordakademie.iaa.examsurvey.service.NotificationService;
 import de.nordakademie.iaa.examsurvey.service.OptionService;
 import de.nordakademie.iaa.examsurvey.service.ParticipationService;
@@ -157,7 +154,7 @@ public class SurveyServiceImplTest {
     }
 
      /* TODO
-    @Test(expected = SurveyNotFoundException.class)
+    @Test(expected = ResourceNotFoundException.class)
     public void saveOptionForSurvey_notFound() {
         // GIVEN
         User requestingUser = mock(User.class);
