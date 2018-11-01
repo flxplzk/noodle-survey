@@ -169,10 +169,10 @@ public class SurveyControllerTest {
         Exception exception = mock(de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException.class);
 
         when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
-        when(surveyService.loadSurveyWithUser(-1L, user)).thenThrow(exception);
+        when(surveyService.loadSurveyWithUser(id, user)).thenThrow(exception);
 
         //WHEN
-        Survey loadedSurvey = controllerUnderTest.loadSurvey(-1L);
+        Survey loadedSurvey = controllerUnderTest.loadSurvey(id);
 
         //THEN
         fail();
@@ -182,7 +182,6 @@ public class SurveyControllerTest {
     public void loadOptionsFail() {
         // GIVEN
         Long id = -1L;
-        List<Option> mockedOptions = Lists.newArrayList(mock(Option.class), mock(Option.class));
         User user = mock(User.class);
         Exception exception = mock(de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException.class);
 
@@ -199,19 +198,148 @@ public class SurveyControllerTest {
 
     @Test
     public void loadParticipations() {
-        // TODO
+        //WHEN
+        Long id = -1L;
+        User user = mock(User.class);
+        List<de.nordakademie.iaa.examsurvey.domain.Participation> participations = Lists.newArrayList(mock(de.nordakademie.iaa.examsurvey.domain.Participation.class), mock(de.nordakademie.iaa.examsurvey.domain.Participation.class));
 
+        when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
+        when(participationService.loadAllParticipationsOfSurveyForUser(id, user)).thenReturn(participations);
+
+        //WHEN
+        List<de.nordakademie.iaa.examsurvey.domain.Participation> returned = controllerUnderTest.loadParticipations(id);
+
+        //THEN
+        assertThat(participations, is(returned));
+        verify(authenticationService, times(1)).getCurrentAuthenticatedUser();
+    }
+
+    @Test(expected = de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException.class)
+    public void loadParticipationsFail() {
+        //WHEN
+        Long id = -1L;
+        User user = mock(User.class);
+        Exception exception = mock(de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException.class);
+
+        when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
+        when(participationService.loadAllParticipationsOfSurveyForUser(id, user)).thenThrow(exception);
+
+        //WHEN
+        List<de.nordakademie.iaa.examsurvey.domain.Participation> returned = controllerUnderTest.loadParticipations(id);
+
+        //THEN
+        fail();
     }
 
     @Test
     public void createParticipationForSurvey() {
-        // TODO
+        //WHEN
+        Long id = -1L;
+        User user = mock(User.class);
+        de.nordakademie.iaa.examsurvey.domain.Participation participation = mock(de.nordakademie.iaa.examsurvey.domain.Participation.class);
 
+        when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
+        when(participationService.saveParticipationForSurveyWithAuthenticatedUser(participation, id, user)).thenReturn(participation);
+
+        //WHEN
+        de.nordakademie.iaa.examsurvey.domain.Participation returned = controllerUnderTest.createParticipationForSurvey(participation, id);
+
+        //THEN
+        assertThat(participation, is(returned));
+        verify(authenticationService, times(1)).getCurrentAuthenticatedUser();
+    }
+
+    @Test(expected = de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException.class)
+    public void createParticipationForSurveyFail() {
+        //WHEN
+        Long id = -1L;
+        User user = mock(User.class);
+        Exception exception = mock(de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException.class);
+        de.nordakademie.iaa.examsurvey.domain.Participation participation = mock(de.nordakademie.iaa.examsurvey.domain.Participation.class);
+
+        when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
+        when(participationService.saveParticipationForSurveyWithAuthenticatedUser(participation, id, user)).thenThrow(exception);
+
+        //WHEN
+        de.nordakademie.iaa.examsurvey.domain.Participation returned = controllerUnderTest.createParticipationForSurvey(participation, id);
+
+        //THEN
+        fail();
+    }
+
+    @Test(expected = de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException.class)
+    public void createParticipationForSurveyFailInitiator() {
+        //WHEN
+        Long id = -1L;
+        User user = mock(User.class);
+        Exception exception = mock(de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException.class);
+        de.nordakademie.iaa.examsurvey.domain.Participation participation = mock(de.nordakademie.iaa.examsurvey.domain.Participation.class);
+
+        when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
+        when(participationService.saveParticipationForSurveyWithAuthenticatedUser(participation, id, user)).thenThrow(exception);
+
+        //WHEN
+        de.nordakademie.iaa.examsurvey.domain.Participation returned = controllerUnderTest.createParticipationForSurvey(participation, id);
+
+        //THEN
+        fail();
     }
 
     @Test
     public void saveParticipationForSurvey() {
-        // TODO
+        //WHEN
+        Long id = -1L;
+        Long idP = -2L;
+        User user = mock(User.class);
+        de.nordakademie.iaa.examsurvey.domain.Participation participation = mock(de.nordakademie.iaa.examsurvey.domain.Participation.class);
 
+        when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
+        when(participationService.saveParticipationForSurveyWithAuthenticatedUser(participation, id, user)).thenReturn(participation);
+
+        //WHEN
+        de.nordakademie.iaa.examsurvey.domain.Participation returned = controllerUnderTest.saveParticipationForSurvey(participation, id, idP);
+
+        //THEN
+        assertThat(participation, is(returned));
+        verify(authenticationService, times(1)).getCurrentAuthenticatedUser();
     }
+
+    @Test(expected = de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException.class)
+    public void saveParticipationForSurveyFail() {
+        //WHEN
+        Long id = -1L;
+        Long idP = -2L;
+        User user = mock(User.class);
+        Exception exception = mock(de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException.class);
+        de.nordakademie.iaa.examsurvey.domain.Participation participation = mock(de.nordakademie.iaa.examsurvey.domain.Participation.class);
+
+        when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
+        when(participationService.saveParticipationForSurveyWithAuthenticatedUser(participation, id, user)).thenThrow(exception);
+
+        //WHEN
+        de.nordakademie.iaa.examsurvey.domain.Participation returned = controllerUnderTest.saveParticipationForSurvey(participation, id, idP);
+
+        //THEN
+        fail();
+    }
+
+    @Test(expected = de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException.class)
+    public void saveParticipationForSurveyFailInitiator() {
+        //WHEN
+        Long id = -1L;
+        Long idP = -2L;
+        User user = mock(User.class);
+        Exception exception = mock(de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException.class);
+        de.nordakademie.iaa.examsurvey.domain.Participation participation = mock(de.nordakademie.iaa.examsurvey.domain.Participation.class);
+
+        when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
+        when(participationService.saveParticipationForSurveyWithAuthenticatedUser(participation, id, user)).thenThrow(exception);
+
+        //WHEN
+        de.nordakademie.iaa.examsurvey.domain.Participation returned = controllerUnderTest.saveParticipationForSurvey(participation, id, idP);
+
+        //THEN
+        fail();
+    }
+
 }
