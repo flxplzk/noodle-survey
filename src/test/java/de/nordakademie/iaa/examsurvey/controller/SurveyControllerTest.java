@@ -15,6 +15,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -126,35 +127,73 @@ public class SurveyControllerTest {
         verify(surveyService, times(1)).deleteSurvey(id, user);
     }
 
-    @Test
+    @Test(expected = de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException.class)
     public void loadSurveys1() {
         //GIVEN
-        User user = mock(User.class);
-        List<Survey> mockSurveys = Lists.newArrayList(mock(Survey.class), mock(Survey.class), mock(Survey.class));
+        Exception exception = mock(de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException.class);
 
-
-        when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
-        when(surveyService.loadAllSurveysWithUser(user)).thenReturn(mockSurveys);
+        when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(null);
+        when(surveyService.loadAllSurveysWithUser(null)).thenThrow(exception);
 
         //WHEN
         List<Survey> surveys = controllerUnderTest.loadSurveys();
 
         //THEN
-        verify(authenticationService, times(1)).getCurrentAuthenticatedUser();
-        verify(surveyService, times(1)).loadAllSurveysWithUser(user);
-        assertThat(mockSurveys, is(surveys));
+        fail();
 
     }
 
     @Test
     public void loadSurvey() {
-        // TODO
+        //GIVEN
+        Long id = -1L;
+        User user = mock(User.class);
+        Survey survey = mock(Survey.class);
 
+        when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
+        when(surveyService.loadSurveyWithUser(-1L, user)).thenReturn(survey);
+
+        //WHEN
+        Survey loadedSurvey = controllerUnderTest.loadSurvey(-1L);
+
+        //THEN
+        verify(authenticationService, times(1)).getCurrentAuthenticatedUser();
+        assertThat(survey, is(loadedSurvey));
     }
 
-    @Test
-    public void loadOptions() {
-        // TODO
+    @Test(expected = de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException.class)
+    public void loadSurveyNotVisible() {
+        //GIVEN
+        Long id = -1L;
+        User user = mock(User.class);
+        Exception exception = mock(de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException.class);
+
+        when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
+        when(surveyService.loadSurveyWithUser(-1L, user)).thenThrow(exception);
+
+        //WHEN
+        Survey loadedSurvey = controllerUnderTest.loadSurvey(-1L);
+
+        //THEN
+        fail();
+    }
+
+    @Test(expected = de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException.class)
+    public void loadOptionsFail() {
+        // GIVEN
+        Long id = -1L;
+        List<Option> mockedOptions = Lists.newArrayList(mock(Option.class), mock(Option.class));
+        User user = mock(User.class);
+        Exception exception = mock(de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException.class);
+
+        when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
+        when(optionService.loadAllOptionsOfSurveyForUser(id, user)).thenThrow(exception);
+
+        // WHEN
+        List<Option> options = controllerUnderTest.loadOptions(id);
+
+        // THEN
+        fail();
 
     }
 
