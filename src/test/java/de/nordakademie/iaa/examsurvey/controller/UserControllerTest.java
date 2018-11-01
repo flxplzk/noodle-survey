@@ -15,6 +15,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -64,6 +65,23 @@ public class UserControllerTest {
 
     }
 
+    @Test(expected = de.nordakademie.iaa.examsurvey.exception.UserAlreadyExistsException.class)
+    public void createUserAlreadyExists() {
+        // GIVEN
+        User user = mock(User.class);
+        Exception exception = mock(de.nordakademie.iaa.examsurvey.exception.UserAlreadyExistsException.class);
+        User returnedUser = mock(User.class);
+
+        when(userService.createUser(user)).thenThrow(exception);
+
+        // WHEN
+        User createdUser = controllerUnderTest.createUser(user);
+
+        // THEN
+        fail();
+
+    }
+
     @Test
     public void getNotifications() {
         // GIVEN
@@ -83,6 +101,36 @@ public class UserControllerTest {
 
     @Test
     public void createEvent() {
-        // TODO
+        //GIVEN
+        User user = mock(User.class);
+        de.nordakademie.iaa.examsurvey.domain.Event event = mock(de.nordakademie.iaa.examsurvey.domain.Event.class);
+
+        when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
+        when(eventService.createEvent(event, user)).thenReturn(event);
+
+        //WHEN
+        de.nordakademie.iaa.examsurvey.domain.Event returned = controllerUnderTest.createEvent(event);
+
+        //THEN
+        assertThat(event, is(returned));
+        verify(authenticationService, times(1)).getCurrentAuthenticatedUser();
+    }
+
+    @Test(expected = de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException.class)
+    public void createEventPermissionDenied() {
+        //GIVEN
+        User user = mock(User.class);
+        Exception exception = mock(de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException.class);
+        de.nordakademie.iaa.examsurvey.domain.Event event = mock(de.nordakademie.iaa.examsurvey.domain.Event.class);
+
+        when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
+        when(eventService.createEvent(event, user)).thenThrow(exception);
+
+
+        //WHEN
+        de.nordakademie.iaa.examsurvey.domain.Event returned = controllerUnderTest.createEvent(event);
+
+        //THEN
+        fail();
     }
 }
