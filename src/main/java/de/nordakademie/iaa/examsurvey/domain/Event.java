@@ -1,5 +1,6 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Objects;
 
 import javax.persistence.Column;
@@ -56,6 +57,7 @@ public class Event extends AuditModel {
         this.survey = survey;
     }
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     public Set<User> getParticipants() {
         return participants;

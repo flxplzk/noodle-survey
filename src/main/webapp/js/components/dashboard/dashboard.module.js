@@ -16,21 +16,30 @@
     ]);
 
     dashboard.controller("dashboardController", ["$scope", "SurveyResource", "$state", "$mdDialog", DashboardController]);
-    dashboard.controller("dashboardSideNavController", ["$scope", "NotificationResource", "EventResource", "appService", DashboardSideNavController]);
+    dashboard.controller("dashboardSideNavController", ["$scope", "NotificationResource", "EventResource", "appService", "$timeout", DashboardSideNavController]);
     dashboard.directive("dashboardSideNav", DashboardSideNavDirective);
 
-    function DashboardSideNavController($scope, NotificationResource, EventResource, appService) {
+    function DashboardSideNavController($scope, NotificationResource, EventResource, appService, $timeout) {
         $scope.loggedIn = appService.isAuthenticated();
-        $scope.events = EventResource.query();
-        var query = NotificationResource.query();
-        query.$promise.then(function (success) {
-            $scope.notifications = success;
-        });
+        init();
+
+        function init(){
+            if (appService.isAuthenticated()) {
+                $scope.events = EventResource.query();
+                var query = NotificationResource.query();
+                query.$promise.then(function (success) {
+                    $scope.notifications = success;
+                });
+                $timeout(init, 30000);
+            }
+        }
         appService.$authenticated.subscribeOnNext(function (authenticationStatus) {
             $scope.loggedIn = authenticationStatus;
             if (!authenticationStatus) {
                 $scope.events = [];
                 $scope.notifications = [];
+            } else {
+                init();
             }
         })
     }

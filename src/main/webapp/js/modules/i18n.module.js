@@ -106,7 +106,7 @@
             DASHBOARD_SIDE_NAV_NOTIFICATION_TAB: "Notifications",
             DASHBOARD_SIDE_NAV_EVENT_TAB: "Events",
             DASHBOARD_SIDE_NAV_NOTIFICATION_TYPE_SURVEY_CHANGE: "Survey changed",
-            DASHBOARD_SIDE_NAV_NOTIFICATION_TYPE_EVENT_PLANNED: "Event has planned",
+            DASHBOARD_SIDE_NAV_NOTIFICATION_TYPE_EVENT_PLANNED: "Event planned",
             DASHBOARD_SIDE_NAV_NOTIFICATION_TYPE_DESC_SURVEY_CHANGE: "The initiator has changed the survey and therefore your particiation has been deleted. please participate again",
             DASHBOARD_SIDE_NAV_NOTIFICATION_TYPE_DESC_EVENT_PLANNED: "The initiator has closed the survey and planned an event on: ",
             EDITOR_TITLE: "Create new Survey",

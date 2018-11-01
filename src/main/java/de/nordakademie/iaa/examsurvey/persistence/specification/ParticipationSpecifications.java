@@ -6,6 +6,8 @@ import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.Date;
+
 /**
  * Specifications for {@link Participation}.
  *

@@ -2,12 +2,12 @@ package de.nordakademie.iaa.examsurvey.service.impl;
 
 import de.nordakademie.iaa.examsurvey.domain.Event;
 import de.nordakademie.iaa.examsurvey.domain.NotificationType;
+import de.nordakademie.iaa.examsurvey.domain.Option;
 import de.nordakademie.iaa.examsurvey.domain.Participation;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
 import de.nordakademie.iaa.examsurvey.persistence.EventRepository;
 import de.nordakademie.iaa.examsurvey.persistence.ParticipationRepository;
-import de.nordakademie.iaa.examsurvey.persistence.specification.EventSpecifications;
 import de.nordakademie.iaa.examsurvey.service.EventService;
 import de.nordakademie.iaa.examsurvey.service.NotificationService;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
@@ -48,6 +48,11 @@ public class EventServiceImpl implements EventService {
         event.setParticipants(
                 participationRepository.findAll(bySurvey(event.getSurvey()))
                         .stream()
+                        .filter(participation -> participation.getOptions()
+                                .stream()
+                                .map(Option::getDateTime)
+                                .collect(Collectors.toSet())
+                                .contains(event.getTime()))
                         .map(Participation::getUser)
                         .collect(Collectors.toSet())
         );

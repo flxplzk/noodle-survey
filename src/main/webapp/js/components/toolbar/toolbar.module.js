@@ -34,7 +34,7 @@
         return {
             restrict: "E",
             template: "<md-toolbar ng-controller=\"mainController as toolBarCrtl\" layout=\"row\" class=\"md-toolbar-tools\">\n" +
-                "        <h2 md-truncate>{{\"APP_HEADLINE\"|translate}}</h2>\n" +
+                "        <a  href='#' ><h2 md-truncate>{{\"APP_HEADLINE\"|translate}}</h2></a>\n" +
                 "        <span flex></span>" +
                 "        <survey-editor-action-button icon='add' ng-show=\"toolBarCrtl.authenticated\">" +
                 "        </survey-editor-action-button>" +
