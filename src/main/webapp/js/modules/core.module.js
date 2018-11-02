@@ -40,6 +40,14 @@
         this.authenticatedUser = null;
         this.$authenticated = new rx.BehaviorSubject(isAuthenticated);
 
+        var channel = new BroadcastChannel("de.nordakademie.iaa.survey.logout");
+        channel.onmessage = function (ev) {
+            if (!isAuthenticated || "user-logout-requested" !== ev.data) return;
+            vm.logout();
+            channel.close();
+            errorService.showNotification("LOGGED_OUT");
+        };
+
         this.$authenticated.subscribeOnNext(function (authenticationStatus) {
             isAuthenticated = authenticationStatus;
             if (!isAuthenticated) {
@@ -64,6 +72,7 @@
         };
 
         this.logout = function () {
+            channel.postMessage("user-logout-requested");
             authService.logout();
             this.$authenticated
                 .onNext(authService.removeAuthorization());
@@ -77,11 +86,11 @@
                 successCallback();
                 return;
             }
-           authService.testAuth(function (success) {
-               vm.authenticatedUser = success.data;
-               vm.$authenticated.onNext(true);
-               successCallback(success);
-           }, reject)
+            authService.testAuth(function (success) {
+                vm.authenticatedUser = success.data;
+                vm.$authenticated.onNext(true);
+                successCallback(success);
+            }, reject)
         };
 
         this.getAuthenticatedUser = function () {
