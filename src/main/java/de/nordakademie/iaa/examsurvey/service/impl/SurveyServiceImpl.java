@@ -54,6 +54,7 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
         survey.setInitiator(initiator);
         Survey createdSurvey = surveyRepository.save(survey);
         optionService.saveOptionsForSurvey(survey.getOptions(), createdSurvey);
+        notificationService.notifyAll();
         return createdSurvey;
     }
 
@@ -63,9 +64,9 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
     @Override
     public Survey update(Survey survey, User authenticatedUser) {
         final Survey persistedSurvey = findModifiableSurveyWithInitiator(survey, authenticatedUser);
+        notificationService.notifyUsersWithNotificationType(NotificationType.SURVEY_CHANGE, survey);
         participationService.deleteAllParticipationsForSurvey(survey);
         optionService.updateOptionsForSurvey(survey);
-        notificationService.notifyUsersWithNotificationType(NotificationType.SURVEY_CHANGE, survey);
         // For not getting trouble with JPA, only modifiable field values are copied to the persisted survey
         persistedSurvey.setDescription(survey.getDescription());
         persistedSurvey.setSurveyStatus(survey.getSurveyStatus());
