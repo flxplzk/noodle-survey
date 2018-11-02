@@ -1,5 +1,7 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.Objects;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.Entity;
@@ -13,7 +15,8 @@ import java.util.Set;
 /**
  * Base Entity for User Answers to a survey.
  *
- * @author Bengt-Lasse Arndt, Robert Peters
+ * @author Bengt-Lasse Arndt
+ * @author Robert Peters
  */
 @Entity
 @Table(name = "participations")
@@ -34,6 +37,7 @@ public class Participation extends AuditModel {
 
     @ManyToOne
     @NaturalId
+    @JsonIgnore
     public Survey getSurvey() {
         return survey;
     }
@@ -49,5 +53,27 @@ public class Participation extends AuditModel {
 
     public void setOptions(Set<Option> options) {
         this.options = options;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        Participation that = (Participation) o;
+        return Objects.equal(user, that.user) &&
+                Objects.equal(survey, that.survey) &&
+                Objects.equal(options, that.options);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(super.hashCode(), user, survey, options);
     }
 }

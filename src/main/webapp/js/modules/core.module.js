@@ -1,4 +1,18 @@
 (function () {
+    // ########################## MODULE DECLARATION #####################################
+
+    /**
+     * @name "de.nordakademie.iaa.survey.core"
+     *
+     * Core functionalities of the frontend
+     *
+     * @author Felix Plazek
+     * @author Bengt-Lasse Arndt
+     * @author Robert Peters
+     * @author Sascha Pererva
+     *
+     * @type {angular.Module}
+     */
     var core = angular.module("de.nordakademie.iaa.survey.core", [
         "de.nordakademie.iaa.i18n",
         "rx",
@@ -58,15 +72,15 @@
             return isAuthenticated;
         };
 
-        this.testAuthentication = function (success, reject) {
+        this.testAuthentication = function (successCallback, reject) {
             if (this.isAuthenticated()) {
-                success();
+                successCallback();
                 return;
             }
            authService.testAuth(function (success) {
                vm.authenticatedUser = success.data;
                vm.$authenticated.onNext(true);
-               success();
+               successCallback(success);
            }, reject)
         };
 
@@ -83,12 +97,6 @@
      * @constructor
      */
     function NotificationService($mdToast, $translate) {
-        var position = {
-            bottom: false,
-            top: true,
-            left: false,
-            right: true
-        };
         this.showNotification = function (errorMessageKey) {
             var toast = $mdToast.simple()
                 .content($translate.instant(errorMessageKey))

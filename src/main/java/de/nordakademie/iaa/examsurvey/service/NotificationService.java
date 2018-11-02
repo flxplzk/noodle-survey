@@ -11,10 +11,10 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * Service responsible for handling notifications.
- *
- * @author Robert Peters
- * @author Bengt-Lasse Arndt
+ * @author felix plazek
+ * @author robert peters
+ * @author bengt-lasse arndt
+ * @author sascha pererva
  */
 @Transactional(propagation = Propagation.REQUIRED)
 public interface NotificationService {
@@ -25,16 +25,28 @@ public interface NotificationService {
      * @param authenticatedUser must be not {@code null}
      * @return notifications for user
      */
-    List<Notification> getNotificationsForUser(@NotNull User authenticatedUser);
+    List<Notification> getNotificationsForUser(@NotNull final User authenticatedUser);
 
     /**
      * creates new notifications for the given user with the {@link NotificationType}
      * for the passed users.
-     *  @param type         of the notification
+     *
+     * @param type         of the notification
      * @param targetSurvey on which the user will be notified
      */
-    void notifyUsersWithNotificationType(@NotNull NotificationType type,
-                                         @NotNull Survey targetSurvey);
+    void notifyUsersWithNotificationType(@NotNull final NotificationType type,
+                                         @NotNull final Survey targetSurvey);
 
-    void deleteAllNotificationsForSurvey(Survey survey);
+    /**
+     * deletes all corresponding {@link Notification}'s for {@param survey}
+     *
+     * @param survey for which the  {@link Notification}'s shall be deleted
+     */
+    void deleteAllNotificationsForSurvey(@NotNull final Survey survey);
+
+    /**
+     * deletes notification with {@param notificationId} if existent and {@link Notification#getUser()}
+     * equals {@param user}
+     */
+    void deleteNotificationWithUser(@NotNull Long notificationId, @NotNull User user);
 }

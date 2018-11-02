@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 /**
  * @author felix plazek
  */
-@ResponseStatus(value = HttpStatus.FORBIDDEN)
-public class PermissionDeniedException extends SurveyApplicationException {
-    public PermissionDeniedException(String message) {
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class MissingDataException extends SurveyApplicationException {
+    public MissingDataException(String message) {
         super(message);
     }
 }

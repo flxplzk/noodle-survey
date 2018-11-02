@@ -30,11 +30,22 @@
     <link rel="stylesheet" href="node_modules/angular-material-time-picker/dist/md-time-picker.css">
     <link rel="stylesheet" href="node_modules/material-icons/iconfont/material-icons.css">
 </head>
-<body>
-<survey-tool-bar></survey-tool-bar>
-<div class="container">
-    <!-- display screens -->
-    <ui-view></ui-view>
+<body ng-cloak layout="column">
+<survey-tool-bar layout="row"></survey-tool-bar>
+    <!-- Container #2 -->
+    <div flex layout="row">
+
+        <!-- Container #3 -->
+        <dashboard-side-nav layout="column" ></dashboard-side-nav>
+
+        <!-- Container #4 -->
+        <md-content flex id="content">
+            <!-- display screens -->
+            <ui-view></ui-view>
+        </md-content>
+
+    </div>
+
 </div>
 
 <!-- modules -->

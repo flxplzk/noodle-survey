@@ -16,6 +16,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         this.userService = userService;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User getCurrentAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder

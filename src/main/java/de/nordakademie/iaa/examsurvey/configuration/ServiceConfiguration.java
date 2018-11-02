@@ -26,6 +26,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * Bean Service Configuration
+ *
+ * @author Felix Plazek
+ */
 @Configuration
 public class ServiceConfiguration {
 
@@ -37,51 +42,53 @@ public class ServiceConfiguration {
 
     @Bean
     @Scope(value = "singleton")
-    public UserService userService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService userService(final UserRepository userRepository,
+                                   final PasswordEncoder passwordEncoder) {
         return new UserServiceImpl(userRepository, passwordEncoder);
     }
 
     @Bean
     @Scope(value = "singleton")
-    public SurveyService surveyService(SurveyRepository surveyRepository,
-                                       OptionRepository optionRepository,
-                                       ParticipationRepository participationRepository,
-                                       NotificationService notificationService,
-                                       OptionService optionService,
-                                       ParticipationService participationService) {
-        return new SurveyServiceImpl(surveyRepository, optionRepository, participationRepository,
-                notificationService, optionService, participationService);
+    public SurveyService surveyService(final SurveyRepository surveyRepository,
+                                       final NotificationService notificationService,
+                                       final OptionService optionService,
+                                       final ParticipationService participationService) {
+        return new SurveyServiceImpl(surveyRepository, notificationService, optionService, participationService);
     }
 
     @Bean
     @Scope(value = "singleton")
-    public AuthenticationService authenticationService(UserService userService) {
+    public AuthenticationService authenticationService(final UserService userService) {
         return new AuthenticationServiceImpl(userService);
     }
 
     @Bean
     @Scope(value = "singleton")
-    public NotificationService notificationService(NotificationRepository notificationRepository) {
-        return new NotificationServiceImpl(notificationRepository);
+    public NotificationService notificationService(final NotificationRepository notificationRepository,
+                                                   final ParticipationRepository participationRespository) {
+        return new NotificationServiceImpl(notificationRepository, participationRespository);
     }
 
     @Bean
     @Scope(value = "singleton")
-    public OptionService optionService(OptionRepository repository){
-        return new OptionServiceImpl(repository);
+    public OptionService optionService(final OptionRepository optionRepository,
+                                       final SurveyRepository surveyRepository) {
+        return new OptionServiceImpl(surveyRepository, optionRepository);
     }
 
     @Bean
     @Scope(value = "singleton")
-    public  ParticipationService participationService(ParticipationRepository repository){
-        return new ParticipationServiceImpl(repository);
+    public ParticipationService participationService(final ParticipationRepository participationRepository,
+                                                     final SurveyRepository surveyRepository) {
+        return new ParticipationServiceImpl(surveyRepository, participationRepository);
     }
 
     @Bean
     @Scope(value = "singleton")
-    public EventService eventService(SurveyService surveyService,
-                                     EventRepository eventRespository,
-                                     NotificationService notificationService){
-        return new EventServiceImpl(surveyService, eventRespository, notificationService);
+    public EventService eventService(final SurveyService surveyService,
+                                     final EventRepository eventRespository,
+                                     final NotificationService notificationService,
+                                     final ParticipationRepository participationRepository) {
+        return new EventServiceImpl(surveyService, eventRespository, notificationService, participationRepository);
     }
 }

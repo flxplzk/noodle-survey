@@ -1,6 +1,7 @@
 package de.nordakademie.iaa.examsurvey.service.impl;
 
 import de.nordakademie.iaa.examsurvey.domain.User;
+import de.nordakademie.iaa.examsurvey.exception.MissingDataException;
 import de.nordakademie.iaa.examsurvey.exception.UserAlreadyExistsException;
 import de.nordakademie.iaa.examsurvey.persistence.UserRepository;
 import de.nordakademie.iaa.examsurvey.service.UserService;
@@ -10,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
-import static de.nordakademie.iaa.examsurvey.persistence.specification.UserSpecifications.hasUsername;
+import static de.nordakademie.iaa.examsurvey.persistence.specification.UserSpecifications.byUsername;
 
 /**
  * UserService implementation.
@@ -26,14 +27,21 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public User createUser(User user) {
+    public User createUser(final User user) {
         requireNonExistent(user);
+        requireValidData(user);
         final String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         return userRepository.save(user);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return findUserByUsername(username)
@@ -41,12 +49,20 @@ public class UserServiceImpl implements UserService {
     }
 
     private Optional<User> findUserByUsername(final String userName) {
-        return userRepository.findOne(hasUsername(userName));
+        return userRepository.findOne(byUsername(userName));
     }
 
     private void requireNonExistent(User user) {
         if (findUserByUsername(user.getUsername()).isPresent()) {
             throw new UserAlreadyExistsException();
+        }
+    }
+
+    private void requireValidData(final User user) {
+        if (user.getUsername() == null || user.getFirstName() == null
+                || user.getLastName() == null || user.getPassword() == null) {
+            throw new MissingDataException("Fields: \"firstName\", \"lastName\", " +
+                    "\"userName\" and \"password\" are required");
         }
     }
 }

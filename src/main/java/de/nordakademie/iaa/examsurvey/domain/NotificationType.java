@@ -3,7 +3,8 @@ package de.nordakademie.iaa.examsurvey.domain;
 /**
  * Enum for Notifications.
  *
- * @author Bengt-Lasse Arndt, Robert Peters
+ * @author Bengt-Lasse Arndt
+ * @author Robert Peters
  */
 public enum NotificationType {
     SURVEY_CHANGE("Survey Changed"),

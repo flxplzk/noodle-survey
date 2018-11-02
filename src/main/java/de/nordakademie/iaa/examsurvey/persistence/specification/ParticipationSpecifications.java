@@ -6,6 +6,14 @@ import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import org.springframework.data.jpa.domain.Specification;
 
+import javax.persistence.criteria.Predicate;
+import java.util.Date;
+
+/**
+ * Specifications for {@link Participation}.
+ *
+ * @author Felix Plazek
+ */
 public class ParticipationSpecifications {
     public static Specification<Participation> withSurvey(final Survey survey) {
         return (Specification<Participation>) (root, criteriaQuery, criteriaBuilder) ->
@@ -19,4 +27,11 @@ public class ParticipationSpecifications {
                         criteriaBuilder.equal(root.get(Participation_.user), user)
                 );
     }
+
+    public static Specification<Participation> bySurvey(final Survey survey) {
+        return (Specification<Participation>) (root, query, criteriaBuilder) -> survey == null
+                ? criteriaBuilder.isNull(root.get(Participation_.survey))
+                : criteriaBuilder.equal(root.get(Participation_.survey), survey);
+    }
+
 }

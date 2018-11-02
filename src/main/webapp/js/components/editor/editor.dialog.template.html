@@ -14,11 +14,10 @@
             <div class="md-dialog-content">
                 <form name="surveyCreationForm">
                     <md-input-container class="md-block">
-                        <label>{{ "EDITOR_FORM_TITLE" | translate}}</label>
-                        <input md-maxlength="50" required md-no-asterisk name="title" ng-model="survey.title">
+                        <label for="title">{{ "EDITOR_FORM_TITLE" | translate}}</label>
+                        <input id="title" required md-no-asterisk name="title" ng-model="survey.title" ng-disabled="!createNew" >
                         <div ng-messages="surveyCreationForm.title.$error">
                             <div ng-message="required">{{ "EDITOR_FORM_ERROR_REQUIRED" | translate}}</div>
-                            <div ng-message="md-maxlength">{{"EDITOR_FORM_ERROR_MAX_LENGTH" | translate}}</div>
                         </div>
                     </md-input-container>
 
@@ -43,7 +42,8 @@
                                 <md-time-picker layout="column" flex="50" ng-model="option.dateTime"
                                                 mandatory="required"
                                                 no-meridiem
-                                                no-auto-switch></md-time-picker>
+                                                no-auto-switch>
+                                </md-time-picker>
                             </div>
                         </div>
                         <md-button  class="md-icon-button" layout="column"
@@ -60,11 +60,10 @@
                         <md-button class="md-primary md-raised md-accent md-icon-button"
                                    ng-click="surveyEditorController.addEmptyOption()">
                             <i class="material-icons"> add </i>
+                            <md-tooltip>{{"EDITOR_OPTIONS_HINT"|translate}}</md-tooltip>
                         </md-button>
                     </div>
                 </form>
-
-
             </div>
         </md-dialog-content>
 

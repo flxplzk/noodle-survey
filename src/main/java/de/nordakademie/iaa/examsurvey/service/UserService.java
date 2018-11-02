@@ -8,6 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * @author felix plazek
+ */
 @Transactional(propagation = Propagation.REQUIRED)
 public interface UserService extends UserDetailsService {
     /**

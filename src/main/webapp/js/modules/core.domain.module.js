@@ -101,6 +101,9 @@
         isOpen: function () {
             return this.surveyStatus && this.surveyStatus === "OPEN"
         },
+        isClosed: function () {
+            return this.surveyStatus && this.surveyStatus === "CLOSED"
+        },
         isValid: function () {
             return this.title !== ""
                 && this.description !== ""

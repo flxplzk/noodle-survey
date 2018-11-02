@@ -8,5 +8,6 @@ public class AuthenticationServiceImplTest {
 
     @Test
     public void getCurrentAuthenticatedUser() {
+        // TODO
     }
 }

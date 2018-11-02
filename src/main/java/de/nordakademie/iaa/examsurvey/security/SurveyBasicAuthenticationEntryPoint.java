@@ -9,6 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+/**
+ * Custom EntryPoint to Customize Realm and response
+ *
+ * @author Felix Plazek
+ */
 public class SurveyBasicAuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
 
     private final String realm;
@@ -21,6 +26,7 @@ public class SurveyBasicAuthenticationEntryPoint extends BasicAuthenticationEntr
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authEx)
             throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        // dark hack to prevent browser authentication dialog ... sorry
         response.addHeader("WWW-Authenticate", "xBasic realm=" + getRealmName() + "");
 
         PrintWriter writer = response.getWriter();

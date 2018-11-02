@@ -1,4 +1,17 @@
 (function () {
+    // ########################## MODULE DECLARATION #####################################
+
+    /**
+     * @name "de.nordakademie.iaa.i18n"
+     *
+     * This module provides i18n messages for the frontend application
+     * @author Felix Plazek
+     * @author Bengt-Lasse Arndt
+     * @author Robert Peters
+     * @author Sascha Pererva
+     *
+     * @type {angular.Module}
+     */
     var app = angular.module("de.nordakademie.iaa.i18n", [
         "pascalprecht.translate"
     ]);
@@ -21,9 +34,9 @@
             AUTH_REGISTER_LAST_NAME_LABEL: "Nachname",
             AUTH_REGISTER_REPEAT_PASSWORD_LABEL: "Passwort wiederholen",
             AUTH_REGISTER_BUTTON_REGISTER: "Konto erstellen",
-            AUTH_REGISTER_ERROR_EMAIL: "Deine Email Adresse muss aussehen wie eine Email adresse und zwischen 10 und 100 Zeichen enthalten.",
-            AUTH_REGISTER_ERROR_PASSWORD_STRENGTH: "Das Passwort darf nicht leer sein, muss midestens eine Zahl, ein Sonderzeichen und jeweils einen Groß und einen kleinbuchstaben enthalten.",
-            AUTH_REGISTER_USER_ALREADY_EXISTS: "Es existiert bereits ein Benutzer mit dieser Emailadresse. Bitte wähle eine Andere.",
+            AUTH_REGISTER_ERROR_EMAIL: "Deine Email Adresse muss aussehen wie eine Email Adresse und zwischen 10 und 100 Zeichen enthalten.",
+            AUTH_REGISTER_ERROR_PASSWORD_STRENGTH: "Das Passwort darf nicht leer sein, muss mindestens eine Zahl, ein Sonderzeichen und jeweils einen Groß und einen Kleinbuchstaben enthalten.",
+            AUTH_REGISTER_USER_ALREADY_EXISTS: "Es existiert bereits ein Benutzer mit dieser Emailadresse. Bitte wähle eine Andere<.",
             AUTH_REGISTER_PASSWORD_NON_MATCH: "Die Passwörter müssen übereinstimmen.",
             AUTH_REGISTER_USER_CREATED: "Benutzer erfolgreich erstellt.",
 
@@ -36,7 +49,7 @@
             EDITOR_FORM_TITLE: "Titel",
             EDITOR_FORM_ERROR_REQUIRED: "Dieses Feld muss gefüllt sein",
             EDITOR_FORM_ERROR_MAX_LENGTH: "Der Titel einer Umfrage darf nicht länger als 50 Zeichen sein!",
-            EDITOR_FORM_DESCRIPTION: "Description",
+            EDITOR_FORM_DESCRIPTION: "Beschreibung",
             EDITOR_FORM_TYPE_DATE: "Datum - Umfrage um einen Tag zu bestimmen",
             EDITOR_FORM_TYPE_TIME: "Uhrzeit - Umfrage um einen Tag mit Uhrzeit zu bestimmen",
             EDITOR_FORM_TYPE_TIME_RANGE: "Zeitspanne - Umfrage um einen Tag mit Zeitspanne bestimmen",
@@ -47,14 +60,21 @@
             EDITOR_SAVE_AS_DRAFT: "Entwurf speichern",
             EDITOR_CONFLICT: "Bitte wähle einen anderen Titel für deine Umfrage!",
             EDITOR_NETWORK: "Bitte versuche es später erneut!",
-            EDITOR_CONFIRM_DELETE_TITLE: "",
-            EDITOR_CONFIRM_DELETE_CONTENT: "",
-            EDITOR_CONFIRM_DELETE_OK: "",
-            EDITOR_CONFIRM_DELETE_CANCEL: "",
-            EDITOR_ERROR_DELETE_PERMISSION: "",
-            EDITOR_ERROR_DELETE_UNKNOWN: "",
+            EDITOR_CONFIRM_DELETE_TITLE: "Bestätigen ...",
+            EDITOR_CONFIRM_DELETE_CONTENT: "Du bist dabei diese Umfrage zu löschen. Sie wird nach dem löschen nie wieder verfügbar sein!",
+            EDITOR_CONFIRM_DELETE_OK: "Verstanden",
+            EDITOR_CONFIRM_DELETE_CANCEL: "Abbrechen!!!",
+            EDITOR_ERROR_DELETE_PERMISSION: "Du kannst diese Umfrage nicht löschen, da du sie nicht erstellt hast",
+            EDITOR_ERROR_DELETE_UNKNOWN: "Die Umfrage wurde erfolgreich gelöscht",
 
-            DETAIL_SEND: "Teilnahme speichern"
+            DETAIL_SEND: "Teilnahme speichern",
+            DETAIL_YOU: "Du",
+            DETAIL_TERMINATE_SURVEY: "Umfrage schließen",
+            DETAIL_TOOLTIP_OPEN: "OFFEN",
+            DETAIL_TOOLTIP_CLOSED: "GESCHLOSSEN",
+            DETAIL_TOOLTIP_PRIVATE: "PRIVAT",
+            DETAIL_INITIATOR: "Ersteller",
+            DETAIL_SAVE_SUCCESS: "Änderungen wurden gespeichert!"
         });
 
         // english
@@ -75,16 +95,28 @@
             AUTH_REGISTER_BUTTON_REGISTER: "Register",
             AUTH_REGISTER_ERROR_EMAIL: "Your email must be between 10 and 100 characters long and look like an e-mail address.",
             AUTH_REGISTER_ERROR_PASSWORD_STRENGTH: "Password is required and must be secure! with at least 8 characters.",
-            AUTH_REGISTER_USER_ALREADY_EXISTS: "Username is already in use. please select a new one",
+            AUTH_REGISTER_USER_ALREADY_EXISTS: "Username (email) is already in use. please select a new one",
             AUTH_REGISTER_PASSWORD_NON_MATCH: "The passwords must match.",
             AUTH_REGISTER_USER_CREATED: "User created successfully.",
 
             DASHBOARD_OPEN_DETAILS: "Open",
-            DASHBOARD_TITLE: "All surveys",
+            DASHBOARD_TITLE_ALL: "All surveys",
+            DASHBOARD_TITLE_OPEN: "Open for Participation",
+            DASHBOARD_TITLE_OWN: "Your Surveys",
+            DASHBOARD_TITLE_PARTICIPATED: "Participated",
+            DASHBOARD_SIDE_NAV_NOTIFICATION_TAB: "Notifications",
+            DASHBOARD_SIDE_NAV_EVENT_TAB: "Events",
+            DASHBOARD_SIDE_NAV_NOTIFICATION_TYPE_SURVEY_CHANGE: "Survey changed",
+            DASHBOARD_SIDE_NAV_NOTIFICATION_TYPE_EVENT_PLANNED: "Survey closed!",
+            DASHBOARD_SIDE_NAV_NOTIFICATION_TYPE_DESC_SURVEY_CHANGE: "The initiator has changed the survey and therefore your particiation has been deleted. please participate again",
+            DASHBOARD_SIDE_NAV_NOTIFICATION_TYPE_DESC_EVENT_PLANNED: "The initiator has closed the survey and planned an event. If You participated on the chosen Options, check your upcoming events",
+            DASHBOARD_SIDE_NAV_SHOW: "View details",
+            DASHBOARD_SIDE_NAV_NEW_EVENT: "New Events for You",
+            DASHBOARD_SIDE_NAV_NEW_Notification: "New Notification :)",
             EDITOR_TITLE: "Create new Survey",
             EDITOR_TITLE_NEW:  "Create new Survey",
             EDITOR_TITLE_UPDATE:  "Update Survey",
-            EDITOR_NOT_FOUND: "The requested entity could does not exist anymore :( ",
+            EDITOR_NOT_FOUND: "The requested entity does not exist anymore :( ",
 
             EDITOR_SAVE: "Save and publish",
             EDITOR_CANCEL: "Cancel",
@@ -103,11 +135,14 @@
             EDITOR_CONFLICT: "Please choose a new title for your survey, yours is already in use",
             EDITOR_NETWORK: "Please try again later!",
             EDITOR_CONFIRM_DELETE_TITLE: "Confirm ...",
-            EDITOR_CONFIRM_DELETE_CONTENT: "You are delting your survey. With doing so all associated notifications, event, and participations will be deleted for ever and ever an ever.",
+            EDITOR_CONFIRM_DELETE_CONTENT: "You are deleting your survey. With doing so all associated notifications, participations and the event will be deleted for ever and ever an ever.",
             EDITOR_CONFIRM_DELETE_OK: "Do it!",
             EDITOR_CONFIRM_DELETE_CANCEL: "Cancel",
             EDITOR_ERROR_DELETE_PERMISSION: "You can NOT delete a survey when you are not the initiator",
             EDITOR_ERROR_DELETE_UNKNOWN: "Survey has been deleted",
+            EDITOR_CLOSE_TITLE: "Close survey ...",
+            EDITOR_SURVEY_CLOSE: "Please select one of the below options or your event. All Users will be notified. This action can not be changed",
+            EDITOR_OPTIONS_HINT: "Options must be unique and in the future.",
 
             DETAIL_SEND: "Save",
             DETAIL_YOU: "You",
@@ -116,10 +151,12 @@
             DETAIL_TOOLTIP_CLOSED: "CLOSED",
             DETAIL_TOOLTIP_PRIVATE: "PRIVATE",
             DETAIL_INITIATOR: "Initiator",
-            DETAIL_SAVE_SUCCESS: "changes has been saved!"
+            DETAIL_SAVE_SUCCESS: "Changes has been saved!",
+            DETAIL_SUM: "Sum"
 
         });
 
         $translateProvider.preferredLanguage("en_US");
+        $translateProvider.useSanitizeValueStrategy('escape');
     })
 }());

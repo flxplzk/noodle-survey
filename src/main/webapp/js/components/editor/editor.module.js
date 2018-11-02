@@ -1,4 +1,13 @@
 (function () {
+    /**
+     * @name "de.nordakademie.iaa.survey.editor"
+     *
+     * EditorModule
+     * @author Felix Plazek
+     * @author Sascha Pererva
+     *
+     * @type {angular.Module}
+     */
     var editor = angular.module("de.nordakademie.iaa.survey.editor", [
         "de.nordakademie.iaa.survey.core.domain",
         "de.nordakademie.iaa.survey.core",
@@ -10,7 +19,9 @@
 
     editor.directive("surveyEditorActionButton", FloatingActionButtonDirective);
     editor.directive("deleteSurveyActionButton", DeleteButtonDirective);
+    editor.directive("closeSurveyActionButton", CloseButtonDirective);
     editor.controller("floatingEditorController", ["$mdDialog", "$scope", FloatingActionButtonController]);
+    editor.controller("closeActionButtonController", ["$mdDialog", "$scope", "EventResource", CloseActionButtonController]);
     editor.controller("deleteSurveyController", ["SurveyResource", "$mdDialog", "$translate",
         "$scope", "$state", "notificationService", DeleteSurveyController]);
 
@@ -29,6 +40,70 @@
                 " ng-click=\"dialogManager.showEditorDialog($event)\">" +
                 "<i class=\"material-icons\"> {{icon}} </i></md-button>" +
                 "</div>"
+        }
+    }
+
+    function CloseButtonDirective() {
+        return {
+            restrict: "E",
+            transclude: false,
+            controller: "closeActionButtonController",
+            controllerAs: "closeCrtl",
+            scope: {
+                surveyId: "=",
+                icon: "@"
+            },
+            template: "<div>" +
+                "<md-button class=\"md-primary md-raised md-accent md-icon-button\"" +
+                " ng-click=\"closeCrtl.close($event)\">" +
+                "<i class=\"material-icons\"> {{icon}} </i></md-button>" +
+                "</div>"
+        }
+    }
+
+    function CloseActionButtonController($mdDialog, $scope) {
+        this.close = function (ev) {
+            $mdDialog.show({
+                locals: {surveyId: $scope.surveyId},
+                templateUrl: "/js/components/editor/close.dialog.template.html",
+                controller: ["$mdDialog", "$scope", "EventResource", "SurveyResource",
+                    "OptionResource", "$state", "surveyId", SurveyCloseController],
+                controllerAs: "surveyCloseCrtl",
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: false,
+                fullscreen: true
+            })
+        };
+    }
+
+    function SurveyCloseController($mdDialog, $scope, EventResource, SurveyResource, OptionResource, $state, surveyId) {
+        $scope.caption = "EDITOR_CLOSE_TITLE";
+        $scope.survey = SurveyResource.get({survey: surveyId});
+        $scope.options = OptionResource.query({survey: surveyId});
+        $scope.selected = null;
+
+        this.cancel = function () {
+            $mdDialog.cancel();
+        };
+
+
+        this.save = function () {
+            var selectedDate = new Date(angular.fromJson($scope.selected).dateTime);
+            var saveRequest = EventResource.save({title: $scope.survey.title, survey: $scope.survey, time:selectedDate});
+            saveRequest.$promise.then(success, reject);
+            function success(success) {
+                $state.go($state.current, {}, {reload: true});
+                $mdDialog.cancel();
+            }
+
+            function reject(error) {
+
+            }
+        };
+
+        this.valid = function () {
+            return $scope.selected != null;
         }
     }
 
@@ -98,12 +173,15 @@
             $scope.createNew = angular.isUndefined(surveyId);
             $scope.caption = $scope.createNew ? "EDITOR_TITLE_NEW" : "EDITOR_TITLE_UPDATE";
 
-            initialize();
+
 
             this.addEmptyOption = function () {
-                $scope.options.push(new OptionResource({dateTime: new Date()}));
+                var date = new Date();
+                date.setMilliseconds(0);
+                date.setSeconds(0);
+                $scope.options.push(new OptionResource({dateTime: date}));
             };
-
+            initialize();
             this.removeOption = function (optionToRemove) {
                 $scope.options = $scope.options.filter(function (value) {
                     return !value.equals(optionToRemove);
@@ -125,6 +203,10 @@
                 var survey = $scope.survey;
                 survey.surveyStatus = status;
                 survey.options = $scope.options;
+                if (!validOptions()) {
+                    notificationService.showNotification("EDITOR_OPTIONS_HINT");
+                    return;
+                }
                 if ($scope.createNew) {
                     survey.$save(successHandler, createErrorHandler);
                 } else {
@@ -133,11 +215,11 @@
             }
 
             function validOptions() {
-                return optionsDefined && optionsValid() && optionsUnique()
+                return optionsDefined() && optionsValid() && optionsUnique();
             }
 
             function optionsDefined() {
-                return angular.isUndefined($scope.options) || $scope.options.length === 0
+                return angular.isDefined($scope.options) && $scope.options.length > 0
             }
 
             function optionsValid() {
@@ -163,8 +245,7 @@
 
             this.valid = function () {
                 return angular.isDefined($scope.survey)
-                    && $scope.survey.isValid()
-                    && validOptions();
+                    && $scope.survey.isValid();
             };
             this.cancel = function () {
                 $mdDialog.cancel();
@@ -173,7 +254,8 @@
             function initialize() {
                 if ($scope.createNew) {
                     $scope.survey = new SurveyResource({title: "", description: ""});
-                    $scope.options = [new OptionResource({dateTime: new Date()})];
+                    $scope.options = [];
+                    vm.addEmptyOption();
                     $scope.busy = false;
                     return;
                 }
@@ -183,7 +265,11 @@
             }
 
             function successHandler(survey) {
-                $state.go("detail", {surveyId: survey.getId()});
+                if ($scope.createNew) {
+                    $state.go("detail", {surveyId: survey.getId()});
+                } else {
+                    $state.go($state.current, {}, {reload: true});
+                }
                 vm.cancel()
             }
 
