@@ -6,9 +6,13 @@ import de.nordakademie.iaa.examsurvey.domain.NotificationType;
 import de.nordakademie.iaa.examsurvey.domain.Participation;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
+import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
+import de.nordakademie.iaa.examsurvey.exception.ResourceNotFoundException;
 import de.nordakademie.iaa.examsurvey.persistence.NotificationRepository;
 import de.nordakademie.iaa.examsurvey.persistence.ParticipationRepository;
+import de.nordakademie.iaa.examsurvey.persistence.UserRepository;
 import de.nordakademie.iaa.examsurvey.persistence.specification.NotificationSpecifications;
+import de.nordakademie.iaa.examsurvey.persistence.specification.UserSpecifications;
 import de.nordakademie.iaa.examsurvey.service.NotificationService;
 
 import javax.validation.constraints.NotNull;
@@ -64,5 +68,18 @@ public class NotificationServiceImpl implements NotificationService {
         final List<Notification> notifications = notificationRepository
                 .findAll(NotificationSpecifications.bySurvey(survey));
         notificationRepository.deleteAll(notifications);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteNotificationWithUser(@NotNull final Long notificationId, @NotNull final User user) {
+        final Notification existentNotification = notificationRepository.findById(notificationId)
+                .orElseThrow(ResourceNotFoundException::new);
+        if (user == null || !user.equals(existentNotification.getUser())){
+            throw new PermissionDeniedException("User must be non null or affected user.");
+        }
+        notificationRepository.deleteById(notificationId);
     }
 }

@@ -13,6 +13,7 @@
         "de.nordakademie.iaa.survey.core",
         "de.nordakademie.iaa.i18n",
         "de.nordakademie.iaa.survey.editor",
+        "ui.router",
         "ngMaterial"
     ]);
 
@@ -33,9 +34,8 @@
     function ToolBarDirective() {
         return {
             restrict: "E",
-            template: "<md-toolbar ng-controller=\"mainController as toolBarCrtl\">\n" +
-                "    <div class=\"md-toolbar-tools\">\n" +
-                "        <h2 md-truncate>{{\"APP_HEADLINE\"|translate}}</h2>\n" +
+            template: "<md-toolbar ng-controller=\"mainController as toolBarCrtl\" layout=\"row\" class=\"md-toolbar-tools\">\n" +
+                "        <a ui-sref='dashboard' ><h2 md-truncate>{{\"APP_HEADLINE\"|translate}}</h2></a>\n" +
                 "        <span flex></span>" +
                 "        <survey-editor-action-button icon='add' ng-show=\"toolBarCrtl.authenticated\">" +
                 "        </survey-editor-action-button>" +
@@ -44,7 +44,6 @@
                 "            <i class=\"material-icons\">power_settings_new</i>" +
                 "           <md-tooltip >{{\"APP_LOGOUT\"|translate}}</md-tooltip>\n" +
                 "        </md-button>\n" +
-                "    </div>\n" +
                 "</md-toolbar>"
         }
     }

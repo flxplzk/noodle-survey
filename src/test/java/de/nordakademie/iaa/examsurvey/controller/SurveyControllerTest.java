@@ -1,6 +1,7 @@
 package de.nordakademie.iaa.examsurvey.controller;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import de.nordakademie.iaa.examsurvey.domain.Option;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
@@ -63,10 +64,10 @@ public class SurveyControllerTest {
         User user = mock(User.class);
 
         when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
-        when(surveyService.loadAllSurveysWithUser(user)).thenReturn(surveys);
+        when(surveyService.loadAllSurveysWithFilterCriteriaAndUser(null, user)).thenReturn(surveys);
 
         // WHEN
-        List<Survey> loadedSurveys = controllerUnderTest.loadSurveys();
+        List<Survey> loadedSurveys = controllerUnderTest.loadSurveys(null);
 
         // THEN
         assertThat(loadedSurveys, is(surveys));

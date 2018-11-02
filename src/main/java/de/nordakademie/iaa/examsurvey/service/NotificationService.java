@@ -43,4 +43,10 @@ public interface NotificationService {
      * @param survey for which the  {@link Notification}'s shall be deleted
      */
     void deleteAllNotificationsForSurvey(@NotNull final Survey survey);
+
+    /**
+     * deletes notification with {@param notificationId} if existent and {@link Notification#getUser()}
+     * equals {@param user}
+     */
+    void deleteNotificationWithUser(@NotNull Long notificationId, @NotNull User user);
 }

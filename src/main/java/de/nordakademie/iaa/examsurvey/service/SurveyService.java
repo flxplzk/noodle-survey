@@ -1,16 +1,18 @@
 package de.nordakademie.iaa.examsurvey.service;
 
+import de.nordakademie.iaa.examsurvey.controller.filtercriterion.FilterCriterion;
 import de.nordakademie.iaa.examsurvey.domain.Participation;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
+import de.nordakademie.iaa.examsurvey.exception.ResourceNotFoundException;
 import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
-import de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author felix plazek
@@ -38,10 +40,12 @@ public interface SurveyService {
      * survey where the user is the initiator with
      * {@link de.nordakademie.iaa.examsurvey.domain.SurveyStatus#PRIVATE}
      *
+     *
+     * @param filterCriteria
      * @param requestingUser which requests
      * @return all surveys relevant for given {@link User}
      */
-    List<Survey> loadAllSurveysWithUser(@NotNull final User requestingUser);
+    List<Survey> loadAllSurveysWithFilterCriteriaAndUser(Set<FilterCriterion> filterCriteria, @NotNull final User requestingUser);
 
     /**
      * Loads the requested Survey with id = {@param identifier} for
@@ -50,7 +54,7 @@ public interface SurveyService {
      * @param identifier        of the requested Survey
      * @param authenticatedUser requesting User
      * @return requested Survey
-     * @throws SurveyNotFoundException if the Survey was not found or is Private and
+     * @throws ResourceNotFoundException if the Survey was not found or is Private and
      *                                 therefore only visible for its initiator
      */
     Survey loadSurveyWithUser(@NotNull final Long identifier,

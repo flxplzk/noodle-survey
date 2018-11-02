@@ -1,12 +1,13 @@
 package de.nordakademie.iaa.examsurvey.service.impl;
 
+import de.nordakademie.iaa.examsurvey.controller.filtercriterion.FilterCriterion;
 import de.nordakademie.iaa.examsurvey.domain.NotificationType;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.SurveyStatus;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
 import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
-import de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException;
+import de.nordakademie.iaa.examsurvey.exception.ResourceNotFoundException;
 import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
 import de.nordakademie.iaa.examsurvey.service.NotificationService;
 import de.nordakademie.iaa.examsurvey.service.OptionService;
@@ -14,9 +15,11 @@ import de.nordakademie.iaa.examsurvey.service.ParticipationService;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
 
 import java.util.List;
+import java.util.Set;
 
 import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.hasTitle;
 import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.isVisibleForUser;
+import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.isVisibleForUserWithFilterCriteria;
 
 /**
  * UserService implementation.
@@ -95,9 +98,9 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
      * {@inheritDoc}
      */
     @Override
-    public List<Survey> loadAllSurveysWithUser(User requestingUser) {
+    public List<Survey> loadAllSurveysWithFilterCriteriaAndUser(Set<FilterCriterion> filterCriteria, User requestingUser) {
         requireNonNullUser(requestingUser);
-        return surveyRepository.findAll(isVisibleForUser(requestingUser));
+        return surveyRepository.findAll(isVisibleForUserWithFilterCriteria(requestingUser, filterCriteria));
     }
 
     /**
@@ -114,7 +117,7 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
     private Survey findDeletableSurveyWithInitiator(Long id, User authenticatedUser) {
         requireNonNullUser(authenticatedUser);
         Survey existentSurvey = surveyRepository.findById(id)
-                .orElseThrow(SurveyNotFoundException::new);
+                .orElseThrow(ResourceNotFoundException::new);
         requireInitiator(authenticatedUser, existentSurvey);
         return existentSurvey;
     }
@@ -143,7 +146,7 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
 
     private Survey getExistent(Survey survey) {
         return surveyRepository.findById(survey.getId())
-                .orElseThrow(SurveyNotFoundException::new);
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     private void requireNonExistent(final Survey survey) {

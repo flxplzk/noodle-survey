@@ -64,6 +64,19 @@ public class UserController {
         return notificationService.getNotificationsForUser(authenticatedUser);
     }
 
+    @RequestMapping(value = PATH_USERS_NOTIFICATIONS + "/{id}",
+            method = RequestMethod.DELETE)
+    public void getNotifications(@PathVariable(name = "id") Long id){
+        notificationService.deleteNotificationWithUser(id, authenticationService.getCurrentAuthenticatedUser());
+    }
+
+    @RequestMapping(value = PATH_USERS_EVENTS,
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public List<Event> loadEventsForUser(){
+        return eventService.loadAllEventsForAuthenticatedUser(authenticationService.getCurrentAuthenticatedUser());
+    }
+
     @RequestMapping(value = PATH_USERS_EVENTS,
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE,

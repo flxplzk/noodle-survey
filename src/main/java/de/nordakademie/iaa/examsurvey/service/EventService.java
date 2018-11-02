@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * @author felix plazek
@@ -25,4 +26,12 @@ public interface EventService {
      */
     Event createEvent(@NotNull final Event event,
                       @NotNull final User authenticatedUser);
+
+    /**
+     * finds nd returns all events for {@param authenticated}
+     *
+     * @param authenticatedUser that requests
+     * @return events
+     */
+    List<Event> loadAllEventsForAuthenticatedUser(@NotNull final User authenticatedUser);
 }
