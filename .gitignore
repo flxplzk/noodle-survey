@@ -1,6 +1,7 @@
 /target/
 !.mvn/wrapper/maven-wrapper.jar
-src/main/webapp/bower_components/
+
+
 ### STS ###
 .apt_generated
 .classpath
@@ -23,3 +24,6 @@ src/main/webapp/bower_components/
 /dist/
 /nbdist/
 /.nb-gradle/
+/src/main/webapp/node_modules/
+/src/main/webapp/node/etc/
+/src/main/webapp/node/node_modueles/
