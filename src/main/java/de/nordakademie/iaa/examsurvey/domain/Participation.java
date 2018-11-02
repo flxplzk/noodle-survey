@@ -1,5 +1,6 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Objects;
 import org.hibernate.annotations.NaturalId;
 
@@ -36,6 +37,7 @@ public class Participation extends AuditModel {
 
     @ManyToOne
     @NaturalId
+    @JsonIgnore
     public Survey getSurvey() {
         return survey;
     }
