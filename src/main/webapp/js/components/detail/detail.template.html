@@ -31,53 +31,46 @@
 
     <md-card ng-show="!computing">
         <md-card-content>
-            <md-list layout="column" flex style="margin-bottom: 0; padding-bottom: 0">
-                <md-list-item class="md-3-line">
-                    <div style="width: 200px"></div>
-                    <div ng-repeat="option in options" style="width: 100px">
-                        <div layout="row">{{option.dateTime | date: "shortDate"}}</div>
-                        <div layout="row">{{option.dateTime | date: "shortTime"}}</div>
-                    </div>
-                    <md-divider></md-divider>
-                </md-list-item>
-            </md-list>
-            <md-content layout="column" flex>
-                <div class="content" style="margin-top: 0; padding-top: 0">
-                    <md-list layout="column" style="margin-top: 0; padding-top: 0" flex>
-                        <md-list-item
-                                class="md-2-line"
-                                ng-repeat="participation in participations"
-                                ng-click="detailCrtl.valueOf()">
-                            <div style="width: 200px">{{participation.user.username}}</div>
-                            <div style="width: 100px" ng-repeat="option in options" layout-align="center center">
-                                <i ng-show="detailCrtl.participates(participation, option)"
-                                   class="material-icons"
-                                   style="padding-left: 25%">done</i>
-                            </div>
-                            <md-divider ng-if="!$last"></md-divider>
-                        </md-list-item>
-                    </md-list>
-                </div>
-            </md-content>
-            <md-list layout="column" flex style="margin-bottom: 0; padding-bottom: 0">
-                <md-list-item class="md-3-line">
-                    <div style="width: 200px"></div>
-                    <div ng-repeat="option in options" style="width: 100px" layout-align="center center">
+            <table>
+                <thead>
+                <tr>
+                    <td><!-- empty slot --></td>
+                    <td ng-repeat="option in options" layout-align="center center">
+                        <div>{{option.dateTime | date: "shortDate"}}</div>
+                        <div>{{option.dateTime | date: "shortTime"}}</div>
+                    </td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="participation in participations" class="md-3-line" ng-click="detailCrtl.valueOf()">
+                    <td>{{participation.user.username}}</td>
+                    <td ng-repeat="option in options">
+                        <div>
+                            <i ng-show="detailCrtl.participates(participation, option)"
+                               class="material-icons"
+                               style="padding-left: 25%">done</i>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{"DETAIL_SUM"|translate}}</td>
+                    <td ng-repeat="option in options">
                         <span style="padding-left: 25%">{{detailCrtl.sumParticipationsForOption(option)}}</span>
-                    </div>
-                </md-list-item>
-                <md-list-item class="md-3-line" ng-show="!detailCrtl.isOwnSurvey() && survey.isOpen()">
-                    <div style="width: 200px">
-                        {{"DETAIL_YOU"|translate}}
-                    </div>
-                    <div ng-repeat="option in options" style="width: 100px">
-                        <md-input-container style="padding-left: 25%">
+                    </td>
+                </tr>
+                <tr ng-show="!detailCrtl.isOwnSurvey() && survey.isOpen()">
+                    <td>{{"DETAIL_YOU"|translate}}</td>
+                    <td ng-repeat="option in options">
+                        <span style="padding-left: 25%">
                             <md-checkbox ng-disabled="detailCrtl.isOpen()"
-                                         ng-model="option.checked"
-                                         name="tos" aria-label="participate"></md-checkbox>
-                    </div>
-                </md-list-item>
-            </md-list>
+                                     ng-model="option.checked"
+                                     name="tos" aria-label="participate" style="padding-left: 25%">
+                            </md-checkbox>
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </md-card-content>
         <md-card-actions layout="row" layout-align="end center"
                          ng-show="!detailCrtl.isOwnSurvey() && survey.isOpen()">

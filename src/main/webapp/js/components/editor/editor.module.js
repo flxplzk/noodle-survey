@@ -173,12 +173,15 @@
             $scope.createNew = angular.isUndefined(surveyId);
             $scope.caption = $scope.createNew ? "EDITOR_TITLE_NEW" : "EDITOR_TITLE_UPDATE";
 
-            initialize();
+
 
             this.addEmptyOption = function () {
-                $scope.options.push(new OptionResource({dateTime: new Date()}));
+                var date = new Date();
+                date.setMilliseconds(0);
+                date.setSeconds(0);
+                $scope.options.push(new OptionResource({dateTime: date}));
             };
-
+            initialize();
             this.removeOption = function (optionToRemove) {
                 $scope.options = $scope.options.filter(function (value) {
                     return !value.equals(optionToRemove);
@@ -200,6 +203,10 @@
                 var survey = $scope.survey;
                 survey.surveyStatus = status;
                 survey.options = $scope.options;
+                if (!validOptions()) {
+                    notificationService.showNotification("EDITOR_OPTIONS_HINT");
+                    return;
+                }
                 if ($scope.createNew) {
                     survey.$save(successHandler, createErrorHandler);
                 } else {
@@ -208,11 +215,11 @@
             }
 
             function validOptions() {
-                return optionsDefined && optionsValid() && optionsUnique()
+                return optionsDefined() && optionsValid() && optionsUnique();
             }
 
             function optionsDefined() {
-                return angular.isUndefined($scope.options) || $scope.options.length === 0
+                return angular.isDefined($scope.options) && $scope.options.length > 0
             }
 
             function optionsValid() {
@@ -238,8 +245,7 @@
 
             this.valid = function () {
                 return angular.isDefined($scope.survey)
-                    && $scope.survey.isValid()
-                    && validOptions();
+                    && $scope.survey.isValid();
             };
             this.cancel = function () {
                 $mdDialog.cancel();
@@ -248,7 +254,8 @@
             function initialize() {
                 if ($scope.createNew) {
                     $scope.survey = new SurveyResource({title: "", description: ""});
-                    $scope.options = [new OptionResource({dateTime: new Date()})];
+                    $scope.options = [];
+                    vm.addEmptyOption();
                     $scope.busy = false;
                     return;
                 }
@@ -261,7 +268,7 @@
                 if ($scope.createNew) {
                     $state.go("detail", {surveyId: survey.getId()});
                 } else {
-                    initialize();
+                    $state.go($state.current, {}, {reload: true});
                 }
                 vm.cancel()
             }

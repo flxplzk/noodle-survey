@@ -111,6 +111,8 @@
             DASHBOARD_SIDE_NAV_NOTIFICATION_TYPE_DESC_SURVEY_CHANGE: "The initiator has changed the survey and therefore your particiation has been deleted. please participate again",
             DASHBOARD_SIDE_NAV_NOTIFICATION_TYPE_DESC_EVENT_PLANNED: "The initiator has closed the survey and planned an event. If You participated on the chosen Options, check your upcoming events",
             DASHBOARD_SIDE_NAV_SHOW: "View details",
+            DASHBOARD_SIDE_NAV_NEW_EVENT: "New Events for You",
+            DASHBOARD_SIDE_NAV_NEW_Notification: "New Notification :)",
             EDITOR_TITLE: "Create new Survey",
             EDITOR_TITLE_NEW:  "Create new Survey",
             EDITOR_TITLE_UPDATE:  "Update Survey",
@@ -140,6 +142,7 @@
             EDITOR_ERROR_DELETE_UNKNOWN: "Survey has been deleted",
             EDITOR_CLOSE_TITLE: "Close survey ...",
             EDITOR_SURVEY_CLOSE: "Please select one of the below options or your event. All Users will be notified. This action can not be changed",
+            EDITOR_OPTIONS_HINT: "Options must be unique and in the future.",
 
             DETAIL_SEND: "Save",
             DETAIL_YOU: "You",
@@ -148,7 +151,8 @@
             DETAIL_TOOLTIP_CLOSED: "CLOSED",
             DETAIL_TOOLTIP_PRIVATE: "PRIVATE",
             DETAIL_INITIATOR: "Initiator",
-            DETAIL_SAVE_SUCCESS: "Changes has been saved!"
+            DETAIL_SAVE_SUCCESS: "Changes has been saved!",
+            DETAIL_SUM: "Sum"
 
         });
 

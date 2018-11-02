@@ -17,19 +17,31 @@
 
     dashboard.controller("dashboardController", ["$scope", "SurveyResource", "$state", "$mdDialog", DashboardController]);
     dashboard.controller("dashboardSideNavController", ["$scope", "NotificationResource", "EventResource",
-        "appService", "$timeout", "$state", DashboardSideNavController]);
+        "appService", "$timeout", "$state", "notificationService", DashboardSideNavController]);
     dashboard.directive("dashboardSideNav", DashboardSideNavDirective);
     dashboard.directive("dashboardSurveyListing", SurveyListingDirective);
 
-    function DashboardSideNavController($scope, NotificationResource, EventResource, appService, $timeout, $state) {
+    function DashboardSideNavController($scope, NotificationResource, EventResource, appService, $timeout, $state, notificationService) {
         $scope.loggedIn = appService.isAuthenticated();
+        $scope.events = [];
+        $scope.notifications = [];
         var timer;
         init();
 
         function init() {
             if (appService.isAuthenticated()) {
-                $scope.events = EventResource.query();
-                $scope.notifications = NotificationResource.query();
+                EventResource.query(function (success) {
+                    if ($scope.events.length < success.length) {
+                        notificationService.showNotification("DASHBOARD_SIDE_NAV_NEW_EVENT");
+                    }
+                    $scope.events = success;
+                });
+                NotificationResource.query(function (success) {
+                    if ($scope.notifications.length < success.length) {
+                        notificationService.showNotification("DASHBOARD_SIDE_NAV_NEW_NOTIFICATION");
+                    }
+                    $scope.notifications = success;
+                });
                 timer = $timeout(init, 10000);
             }
         }
@@ -81,12 +93,13 @@
                 "         </md-list-item>\n" +
                 "        </md-list>",
             scope: {
-              filter: "@"
+                filter: "@"
             },
             controller: "dashboardController",
             controllerAs: "dashboardCrtl"
         }
     }
+
     function DashboardController($scope, SurveyResource, $state, $mdDialog) {
         $scope.model = {
             surveys: [],
