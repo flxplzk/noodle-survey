@@ -44,7 +44,6 @@
         channel.onmessage = function (ev) {
             if (!isAuthenticated || "user-logout-requested" !== ev.data) return;
             vm.logout();
-            channel.close();
             errorService.showNotification("LOGGED_OUT");
         };
 

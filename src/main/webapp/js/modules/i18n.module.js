@@ -98,6 +98,7 @@
             AUTH_REGISTER_USER_ALREADY_EXISTS: "Username (email) is already in use. please select a new one",
             AUTH_REGISTER_PASSWORD_NON_MATCH: "The passwords must match.",
             AUTH_REGISTER_USER_CREATED: "User created successfully.",
+            LOGGED_OUT: "You have been successfully logged out.",
 
             DASHBOARD_OPEN_DETAILS: "Open",
             DASHBOARD_TITLE_ALL: "All surveys",
@@ -152,7 +153,10 @@
             DETAIL_TOOLTIP_PRIVATE: "PRIVATE",
             DETAIL_INITIATOR: "Initiator",
             DETAIL_SAVE_SUCCESS: "Changes has been saved!",
-            DETAIL_SUM: "Sum"
+            DETAIL_SUM: "Sum",
+
+            ERROR_HEADING: "Oops, this error should not occur.",
+            ERROR_SUB_HEADING: "In order too cheer you a bit up, we asked our beloved nicolas what he would say:"
 
         });
 
