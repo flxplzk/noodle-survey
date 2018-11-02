@@ -13,9 +13,11 @@
                     </span>
             </md-card-title-text>
             <md-card-actions layout="row" layout-align="end center" ng-show="detailCrtl.isOwnSurvey()">
-                <survey-editor-action-button ng-show="!survey.isClosed()" icon="build" survey-id="surveyId"></survey-editor-action-button>
+                <survey-editor-action-button ng-show="!survey.isClosed()" icon="build"
+                                             survey-id="surveyId"></survey-editor-action-button>
                 <delete-survey-action-button icon="delete" survey-id="surveyId"></delete-survey-action-button>
-                <close-survey-action-button ng-show="survey.isOpen()" icon="event" survey-id="surveyId"></close-survey-action-button>
+                <close-survey-action-button ng-show="survey.isOpen()" icon="event"
+                                            survey-id="surveyId"></close-survey-action-button>
             </md-card-actions>
         </md-card-title>
         <md-card-content>
@@ -58,6 +60,12 @@
                 </div>
             </md-content>
             <md-list layout="column" flex style="margin-bottom: 0; padding-bottom: 0">
+                <md-list-item class="md-3-line">
+                    <div style="width: 200px"></div>
+                    <div ng-repeat="option in options" style="width: 100px" layout-align="center center">
+                        <span style="padding-left: 25%">{{detailCrtl.sumParticipationsForOption(option)}}</span>
+                    </div>
+                </md-list-item>
                 <md-list-item class="md-3-line" ng-show="!detailCrtl.isOwnSurvey() && survey.isOpen()">
                     <div style="width: 200px">
                         {{"DETAIL_YOU"|translate}}
@@ -67,12 +75,6 @@
                             <md-checkbox ng-disabled="detailCrtl.isOpen()"
                                          ng-model="option.checked"
                                          name="tos" aria-label="participate"></md-checkbox>
-                    </div>
-                </md-list-item>
-                <md-list-item class="md-3-line">
-                    <div style="width: 200px"></div>
-                    <div ng-repeat="option in options" style="width: 100px" layout-align="center center">
-                        <span style="padding-left: 25%">{{detailCrtl.sumParticipationsForOption(option)}}</span>
                     </div>
                 </md-list-item>
             </md-list>

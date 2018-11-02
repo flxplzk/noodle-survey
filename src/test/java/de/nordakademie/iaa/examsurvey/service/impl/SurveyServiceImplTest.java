@@ -1,6 +1,7 @@
 package de.nordakademie.iaa.examsurvey.service.impl;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
@@ -53,7 +54,7 @@ public class SurveyServiceImplTest {
     public void loadAllSurveysForUser_PermissionDeniedException() {
         // GIVEN
         // WHEN
-        surveyService.loadAllSurveysWithUser(null);
+        surveyService.loadAllSurveysWithFilterCriteriaAndUser(Sets.newHashSet(), null);
 
         // THEN
         fail();
@@ -67,7 +68,7 @@ public class SurveyServiceImplTest {
         when(surveyRepository.findAll(any())).thenReturn(surveys);
 
         // WHEN
-        List<Survey> loadAllSurveysWithUser = surveyService.loadAllSurveysWithUser(user);
+        List<Survey> loadAllSurveysWithUser = surveyService.loadAllSurveysWithFilterCriteriaAndUser(Sets.newHashSet(), user);
 
         // THEN
         assertThat(loadAllSurveysWithUser, is(surveys));

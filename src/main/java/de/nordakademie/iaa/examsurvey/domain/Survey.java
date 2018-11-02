@@ -33,6 +33,7 @@ public class Survey extends AuditModel {
     private String title;
     private String description;
     private User initiator;
+    private Event event;
     private SurveyStatus surveyStatus;
     private Set<Option> options;
 
@@ -78,7 +79,7 @@ public class Survey extends AuditModel {
     }
 
     /**
-     * This field is only used for data transfer purpose. When Saving the option are saved separately to options table
+     * This field is only used for data transfer purpose. When Saving the options are saved separately to options table
      *
      * @return set of Options or {@code null} when loading from database
      */
@@ -90,6 +91,17 @@ public class Survey extends AuditModel {
 
     public void setOptions(Set<Option> options) {
         this.options = options;
+    }
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "survey", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY, orphanRemoval = true)
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
     }
 
     @Override

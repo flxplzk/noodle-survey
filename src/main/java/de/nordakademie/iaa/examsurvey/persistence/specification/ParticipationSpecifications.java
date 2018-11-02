@@ -6,6 +6,7 @@ import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import org.springframework.data.jpa.domain.Specification;
 
+import javax.persistence.criteria.Predicate;
 import java.util.Date;
 
 /**
@@ -32,4 +33,5 @@ public class ParticipationSpecifications {
                 ? criteriaBuilder.isNull(root.get(Participation_.survey))
                 : criteriaBuilder.equal(root.get(Participation_.survey), survey);
     }
+
 }

@@ -1,7 +1,9 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
+import javax.persistence.metamodel.PluralAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
+import java.util.Set;
 
 /**
  * {@link StaticMetamodel} for type {@link Survey}
@@ -10,8 +12,6 @@ import javax.persistence.metamodel.StaticMetamodel;
  */
 @StaticMetamodel(Survey.class)
 public class Survey_ extends AuditModel_{
-    protected Survey_() {
-    }
     public static volatile SingularAttribute<Survey, String> title;
     public static volatile SingularAttribute<Survey, String> description;
     public static volatile SingularAttribute<Survey, User> initiator;

@@ -103,6 +103,7 @@
             DASHBOARD_TITLE_ALL: "All surveys",
             DASHBOARD_TITLE_OPEN: "Open for Participation",
             DASHBOARD_TITLE_OWN: "Your Surveys",
+            DASHBOARD_TITLE_PARTICIPATED: "Participated",
             DASHBOARD_SIDE_NAV_NOTIFICATION_TAB: "Notifications",
             DASHBOARD_SIDE_NAV_EVENT_TAB: "Events",
             DASHBOARD_SIDE_NAV_NOTIFICATION_TYPE_SURVEY_CHANGE: "Survey changed",

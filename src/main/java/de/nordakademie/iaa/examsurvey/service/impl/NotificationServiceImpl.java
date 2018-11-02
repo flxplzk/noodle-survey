@@ -10,7 +10,9 @@ import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
 import de.nordakademie.iaa.examsurvey.exception.ResourceNotFoundException;
 import de.nordakademie.iaa.examsurvey.persistence.NotificationRepository;
 import de.nordakademie.iaa.examsurvey.persistence.ParticipationRepository;
+import de.nordakademie.iaa.examsurvey.persistence.UserRepository;
 import de.nordakademie.iaa.examsurvey.persistence.specification.NotificationSpecifications;
+import de.nordakademie.iaa.examsurvey.persistence.specification.UserSpecifications;
 import de.nordakademie.iaa.examsurvey.service.NotificationService;
 
 import javax.validation.constraints.NotNull;

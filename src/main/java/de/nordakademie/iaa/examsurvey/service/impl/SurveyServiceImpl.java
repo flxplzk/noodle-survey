@@ -1,5 +1,6 @@
 package de.nordakademie.iaa.examsurvey.service.impl;
 
+import de.nordakademie.iaa.examsurvey.controller.filtercriterion.FilterCriterion;
 import de.nordakademie.iaa.examsurvey.domain.NotificationType;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.SurveyStatus;
@@ -14,9 +15,11 @@ import de.nordakademie.iaa.examsurvey.service.ParticipationService;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
 
 import java.util.List;
+import java.util.Set;
 
 import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.hasTitle;
 import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.isVisibleForUser;
+import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.isVisibleForUserWithFilterCriteria;
 
 /**
  * UserService implementation.
@@ -95,9 +98,9 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
      * {@inheritDoc}
      */
     @Override
-    public List<Survey> loadAllSurveysWithUser(User requestingUser) {
+    public List<Survey> loadAllSurveysWithFilterCriteriaAndUser(Set<FilterCriterion> filterCriteria, User requestingUser) {
         requireNonNullUser(requestingUser);
-        return surveyRepository.findAll(isVisibleForUser(requestingUser));
+        return surveyRepository.findAll(isVisibleForUserWithFilterCriteria(requestingUser, filterCriteria));
     }
 
     /**

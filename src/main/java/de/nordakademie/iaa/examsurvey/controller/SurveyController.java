@@ -1,5 +1,7 @@
 package de.nordakademie.iaa.examsurvey.controller;
 
+import com.google.common.collect.Sets;
+import de.nordakademie.iaa.examsurvey.controller.filtercriterion.FilterCriterion;
 import de.nordakademie.iaa.examsurvey.domain.Option;
 import de.nordakademie.iaa.examsurvey.domain.Participation;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
@@ -13,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Felix Plazek
@@ -69,8 +72,10 @@ public class SurveyController {
     @RequestMapping(value = PATH_SURVEYS,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Survey> loadSurveys() {
-        return surveyService.loadAllSurveysWithUser(getAuthenticatedUser());
+    public List<Survey> loadSurveys(@RequestParam(name = "filter", required = false) final List<String> filterParams) {
+        Set<FilterCriterion> filterCriteria = FilterCriterion.of(
+                filterParams != null ? Sets.newHashSet(filterParams) : Sets.newHashSet());
+        return surveyService.loadAllSurveysWithFilterCriteriaAndUser(filterCriteria, getAuthenticatedUser());
     }
 
     @RequestMapping(value = PATH_SURVEYS_IDENTIFIER,

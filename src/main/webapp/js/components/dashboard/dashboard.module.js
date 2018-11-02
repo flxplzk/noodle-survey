@@ -19,6 +19,7 @@
     dashboard.controller("dashboardSideNavController", ["$scope", "NotificationResource", "EventResource",
         "appService", "$timeout", "$state", DashboardSideNavController]);
     dashboard.directive("dashboardSideNav", DashboardSideNavDirective);
+    dashboard.directive("dashboardSurveyListing", SurveyListingDirective);
 
     function DashboardSideNavController($scope, NotificationResource, EventResource, appService, $timeout, $state) {
         $scope.loggedIn = appService.isAuthenticated();
@@ -62,16 +63,38 @@
         }
     }
 
+    function SurveyListingDirective() {
+        return {
+            restrict: "E",
+            template: " <md-list>\n" +
+                "         <md-list-item class=\"md-2-line\" ng-repeat=\"survey in model.surveys\"\n" +
+                "           ng-click=\"dashboardCrtl.viewDetails(survey)\">\n" +
+                "             <div class=\"md-list-item-text\">\n" +
+                "                <h3>{{survey.title}}</h3>\n" +
+                "                <h4>{{survey.description}}</h4>\n" +
+                "                 </div>\n" +
+                "                 <md-button class=\"md-icon-button md-primary\"\n" +
+                "                      ng-click=\"dashboardCrtl.viewDetails(survey)\">\n" +
+                "                      <i class=\"material-icons\">{{ survey.isOpen() ? \"lock_open\" : \"lock_closed\"}}</i>\n" +
+                "                 </md-button>\n" +
+                "            <md-divider ng-if=\"!$last\"></md-divider>\n" +
+                "         </md-list-item>\n" +
+                "        </md-list>",
+            scope: {
+              filter: "@"
+            },
+            controller: "dashboardController",
+            controllerAs: "dashboardCrtl"
+        }
+    }
     function DashboardController($scope, SurveyResource, $state, $mdDialog) {
         $scope.model = {
             surveys: [],
-            loading: true,
-            tabs: [],
-            selectedIndex: 0
+            loading: true
         };
-
+        var filter = $scope.filter;
         // On init load all surveys from backend.
-        var query = SurveyResource.query();
+        var query = SurveyResource.query({filter: filter});
         query.$promise.then(function (surveys) {
             $scope.model.surveys = surveys;
             $scope.model.loading = false;
