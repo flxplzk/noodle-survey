@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static de.nordakademie.iaa.examsurvey.persistence.specification.OptionSpecifications.hasSurvey;
+import static java.util.Collections.sort;
 
 /**
  * @author felix plazek
@@ -80,7 +81,9 @@ public class OptionServiceImpl
     @Override
     public List<Option> loadAllOptionsOfSurveyForUser(Long surveyId, User authenticatedUser) {
         final Survey survey = getSurveyVisibleForUser(surveyId, authenticatedUser);
-        return Lists.newArrayList(optionRepository.findAll(OptionSpecifications.hasSurvey(survey)));
+        List<Option> options = Lists.newArrayList(optionRepository.findAll(OptionSpecifications.hasSurvey(survey)));
+        sort(options);
+        return options;
     }
 
     private List<Option> findOptionsBySurvey(final Survey survey) {
