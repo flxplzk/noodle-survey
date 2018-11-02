@@ -31,4 +31,39 @@
         }
     }
 
+
+    error.factory('errorInterceptor', function ($q, $state) {
+        return {
+            request: function (config) {
+                return config || $q.when(config);
+            },
+            requestError: function (request) {
+                $state.go("error");
+                return $q.reject(request);
+            },
+            response: function (response) {
+                return response || $q.when(response);
+            },
+            responseError: function (response) {
+                if (response && response.status === 500 || response && response.status < 0) {
+                    $state.go("error");
+                }
+                return $q.reject(response);
+            }
+        };
+    });
+
+    error.config(function ($httpProvider) {
+        $httpProvider.interceptors.push('errorInterceptor');
+    });
+
+    app.config(function ($stateProvider) {
+        var errorState = {
+            name: 'error',
+            url: "/oops",
+            template: "<error></error>"
+        };
+        $stateProvider.state(errorState);
+    });
+
 }());

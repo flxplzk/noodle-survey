@@ -76,29 +76,4 @@
         $stateProvider.state(detailState);
         $stateProvider.state(errorState);
     });
-
-    app.factory('errorInterceptor', function ($q, $state) {
-        return {
-            request: function (config) {
-                return config || $q.when(config);
-            },
-            requestError: function (request) {
-                $state.go("error");
-                return $q.reject(request);
-            },
-            response: function (response) {
-                return response || $q.when(response);
-            },
-            responseError: function (response) {
-                if (response && response.status === 500 || response && response.status < 0) {
-                    $state.go("error");
-                }
-                return $q.reject(response);
-            }
-        };
-    });
-
-    app.config(function ($httpProvider) {
-        $httpProvider.interceptors.push('errorInterceptor');
-    });
 }());
