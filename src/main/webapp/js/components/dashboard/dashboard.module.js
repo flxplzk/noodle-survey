@@ -29,7 +29,7 @@
             if (appService.isAuthenticated()) {
                 $scope.events = EventResource.query();
                 $scope.notifications = NotificationResource.query();
-                timer = $timeout(init, 30000);
+                timer = $timeout(init, 10000);
             }
         }
 
