@@ -3,7 +3,7 @@ package de.nordakademie.iaa.examsurvey.service.impl;
 import de.nordakademie.iaa.examsurvey.domain.Event;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
-import de.nordakademie.iaa.examsurvey.exception.SurveyNotFoundException;
+import de.nordakademie.iaa.examsurvey.exception.ResourceNotFoundException;
 import de.nordakademie.iaa.examsurvey.persistence.EventRepository;
 import de.nordakademie.iaa.examsurvey.persistence.ParticipationRepository;
 import de.nordakademie.iaa.examsurvey.service.NotificationService;
@@ -62,13 +62,13 @@ public class EventServiceImplTest {
         verify(surveyService, times(1)).closeSurvey(survey, user);
     }
 
-    @Test(expected = SurveyNotFoundException.class)
+    @Test(expected = ResourceNotFoundException.class)
     public void createEventNoSurvey() {
         //GIVEN
         Event event = mock(Event.class);
         User user = mock(User.class);
         Survey survey = mock(Survey.class);
-        Exception exception = mock(SurveyNotFoundException.class);
+        Exception exception = mock(ResourceNotFoundException.class);
 
         when(event.getSurvey()).thenReturn(survey);
         surveyService.closeSurvey(survey, user);
