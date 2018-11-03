@@ -116,7 +116,7 @@
             DETAIL_INITIATOR: "Ersteller",
             DETAIL_SAVE_SUCCESS: "Änderungen wurden gespeichert!",
             DETAIL_SUM: "Summe",
-            ERROR_HEADING: "Ups, das hätte nicht passieren sollen. Es sei denn, du wolltest hierhin. Dann: herzlichen Glückwunsch!",
+            ERROR_HEADING: "Ups, das hätte nicht passieren sollen. Es sei denn, du wolltest hierhin. In diesem Fall: Herzlichen Glückwunsch!",
             ERROR_SUB_HEADING: "Um dich etwas aufzumuntern, haben wir unseren guten Freund Nicolas gefragt, was er davon hält: "
         });
 
@@ -195,7 +195,7 @@
             DETAIL_SAVE_SUCCESS: "Changes has been saved!",
             DETAIL_SUM: "Sum",
 
-            ERROR_HEADING: "Oops, this error should not occur.",
+            ERROR_HEADING: "Oops, this error should not occur. Unless you wanted to see this. In this case: Congratulations!",
             ERROR_SUB_HEADING: "In order too cheer you up a bit, we asked our beloved Nicolas what he would say:"
 
         });
