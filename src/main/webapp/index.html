@@ -24,7 +24,8 @@
     <script type="application/javascript" src="node_modules/angular-aria/angular-aria.js"></script>
     <script type="application/javascript" src="node_modules/angular-messages/angular-messages.js"></script>
     <script type="application/javascript" src="node_modules/angular-material/angular-material.js"></script>
-    <script type="application/javascript" src="node_modules/angular-material-time-picker/dist/md-time-picker.js"></script>
+    <script type="application/javascript"
+            src="node_modules/angular-material-time-picker/dist/md-time-picker.js"></script>
 
     <link rel="stylesheet" href="node_modules/angular-material/angular-material.css">
     <link rel="stylesheet" href="node_modules/angular-material-time-picker/dist/md-time-picker.css">
@@ -32,32 +33,26 @@
 </head>
 <body ng-cloak layout="column">
 <survey-tool-bar layout="row"></survey-tool-bar>
-    <!-- Container #2 -->
-    <div flex layout="row">
-
-        <!-- Container #3 -->
-        <dashboard-side-nav layout="column" ></dashboard-side-nav>
-
-        <!-- Container #4 -->
-        <md-content flex id="content">
-            <!-- display screens -->
-            <ui-view></ui-view>
-        </md-content>
-
-    </div>
-
+<div flex layout="row">
+    <dashboard-side-nav layout="column"></dashboard-side-nav>
+    <md-content flex id="content">
+        <ui-view></ui-view>
+    </md-content>
 </div>
 
 <!-- modules -->
-<script type="application/javascript" src="js/modules/i18n.module.js"></script>
-<script type="application/javascript" src="js/modules/core.module.js"></script>
-<script type="application/javascript" src="js/modules/core.domain.module.js"></script>
+<script type="application/javascript" src="js/components/i18n/i18n.module.js"></script>
+<script type="application/javascript" src="js/components/routing/routes.module.js"></script>
+<script type="application/javascript" src="js/components/core/core.module.js"></script>
+<script type="application/javascript" src="js/components/domain/core.domain.module.js"></script>
+<script type="application/javascript" src="js/components/cage/cage.module.js"></script>
+<script type="application/javascript" src="js/components/error/error.module.js"></script>
 <script type="application/javascript" src="js/components/authentication/authentication.module.js"></script>
 <script type="application/javascript" src="js/components/editor/editor.module.js"></script>
 <script type="application/javascript" src="js/components/toolbar/toolbar.module.js"></script>
 <script type="application/javascript" src="js/components/dashboard/dashboard.module.js"></script>
 <script type="application/javascript" src="js/components/detail/detail.module.js"></script>
-<script type="application/javascript" src="js/modules/app.module.js"></script>
+<script type="application/javascript" src="js/components/app.module.js"></script>
 
 </body>
 </html>

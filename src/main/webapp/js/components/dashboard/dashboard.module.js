@@ -11,17 +11,20 @@
     var dashboard = angular.module("de.nordakademie.iaa.survey.dashboard", [
         "de.nordakademie.iaa.survey.core.domain",
         "de.nordakademie.iaa.survey.core",
+        "de.nordakademie.iaa.survey.routes",
         "de.nordakademie.iaa.i18n",
         "ngMaterial"
     ]);
 
-    dashboard.controller("dashboardController", ["$scope", "SurveyResource", "$state", "$mdDialog", DashboardController]);
+    dashboard.controller("dashboardController", ["$scope", "SurveyResource", "$state", "$mdDialog", "ROUTE_STATES",
+        DashboardController]);
     dashboard.controller("dashboardSideNavController", ["$scope", "NotificationResource", "EventResource",
-        "appService", "$timeout", "$state", "notificationService", DashboardSideNavController]);
+        "appService", "$timeout", "$state", "notificationService", "ROUTE_STATES", DashboardSideNavController]);
     dashboard.directive("dashboardSideNav", DashboardSideNavDirective);
     dashboard.directive("dashboardSurveyListing", SurveyListingDirective);
 
-    function DashboardSideNavController($scope, NotificationResource, EventResource, appService, $timeout, $state, notificationService) {
+    function DashboardSideNavController($scope, NotificationResource, EventResource, appService,
+                                        $timeout, $state, notificationService, ROUTE_STATES) {
         $scope.loggedIn = appService.isAuthenticated();
         $scope.events = [];
         $scope.notifications = [];
@@ -47,7 +50,7 @@
         }
 
         this.viewDetails = function (survey) {
-            $state.go("detail", {surveyId: survey._id})
+            $state.go(ROUTE_STATES.DETAIL_STATE, {surveyId: survey._id})
         };
 
         this.delete = function (notification) {
@@ -100,7 +103,7 @@
         }
     }
 
-    function DashboardController($scope, SurveyResource, $state, $mdDialog) {
+    function DashboardController($scope, SurveyResource, $state, $mdDialog, ROUTE_STATES) {
         $scope.model = {
             surveys: [],
             loading: true
@@ -114,7 +117,7 @@
         });
 
         this.viewDetails = function (survey) {
-            $state.go("detail", {surveyId: survey.getId()})
+            $state.go(ROUTE_STATES.DETAIL_STATE, {surveyId: survey.getId()})
         };
 
         $scope.initiatorOfSurveyShort = function (survey) {

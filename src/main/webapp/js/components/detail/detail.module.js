@@ -38,18 +38,19 @@
         init();
 
         function init() {
-            $scope.survey = SurveyResource.get({survey: $stateParams.surveyId});
-            var oQuery = OptionResource.query({survey: $stateParams.surveyId});
-            oQuery.$promise.then(function (data) {
-                $scope.options = data;
-                filterOwnParticipation();
-            });
-            var query = ParticipationResource.query({survey: $stateParams.surveyId});
-            query.$promise.then(function (data) {
-                $scope.participations = data;
-                filterOwnParticipation();
-            })
+            $scope.survey = SurveyResource.get({survey: $stateParams.surveyId}, function (survey) {
 
+                var oQuery = OptionResource.query({survey: $stateParams.surveyId});
+                oQuery.$promise.then(function (data) {
+                    $scope.options = data;
+                    filterOwnParticipation();
+                });
+                var query = ParticipationResource.query({survey: $stateParams.surveyId});
+                query.$promise.then(function (data) {
+                    $scope.participations = data;
+                    filterOwnParticipation();
+                })
+            });
         }
 
         this.participates = function (participation, option) {
@@ -101,6 +102,9 @@
         };
 
         function filterOwnParticipation() {
+            if ("CLOSED" === $scope.survey.surveyStatus){
+                return;
+            }
             $scope.participations = $scope.participations.filter(function (value, index) {
                 if (value.user.username === currentUser.principal.username) {
                     $scope.ownParticipation = value;

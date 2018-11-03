@@ -1,26 +1,34 @@
-(function() {
+(function () {
+
     // ########################## MODULE DECLARATION #####################################
 
     /**
-     * @name "de.nordakademie.iaa.survey"
+     * @name "de.nordakademie.iaa.survey.routes"
      *
-     * this is the app
+     * Routes Configuration Module.
      * @author Felix Plazek
-     * @author Bengt-Lasse Arndt
-     * @author Robert Peters
-     * @author Sascha Pererva
      *
      * @type {angular.Module}
      */
-    var app = angular.module("de.nordakademie.iaa.survey", [
-        "de.nordakademie.iaa.survey.authentication",
-        "de.nordakademie.iaa.survey.toolbar",
-        "de.nordakademie.iaa.survey.dashboard",
-        "de.nordakademie.iaa.survey.detail",
-        "de.nordakademie.iaa.survey.editor"
+    var routing = angular.module("de.nordakademie.iaa.survey.routes", [
+        "de.nordakademie.iaa.survey.core",
+        "ui.router"
     ]);
 
-    app.config(function ($stateProvider) {
+    var ROUTE_STATES = {
+        LOGIN_STATE: "login",
+        REGISTER_STATE: "register",
+        DASHBOARD_STATE: "dashboard",
+        DETAIL_STATE: "detail",
+        DEFAULT_STATE: "home"
+    };
+
+    /**
+     * wrapping routes as constant for better maintainability
+     */
+    routing.constant("ROUTE_STATES", ROUTE_STATES);
+
+    routing.config(function ($stateProvider) {
         var enteringGuard = function ($transition$, $state$) {
             var appService = $transition$.injector().get("appService");
             var stateService = $transition$.injector().get("$state");
@@ -28,36 +36,35 @@
                 console.log("user authenticated; access granted!");
             }, function (reject) {
                 $transition$.abort();
-                stateService.go("login");
+                stateService.go(ROUTE_STATES.LOGIN_STATE);
                 console.log("user not authenticated; redirected to login!");
-
             });
         };
 
         var loginState = {
-            name: 'login',
+            name: ROUTE_STATES.LOGIN_STATE,
             url: '/login',
             templateUrl: "js/components/authentication/login.template.html"
         };
         var registerState = {
-            name: 'register',
+            name: ROUTE_STATES.REGISTER_STATE,
             url: '/register',
             templateUrl: "js/components/authentication/register.template.html"
         };
         var dashboardState = {
-            name: 'dashboard',
+            name: ROUTE_STATES.DASHBOARD_STATE,
             url: '/dashboard',
             templateUrl: "js/components/dashboard/dashboard.template.html",
             onEnter: enteringGuard
         };
-        var detailState ={
-            name: "detail",
+        var detailState = {
+            name: ROUTE_STATES.DETAIL_STATE,
             url: "/detail/{surveyId}",
             templateUrl: "js/components/detail/detail.template.html",
             onEnter: enteringGuard
         };
         var defaultState = {
-            name: 'home',
+            name: ROUTE_STATES.DEFAULT_STATE,
             url: '',
             templateUrl: "js/components/dashboard/dashboard.template.html",
             onEnter: enteringGuard
@@ -69,4 +76,4 @@
         $stateProvider.state(defaultState);
         $stateProvider.state(detailState);
     });
-}());
+})();

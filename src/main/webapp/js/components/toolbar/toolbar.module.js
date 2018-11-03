@@ -10,15 +10,15 @@
      * @type {angular.Module}
      */
     var toolbar = angular.module("de.nordakademie.iaa.survey.toolbar", [
+        "de.nordakademie.iaa.survey.routes",
+        "de.nordakademie.iaa.survey.editor",
         "de.nordakademie.iaa.survey.core",
         "de.nordakademie.iaa.i18n",
-        "de.nordakademie.iaa.survey.editor",
-        "ui.router",
         "ngMaterial"
     ]);
 
     toolbar.controller("mainController", ["appService", ToolBarController]);
-    toolbar.directive("surveyToolBar", ToolBarDirective);
+    toolbar.directive("surveyToolBar", ["ROUTE_STATES", ToolBarDirective]);
 
     function ToolBarController(appService) {
         this.authenticated = false;
@@ -31,11 +31,11 @@
         }
     }
 
-    function ToolBarDirective() {
+    function ToolBarDirective(ROUTE_STATES) {
         return {
             restrict: "E",
             template: "<md-toolbar ng-controller=\"mainController as toolBarCrtl\" layout=\"row\" class=\"md-toolbar-tools\">\n" +
-                "        <a ui-sref='dashboard' ><h2 md-truncate>{{\"APP_HEADLINE\"|translate}}</h2></a>\n" +
+                "        <a ui-sref="+ ROUTE_STATES.DASHBOARD_STATE +" ><h2 md-truncate>{{\"APP_HEADLINE\"|translate}}</h2></a>\n" +
                 "        <span flex></span>" +
                 "        <survey-editor-action-button icon='add' ng-show=\"toolBarCrtl.authenticated\">" +
                 "        </survey-editor-action-button>" +
