@@ -4,8 +4,6 @@ import de.nordakademie.iaa.examsurvey.domain.User;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.Optional;
-
 /**
  * Repository for {@link User}.
  *

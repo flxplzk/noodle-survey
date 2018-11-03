@@ -19,10 +19,16 @@ public class SurveyTest {
                 new GregorianCalendar(2018, 12, 1, 12, 0).getTime()
         );
 
+        final Event event = new Event();
+        event.setTitle("lol1");
+        final Event event2 = new Event();
+        event.setTitle("lol2");
+
         EqualsVerifier.forClass(Survey.class)
                 .withRedefinedSuperclass()
                 .withPrefabValues(Option.class, option1, option2)
-                .withIgnoredFields("options")
+                .withPrefabValues(Event.class, event, event2)
+                .withIgnoredFields("options", "event")
                 .usingGetClass()
                 .verify();
     }

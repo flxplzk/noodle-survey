@@ -40,7 +40,6 @@ public interface SurveyService {
      * survey where the user is the initiator with
      * {@link de.nordakademie.iaa.examsurvey.domain.SurveyStatus#PRIVATE}
      *
-     *
      * @param filterCriteria
      * @param requestingUser which requests
      * @return all surveys relevant for given {@link User}
@@ -55,7 +54,7 @@ public interface SurveyService {
      * @param authenticatedUser requesting User
      * @return requested Survey
      * @throws ResourceNotFoundException if the Survey was not found or is Private and
-     *                                 therefore only visible for its initiator
+     *                                   therefore only visible for its initiator
      */
     Survey loadSurveyWithUser(@NotNull final Long identifier,
                               @NotNull final User authenticatedUser);

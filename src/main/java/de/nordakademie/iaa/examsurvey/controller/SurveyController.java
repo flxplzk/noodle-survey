@@ -12,7 +12,12 @@ import de.nordakademie.iaa.examsurvey.service.ParticipationService;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Set;
@@ -164,8 +169,8 @@ public class SurveyController {
     /**
      * saves existent participation.
      *
-     * @param participation to update
-     * @param surveyIdentifier of participation
+     * @param participation           to update
+     * @param surveyIdentifier        of participation
      * @param participationIdentifier of participation
      * @return updated participation
      */

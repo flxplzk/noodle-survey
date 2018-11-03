@@ -45,6 +45,7 @@ public class User extends AuditModel implements UserDetails {
     public String getUsername() {
         return username;
     }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -64,6 +65,7 @@ public class User extends AuditModel implements UserDetails {
     public String getFirstName() {
         return firstName;
     }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -72,6 +74,7 @@ public class User extends AuditModel implements UserDetails {
     public String getLastName() {
         return lastName;
     }
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }

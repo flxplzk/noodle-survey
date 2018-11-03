@@ -12,7 +12,6 @@ import de.nordakademie.iaa.examsurvey.service.EventService;
 import de.nordakademie.iaa.examsurvey.service.NotificationService;
 import de.nordakademie.iaa.examsurvey.service.SurveyService;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 

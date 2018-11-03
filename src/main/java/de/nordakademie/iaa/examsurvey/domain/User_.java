@@ -12,6 +12,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 public class User_ extends AuditModel_ {
     protected User_() {
     }
+
     public static volatile SingularAttribute<User, String> firstName;
     public static volatile SingularAttribute<User, String> lastName;
     public static volatile SingularAttribute<User, String> password;

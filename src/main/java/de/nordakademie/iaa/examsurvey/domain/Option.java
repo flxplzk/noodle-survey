@@ -2,14 +2,10 @@ package de.nordakademie.iaa.examsurvey.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Objects;
-import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -25,7 +21,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "options")
-public class Option extends AuditModel{
+public class Option extends AuditModel {
     private Date dateTime;
     private Survey survey;
 
@@ -34,6 +30,7 @@ public class Option extends AuditModel{
     public Date getDateTime() {
         return dateTime;
     }
+
     public void setDateTime(Date dateTime) {
         this.dateTime = dateTime;
     }
@@ -44,6 +41,7 @@ public class Option extends AuditModel{
     public Survey getSurvey() {
         return survey;
     }
+
     public void setSurvey(Survey survey) {
         this.survey = survey;
     }
