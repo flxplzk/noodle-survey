@@ -41,12 +41,24 @@ public class UserController {
         this.eventService = eventService;
     }
 
+    /**
+     * returns current Principal. Call only works with authenticated request.
+     *
+     * @param user current
+     * @return current user
+     */
     @RequestMapping(value = PATH_USERS + "/me",
             method = RequestMethod.GET)
     public Principal user(Principal user) {
         return user;
     }
 
+    /**
+     * creates new user
+     *
+     * @param user to create
+     * @return created user
+     */
     @RequestMapping(value = PATH_USERS,
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
@@ -56,32 +68,53 @@ public class UserController {
         return userService.createUser(user);
     }
 
+    /**
+     * returns all notifications for current user
+     *
+     * @return notifications for authenticated user
+     */
     @RequestMapping(value = PATH_USERS_NOTIFICATIONS,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Notification> getNotifications(){
+    public List<Notification> getNotifications() {
         User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
         return notificationService.getNotificationsForUser(authenticatedUser);
     }
 
+    /**
+     * deletes Participatiosn with {@param id}
+     *
+     * @param id of the notification to delete
+     */
     @RequestMapping(value = PATH_USERS_NOTIFICATIONS + "/{id}",
             method = RequestMethod.DELETE)
-    public void getNotifications(@PathVariable(name = "id") Long id){
+    public void getNotifications(@PathVariable(name = "id") Long id) {
         notificationService.deleteNotificationWithUser(id, authenticationService.getCurrentAuthenticatedUser());
     }
 
+    /**
+     * loads all events for authenticated User
+     *
+     * @return all events for authenticated User
+     */
     @RequestMapping(value = PATH_USERS_EVENTS,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Event> loadEventsForUser(){
+    public List<Event> loadEventsForUser() {
         return eventService.loadAllEventsForAuthenticatedUser(authenticationService.getCurrentAuthenticatedUser());
     }
 
+    /**
+     * creates Event for Survey.
+     *
+     * @param event to create
+     * @return created event
+     */
     @RequestMapping(value = PATH_USERS_EVENTS,
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Event createEvent(@RequestBody Event event){
+    public Event createEvent(@RequestBody Event event) {
         return eventService.createEvent(event, authenticationService.getCurrentAuthenticatedUser());
     }
 }
