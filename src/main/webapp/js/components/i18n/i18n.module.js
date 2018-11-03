@@ -12,11 +12,39 @@
      *
      * @type {angular.Module}
      */
-    var app = angular.module("de.nordakademie.iaa.i18n", [
-        "pascalprecht.translate"
+    var i18n = angular.module("de.nordakademie.iaa.i18n", [
+        "pascalprecht.translate",
+        "ngMaterial"
     ]);
+    i18n.directive("languageSelector", LanguageButtonDirective);
+    i18n.controller("languageController", ["$scope", "$translate", LanguageSelectorController]);
 
-    app.config(function ($translateProvider) {
+    function LanguageButtonDirective() {
+        return {
+            restrict: "E",
+            controller: "languageController",
+            controllerAs: "languageCrtl",
+            template: "<div>" +
+                "<md-select style='padding-top: 7px' name=\"favoriteColor\" ng-model=\"preferredLanguage\" " +
+                "ng-change='languageCrtl.updateLanguage()' required>\n" +
+                "          <md-option ng-repeat='language in supportedLanguages' value=\"{{language}}\">" +
+                "               {{language.value}}" +
+                "           </md-option>\n" +
+                "        </md-select>" +
+                "</div>"
+        }
+    }
+
+    function LanguageSelectorController($scope, $translate) {
+        $scope.supportedLanguages = [{key: "en_US", value: "EN"}, {key: "de_DE", value:"DE"}];
+        $scope.preferredLanguage = $scope.supportedLanguages[0];
+        this.updateLanguage = function () {
+            var languageSelected = angular.fromJson($scope.preferredLanguage);
+            $translate.use(languageSelected.key);
+        }
+    }
+
+    i18n.config(function ($translateProvider) {
         // german
         $translateProvider.translations("de_DE", {
 
@@ -39,9 +67,9 @@
             AUTH_REGISTER_USER_ALREADY_EXISTS: "Es existiert bereits ein Benutzer mit dieser E-Mail Adresse. Bitte wähle eine Andere<.",
             AUTH_REGISTER_PASSWORD_NON_MATCH: "Die Kennwörter müssen übereinstimmen.",
             AUTH_REGISTER_USER_CREATED: "Benutzer wurde erfolgreich erstellt.",
-            LOGGED_OUT: "Dein Logout war erfolgreich."
+            LOGGED_OUT: "Dein Logout war erfolgreich.",
             DASHBOARD_OPEN_DETAILS: "Öffnen",
-            DASHBOARD_TITLE_ALL: "Alle Umfragen im Überblick",
+            DASHBOARD_TITLE_ALL: "Alle Umfragen",
             DASHBOARD_TITLE_OPEN: "Offen",
             DASHBOARD_TITLE_OWN: "Deine Umfragen",
             DASHBOARD_TITLE_PARTICIPATED: "Teilgenommen",
@@ -56,7 +84,7 @@
             DASHBOARD_SIDE_NAV_NEW_Notification: "Neue Benachrichtigung! :)",
 
             EDITOR_TITLE: "Neue Umfrage erstellen",
-            EDITOR_TITLE_NEW: "Neue Umfrage erstellen"
+            EDITOR_TITLE_NEW: "Neue Umfrage erstellen",
             EDITOR_TITLE_UPDATE: "Umfrage aktualisieren",
             EDITOR_NOT_FOUND: "Die angefragte Entität existiert nicht mehr.",
             EDITOR_SAVE: "Veröffentlichen",
@@ -130,8 +158,8 @@
             DASHBOARD_SIDE_NAV_NEW_EVENT: "New events for you!",
             DASHBOARD_SIDE_NAV_NEW_NOTIFICATION: "New notification! :)",
             EDITOR_TITLE: "Create new survey",
-            EDITOR_TITLE_NEW:  "Create new survey",
-            EDITOR_TITLE_UPDATE:  "Update survey",
+            EDITOR_TITLE_NEW: "Create new survey",
+            EDITOR_TITLE_UPDATE: "Update survey",
             EDITOR_NOT_FOUND: "The requested entity does not exist anymore :( ",
 
             EDITOR_SAVE: "Save and publish",

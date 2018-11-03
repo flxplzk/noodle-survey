@@ -37,6 +37,7 @@
             template: "<md-toolbar ng-controller=\"mainController as toolBarCrtl\" layout=\"row\" class=\"md-toolbar-tools\">\n" +
                 "        <a ui-sref="+ ROUTE_STATES.DASHBOARD_STATE +" ><h2 md-truncate>{{\"APP_HEADLINE\"|translate}}</h2></a>\n" +
                 "        <span flex></span>" +
+                "        <language-selector></language-selector>" +
                 "        <survey-editor-action-button icon='add' ng-show=\"toolBarCrtl.authenticated\">" +
                 "        </survey-editor-action-button>" +
                 "        <md-button ng-show=\"toolBarCrtl.authenticated\" ng-click=\"toolBarCrtl.logout()\"\n" +
