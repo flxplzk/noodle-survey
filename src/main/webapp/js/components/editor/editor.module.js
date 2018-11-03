@@ -10,11 +10,11 @@
      */
     var editor = angular.module("de.nordakademie.iaa.survey.editor", [
         "de.nordakademie.iaa.survey.core.domain",
+        "de.nordakademie.iaa.survey.routes",
         "de.nordakademie.iaa.survey.core",
         "de.nordakademie.iaa.i18n",
-        "ngMaterial",
         "md.time.picker",
-        "ui.router"
+        "ngMaterial"
     ]);
 
     editor.directive("surveyEditorActionButton", FloatingActionButtonDirective);
@@ -23,7 +23,7 @@
     editor.controller("floatingEditorController", ["$mdDialog", "$scope", FloatingActionButtonController]);
     editor.controller("closeActionButtonController", ["$mdDialog", "$scope", "EventResource", CloseActionButtonController]);
     editor.controller("deleteSurveyController", ["SurveyResource", "$mdDialog", "$translate",
-        "$scope", "$state", "notificationService", DeleteSurveyController]);
+        "$scope", "$state", "notificationService", "ROUTE_STATES", DeleteSurveyController]);
 
     function FloatingActionButtonDirective() {
         return {
@@ -77,7 +77,8 @@
         };
     }
 
-    function SurveyCloseController($mdDialog, $scope, EventResource, SurveyResource, OptionResource, $state, surveyId) {
+    function SurveyCloseController($mdDialog, $scope, EventResource, SurveyResource,
+                                   OptionResource, $state, surveyId) {
         $scope.caption = "EDITOR_CLOSE_TITLE";
         $scope.survey = SurveyResource.get({survey: surveyId});
         $scope.options = OptionResource.query({survey: surveyId});
@@ -98,7 +99,7 @@
             }
 
             function reject(error) {
-
+                // TODO
             }
         };
 
@@ -125,7 +126,7 @@
         }
     }
 
-    function DeleteSurveyController(SurveyResource, $mdDialog, $translate, $scope, $state, notificationService) {
+    function DeleteSurveyController(SurveyResource, $mdDialog, $translate, $scope, $state, notificationService, ROUTE_STATES) {
         this.delete = function (event) {
             var confirm = $mdDialog.confirm()
                 .title($translate.instant("EDITOR_CONFIRM_DELETE_TITLE"))
@@ -138,7 +139,7 @@
                 SurveyResource.delete({survey: $scope.surveyId}, success, reject);
 
                 function success(value) {
-                    $state.go("dashboard");
+                    $state.go(ROUTE_STATES.DASHBOARD_STATE);
                     $mdDialog.cancel();
                 }
 
@@ -159,7 +160,8 @@
             $mdDialog.show({
                 locals: {surveyId: $scope.surveyId},
                 templateUrl: "/js/components/editor/editor.dialog.template.html",
-                controller: ["$scope", "$mdDialog", "SurveyResource", "OptionResource", "$state", "notificationService", "surveyId", EditorController],
+                controller: ["$scope", "$mdDialog", "SurveyResource", "OptionResource", "$state",
+                    "notificationService", "ROUTE_STATES", "surveyId", EditorController],
                 controllerAs: "surveyEditorController",
                 parent: angular.element(document.body),
                 targetEvent: ev,
@@ -168,7 +170,8 @@
             })
         };
 
-        function EditorController($scope, $mdDialog, SurveyResource, OptionResource, $state, notificationService, surveyId) {
+        function EditorController($scope, $mdDialog, SurveyResource, OptionResource, $state,
+                                  notificationService, ROUTE_STATES, surveyId) {
             var vm = this;
             $scope.createNew = angular.isUndefined(surveyId);
             $scope.caption = $scope.createNew ? "EDITOR_TITLE_NEW" : "EDITOR_TITLE_UPDATE";
@@ -266,7 +269,7 @@
 
             function successHandler(survey) {
                 if ($scope.createNew) {
-                    $state.go("detail", {surveyId: survey.getId()});
+                    $state.go(ROUTE_STATES.DETAIL_STATE, {surveyId: survey.getId()});
                 } else {
                     $state.go($state.current, {}, {reload: true});
                 }
