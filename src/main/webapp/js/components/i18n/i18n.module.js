@@ -116,8 +116,8 @@
             DETAIL_INITIATOR: "Ersteller",
             DETAIL_SAVE_SUCCESS: "Änderungen wurden gespeichert!",
             DETAIL_SUM: "Summe",
-            ERROR_HEADING: "Ups, das hätte nicht passieren sollen. Es sei denn, du wolltest hierhin. In diesem Fall: Herzlichen Glückwunsch!",
-            ERROR_SUB_HEADING: "Um dich etwas aufzumuntern, haben wir unseren guten Freund Nicolas gefragt, was er davon hält: "
+            ERROR_HEADING: "Ups, das hätte nicht passieren sollen. Es sei denn, Du wolltest hierhin. In diesem Fall: Herzlichen Glückwunsch!",
+            ERROR_SUB_HEADING: "Um Dich etwas aufzumuntern, haben wir unseren guten Freund Nicolas gefragt, was er davon hält: "
         });
 
         // english
