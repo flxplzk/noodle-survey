@@ -1,5 +1,15 @@
 (function () {
 
+    // ########################## MODULE DECLARATION #####################################
+
+    /**
+     * @name "de.nordakademie.iaa.survey.routes"
+     *
+     * Routes Configuration Module.
+     * @author Felix Plazek
+     *
+     * @type {angular.Module}
+     */
     var routing = angular.module("de.nordakademie.iaa.survey.routes", [
         "de.nordakademie.iaa.survey.core",
         "ui.router"
@@ -13,7 +23,9 @@
         DEFAULT_STATE: "home"
     };
 
-
+    /**
+     * wrapping routes as constant for better maintainability
+     */
     routing.constant("ROUTE_STATES", ROUTE_STATES);
 
     routing.config(function ($stateProvider) {
@@ -26,7 +38,6 @@
                 $transition$.abort();
                 stateService.go(ROUTE_STATES.LOGIN_STATE);
                 console.log("user not authenticated; redirected to login!");
-
             });
         };
 

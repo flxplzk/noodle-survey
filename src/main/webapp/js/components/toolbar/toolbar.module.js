@@ -10,10 +10,10 @@
      * @type {angular.Module}
      */
     var toolbar = angular.module("de.nordakademie.iaa.survey.toolbar", [
+        "de.nordakademie.iaa.survey.routes",
+        "de.nordakademie.iaa.survey.editor",
         "de.nordakademie.iaa.survey.core",
         "de.nordakademie.iaa.i18n",
-        "de.nordakademie.iaa.survey.editor",
-        "de.nordakademie.iaa.survey.routes",
         "ngMaterial"
     ]);
 
