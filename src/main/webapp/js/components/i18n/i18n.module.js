@@ -27,7 +27,7 @@
             template: "<div>" +
                 "<md-select style='padding-top: 7px' name=\"favoriteColor\" ng-model=\"preferredLanguage\" " +
                 "ng-change='languageCrtl.updateLanguage()' required>\n" +
-                "          <md-option ng-repeat='language in supportedLanguages' value=\"{{language}}\">" +
+                "          <md-option ng-repeat='language in supportedLanguages' ng-selected='language.isDefault' value=\"{{language}}\">" +
                 "               {{language.value}}" +
                 "           </md-option>\n" +
                 "        </md-select>" +
@@ -36,7 +36,7 @@
     }
 
     function LanguageSelectorController($scope, $translate) {
-        $scope.supportedLanguages = [{key: "en_US", value: "EN"}, {key: "de_DE", value:"DE"}];
+        $scope.supportedLanguages = [{key: "en_US", value: "EN", isDefault: true}, {key: "de_DE", value:"DE", isDefault: false}];
         $scope.preferredLanguage = $scope.supportedLanguages[0];
         this.updateLanguage = function () {
             var languageSelected = angular.fromJson($scope.preferredLanguage);
