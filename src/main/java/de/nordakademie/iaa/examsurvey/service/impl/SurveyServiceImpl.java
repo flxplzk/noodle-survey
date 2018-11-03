@@ -1,13 +1,13 @@
 package de.nordakademie.iaa.examsurvey.service.impl;
 
-import de.nordakademie.iaa.examsurvey.controller.filtercriterion.FilterCriterion;
+import de.nordakademie.iaa.examsurvey.controller.filtercriterion.FilterCriteria;
 import de.nordakademie.iaa.examsurvey.domain.NotificationType;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.SurveyStatus;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
-import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
 import de.nordakademie.iaa.examsurvey.exception.ResourceNotFoundException;
+import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
 import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
 import de.nordakademie.iaa.examsurvey.service.NotificationService;
 import de.nordakademie.iaa.examsurvey.service.OptionService;
@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Set;
 
 import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.hasTitle;
-import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.isVisibleForUser;
 import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.isVisibleForUserWithFilterCriteria;
 
 /**
@@ -48,7 +47,7 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
      * {@inheritDoc}
      */
     @Override
-    public Survey createSurvey(Survey survey, User initiator) {
+    public Survey createSurvey(final Survey survey, final User initiator) {
         requireNonNullUser(initiator);
         requireNonExistent(survey);
         survey.setInitiator(initiator);
@@ -61,11 +60,11 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
      * {@inheritDoc}
      */
     @Override
-    public Survey update(Survey survey, User authenticatedUser) {
+    public Survey update(final Survey survey, final User authenticatedUser) {
         final Survey persistedSurvey = findModifiableSurveyWithInitiator(survey, authenticatedUser);
+        notificationService.notifyUsersWithNotificationType(NotificationType.SURVEY_CHANGE, survey);
         participationService.deleteAllParticipationsForSurvey(survey);
         optionService.updateOptionsForSurvey(survey);
-        notificationService.notifyUsersWithNotificationType(NotificationType.SURVEY_CHANGE, survey);
         // For not getting trouble with JPA, only modifiable field values are copied to the persisted survey
         persistedSurvey.setDescription(survey.getDescription());
         persistedSurvey.setSurveyStatus(survey.getSurveyStatus());
@@ -76,7 +75,7 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
      * {@inheritDoc}
      */
     @Override
-    public void closeSurvey(Survey surveyToClose, User authenticatedUser) {
+    public void closeSurvey(final Survey surveyToClose, final User authenticatedUser) {
         final Survey persistedSurvey = findModifiableSurveyWithInitiator(surveyToClose, authenticatedUser);
         persistedSurvey.setSurveyStatus(SurveyStatus.CLOSED);
         surveyRepository.save(persistedSurvey);
@@ -86,7 +85,7 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
      * {@inheritDoc}
      */
     @Override
-    public void deleteSurvey(Long id, User authenticatedUser) {
+    public void deleteSurvey(final Long id, final User authenticatedUser) {
         final Survey existentSurvey = findDeletableSurveyWithInitiator(id, authenticatedUser);
         participationService.deleteAllParticipationsForSurvey(existentSurvey);
         optionService.deleteAllOptionsForSurvey(existentSurvey);
@@ -98,7 +97,8 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
      * {@inheritDoc}
      */
     @Override
-    public List<Survey> loadAllSurveysWithFilterCriteriaAndUser(Set<FilterCriterion> filterCriteria, User requestingUser) {
+    public List<Survey> loadAllSurveysWithFilterCriteriaAndUser(final Set<FilterCriteria> filterCriteria,
+                                                                final User requestingUser) {
         requireNonNullUser(requestingUser);
         return surveyRepository.findAll(isVisibleForUserWithFilterCriteria(requestingUser, filterCriteria));
     }
@@ -107,7 +107,7 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
      * {@inheritDoc}
      */
     @Override
-    public Survey loadSurveyWithUser(Long identifier, User authenticatedUser) {
+    public Survey loadSurveyWithUser(final Long identifier, final User authenticatedUser) {
         requireNonNullUser(authenticatedUser);
         return getSurveyVisibleForUser(identifier, authenticatedUser);
     }

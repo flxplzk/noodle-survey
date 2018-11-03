@@ -8,4 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ResponseStatus(HttpStatus.CONFLICT)
 public class UserAlreadyExistsException extends SurveyApplicationException {
+    public UserAlreadyExistsException() {
+        super();
+    }
 }

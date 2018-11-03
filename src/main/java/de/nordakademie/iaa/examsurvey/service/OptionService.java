@@ -25,11 +25,29 @@ public interface OptionService {
      * @param authenticatedUser which requests
      * @return list of options belonging to the survey
      */
-    List<Option> loadAllOptionsOfSurveyForUser(@NotNull Long surveyId, @NotNull User authenticatedUser);
+    List<Option> loadAllOptionsOfSurveyForUser(@NotNull final Long surveyId,
+                                               @NotNull final User authenticatedUser);
 
-    void saveOptionsForSurvey(Set<Option> options, Survey survey);
+    /**
+     * saves all option for {@param survey}
+     *
+     * @param options to save
+     * @param survey  the {@param options} belong
+     */
+    void saveOptionsForSurvey(@NotNull final Set<Option> options,
+                              @NotNull final Survey survey);
 
-    void updateOptionsForSurvey(Survey survey);
+    /**
+     * updates all options of {@param survey}
+     *
+     * @param survey with options
+     */
+    void updateOptionsForSurvey(@NotNull final Survey survey);
 
-    void deleteAllOptionsForSurvey(Survey existentSurvey);
+    /**
+     * deletes all option of survey
+     *
+     * @param existentSurvey to delete options of
+     */
+    void deleteAllOptionsForSurvey(@NotNull final Survey existentSurvey);
 }

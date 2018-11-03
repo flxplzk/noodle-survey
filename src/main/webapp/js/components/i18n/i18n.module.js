@@ -128,7 +128,7 @@
             DASHBOARD_SIDE_NAV_NOTIFICATION_TYPE_DESC_EVENT_PLANNED: "The initiator has closed the survey and planned the event. If you participated on the chosen options, check your upcoming events",
             DASHBOARD_SIDE_NAV_SHOW: "View details",
             DASHBOARD_SIDE_NAV_NEW_EVENT: "New events for you!",
-            DASHBOARD_SIDE_NAV_NEW_Notification: "New notification! :)",
+            DASHBOARD_SIDE_NAV_NEW_NOTIFICATION: "New notification! :)",
             EDITOR_TITLE: "Create new survey",
             EDITOR_TITLE_NEW:  "Create new survey",
             EDITOR_TITLE_UPDATE:  "Update survey",

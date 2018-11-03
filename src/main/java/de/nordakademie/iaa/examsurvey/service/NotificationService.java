@@ -48,5 +48,6 @@ public interface NotificationService {
      * deletes notification with {@param notificationId} if existent and {@link Notification#getUser()}
      * equals {@param user}
      */
-    void deleteNotificationWithUser(@NotNull Long notificationId, @NotNull User user);
+    void deleteNotificationWithUser(@NotNull final Long notificationId,
+                                    @NotNull final User user);
 }

@@ -3,7 +3,13 @@ package de.nordakademie.iaa.examsurvey.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Objects;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * Base Entity for notifications.
@@ -35,6 +41,7 @@ public class Notification extends AuditModel {
     public User getUser() {
         return user;
     }
+
     public void setUser(User user) {
         this.user = user;
     }
@@ -44,6 +51,7 @@ public class Notification extends AuditModel {
     public Survey getSurvey() {
         return survey;
     }
+
     public void setSurvey(Survey survey) {
         this.survey = survey;
     }
@@ -53,6 +61,7 @@ public class Notification extends AuditModel {
     public NotificationType getNotificationType() {
         return notificationType;
     }
+
     public void setNotificationType(NotificationType notificationType) {
         this.notificationType = notificationType;
     }

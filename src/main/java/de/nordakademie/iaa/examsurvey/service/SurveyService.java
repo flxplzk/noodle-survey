@@ -1,6 +1,6 @@
 package de.nordakademie.iaa.examsurvey.service;
 
-import de.nordakademie.iaa.examsurvey.controller.filtercriterion.FilterCriterion;
+import de.nordakademie.iaa.examsurvey.controller.filtercriterion.FilterCriteria;
 import de.nordakademie.iaa.examsurvey.domain.Participation;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
@@ -40,12 +40,11 @@ public interface SurveyService {
      * survey where the user is the initiator with
      * {@link de.nordakademie.iaa.examsurvey.domain.SurveyStatus#PRIVATE}
      *
-     *
      * @param filterCriteria
      * @param requestingUser which requests
      * @return all surveys relevant for given {@link User}
      */
-    List<Survey> loadAllSurveysWithFilterCriteriaAndUser(Set<FilterCriterion> filterCriteria, @NotNull final User requestingUser);
+    List<Survey> loadAllSurveysWithFilterCriteriaAndUser(Set<FilterCriteria> filterCriteria, @NotNull final User requestingUser);
 
     /**
      * Loads the requested Survey with id = {@param identifier} for
@@ -55,7 +54,7 @@ public interface SurveyService {
      * @param authenticatedUser requesting User
      * @return requested Survey
      * @throws ResourceNotFoundException if the Survey was not found or is Private and
-     *                                 therefore only visible for its initiator
+     *                                   therefore only visible for its initiator
      */
     Survey loadSurveyWithUser(@NotNull final Long identifier,
                               @NotNull final User authenticatedUser);

@@ -23,7 +23,7 @@ public interface ParticipationService {
      *
      * @param survey for which the participations shall be deleted
      */
-    void deleteAllParticipationsForSurvey(@NotNull Survey survey);
+    void deleteAllParticipationsForSurvey(@NotNull final Survey survey);
 
     /**
      * Loads all Participations for {@param survey} if
@@ -33,8 +33,8 @@ public interface ParticipationService {
      * @param authenticatedUser that requests
      * @return all participations for the survey
      */
-    List<Participation> loadAllParticipationsOfSurveyForUser(@NotNull Long identifier,
-                                                             @NotNull User authenticatedUser);
+    List<Participation> loadAllParticipationsOfSurveyForUser(@NotNull final Long identifier,
+                                                             @NotNull final User authenticatedUser);
 
     /**
      * Saves or updates the {@param participation} if the persisted
@@ -46,7 +46,7 @@ public interface ParticipationService {
      * @param authenticatedUser that requests
      * @return persisted participation
      */
-    Participation saveParticipationForSurveyWithAuthenticatedUser(@NotNull Participation participation,
-                                                                  @NotNull Long identifier,
-                                                                  @NotNull User authenticatedUser);
+    Participation saveParticipationForSurveyWithAuthenticatedUser(@NotNull final Participation participation,
+                                                                  @NotNull final Long identifier,
+                                                                  @NotNull final User authenticatedUser);
 }

@@ -38,5 +38,4 @@ public class SurveyBasicAuthenticationEntryPoint extends BasicAuthenticationEntr
         setRealmName(realm);
         super.afterPropertiesSet();
     }
-
 }

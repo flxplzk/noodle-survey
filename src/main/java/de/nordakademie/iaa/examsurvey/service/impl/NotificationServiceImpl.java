@@ -10,12 +10,9 @@ import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
 import de.nordakademie.iaa.examsurvey.exception.ResourceNotFoundException;
 import de.nordakademie.iaa.examsurvey.persistence.NotificationRepository;
 import de.nordakademie.iaa.examsurvey.persistence.ParticipationRepository;
-import de.nordakademie.iaa.examsurvey.persistence.UserRepository;
 import de.nordakademie.iaa.examsurvey.persistence.specification.NotificationSpecifications;
-import de.nordakademie.iaa.examsurvey.persistence.specification.UserSpecifications;
 import de.nordakademie.iaa.examsurvey.service.NotificationService;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 import static de.nordakademie.iaa.examsurvey.persistence.specification.NotificationSpecifications.byUser;
@@ -50,8 +47,8 @@ public class NotificationServiceImpl implements NotificationService {
      * {@inheritDoc}
      */
     @Override
-    public void notifyUsersWithNotificationType(@NotNull NotificationType type,
-                                                @NotNull Survey targetSurvey) {
+    public void notifyUsersWithNotificationType(final NotificationType type,
+                                                final Survey targetSurvey) {
         final List<Participation> participationsOfSurvey = participationRepository.findAll(bySurvey(targetSurvey));
         final List<Notification> notifications = Lists.newArrayList();
         participationsOfSurvey.forEach(participation ->
@@ -64,7 +61,7 @@ public class NotificationServiceImpl implements NotificationService {
      * {@inheritDoc}
      */
     @Override
-    public void deleteAllNotificationsForSurvey(@NotNull Survey survey) {
+    public void deleteAllNotificationsForSurvey(final Survey survey) {
         final List<Notification> notifications = notificationRepository
                 .findAll(NotificationSpecifications.bySurvey(survey));
         notificationRepository.deleteAll(notifications);
@@ -74,10 +71,10 @@ public class NotificationServiceImpl implements NotificationService {
      * {@inheritDoc}
      */
     @Override
-    public void deleteNotificationWithUser(@NotNull final Long notificationId, @NotNull final User user) {
+    public void deleteNotificationWithUser(final Long notificationId, final User user) {
         final Notification existentNotification = notificationRepository.findById(notificationId)
                 .orElseThrow(ResourceNotFoundException::new);
-        if (user == null || !user.equals(existentNotification.getUser())){
+        if (user == null || !user.equals(existentNotification.getUser())) {
             throw new PermissionDeniedException("User must be non null or affected user.");
         }
         notificationRepository.deleteById(notificationId);

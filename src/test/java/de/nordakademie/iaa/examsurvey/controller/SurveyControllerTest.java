@@ -19,6 +19,8 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -67,7 +69,7 @@ public class SurveyControllerTest {
         User user = mock(User.class);
 
         when(authenticationService.getCurrentAuthenticatedUser()).thenReturn(user);
-        when(surveyService.loadAllSurveysWithFilterCriteriaAndUser(null, user)).thenReturn(surveys);
+        when(surveyService.loadAllSurveysWithFilterCriteriaAndUser(any(), eq(user))).thenReturn(surveys);
 
         // WHEN
         List<Survey> loadedSurveys = controllerUnderTest.loadSurveys(null);

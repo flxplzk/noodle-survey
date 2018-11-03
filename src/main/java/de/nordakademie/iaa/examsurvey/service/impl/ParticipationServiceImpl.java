@@ -34,7 +34,7 @@ public class ParticipationServiceImpl extends AbstractAuditModelService implemen
      * {@inheritDoc}
      */
     @Override
-    public void deleteAllParticipationsForSurvey(Survey survey) {
+    public void deleteAllParticipationsForSurvey(final Survey survey) {
         List<Participation> participationsToDelete = participationRepository.findAll(withSurvey(survey));
         participationRepository.deleteAll(participationsToDelete);
     }
@@ -43,7 +43,8 @@ public class ParticipationServiceImpl extends AbstractAuditModelService implemen
      * {@inheritDoc}
      */
     @Override
-    public List<Participation> loadAllParticipationsOfSurveyForUser(Long identifier, User authenticatedUser) {
+    public List<Participation> loadAllParticipationsOfSurveyForUser(final Long identifier,
+                                                                    final User authenticatedUser) {
         Survey survey = getSurveyVisibleForUser(identifier, authenticatedUser);
         return participationRepository.findAll(withSurvey(survey));
     }
@@ -53,8 +54,8 @@ public class ParticipationServiceImpl extends AbstractAuditModelService implemen
      */
     @Override
     public Participation saveParticipationForSurveyWithAuthenticatedUser(Participation participation,
-                                                                         Long surveyId,
-                                                                         User authenticatedUser) {
+                                                                         final Long surveyId,
+                                                                         final User authenticatedUser) {
         requireNonNullUser(authenticatedUser);
         final Survey survey = getSurveyVisibleForUser(surveyId, authenticatedUser);
         requireNonInitiator(survey, authenticatedUser);
@@ -67,13 +68,23 @@ public class ParticipationServiceImpl extends AbstractAuditModelService implemen
 
     // #################################### VALIDATION METHODS #########################################
 
-    private void requireNonInitiator(Survey survey, User authenticatedUser) {
+    private void requireNonInitiator(final Survey survey, final User authenticatedUser) {
         if (survey.getInitiator().equals(authenticatedUser)) {
             throw new PermissionDeniedException("Initiator may not participate to own survey");
         }
     }
 
-    private Participation requireOne(final Survey survey, final Participation newParticipation, final User authenticatedUser) {
+    /**
+     * checks if a participation of user for survey exits.
+     *
+     * @param survey            of participation
+     * @param newParticipation  to save
+     * @param authenticatedUser to search participation for
+     * @return returns persisted one with copied properties, new one if no participation was found
+     */
+    private Participation requireOne(final Survey survey,
+                                     final Participation newParticipation,
+                                     final User authenticatedUser) {
         Participation participation = participationRepository.findOne(withSurveyAndUser(survey, authenticatedUser))
                 .orElse(newParticipation);
         participation.setUser(authenticatedUser);

@@ -1,10 +1,8 @@
 package de.nordakademie.iaa.examsurvey.domain;
 
-import javax.persistence.metamodel.PluralAttribute;
 import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
-import java.util.Set;
 
 /**
  * {@link StaticMetamodel} for type {@link Participation}
