@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         return findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("No User with given username found"));
     }
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findOne(byUsername(userName));
     }
 
-    private void requireNonExistent(User user) {
+    private void requireNonExistent(final User user) {
         if (findUserByUsername(user.getUsername()).isPresent()) {
             throw new UserAlreadyExistsException();
         }

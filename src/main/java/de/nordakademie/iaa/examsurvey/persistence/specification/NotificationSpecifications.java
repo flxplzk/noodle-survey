@@ -10,6 +10,8 @@ import org.springframework.data.jpa.domain.Specification;
  * Specifications for {@link Notification}.
  *
  * @author Felix Plazek
+ * @author Bengt-Lasse Arndt
+ * @author Robert Peters
  */
 public class NotificationSpecifications {
     public static Specification<Notification> byUser(User authenticatedUser) {

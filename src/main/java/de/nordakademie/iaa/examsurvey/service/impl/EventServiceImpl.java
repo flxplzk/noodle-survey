@@ -42,7 +42,7 @@ public class EventServiceImpl implements EventService {
      * {@inheritDoc}
      */
     @Override
-    public Event createEvent(Event event, User authenticatedUser) {
+    public Event createEvent(final Event event, final User authenticatedUser) {
         surveyService.closeSurvey(event.getSurvey(), authenticatedUser);
         notificationService.notifyUsersWithNotificationType(NotificationType.EVENT_PLANNED, event.getSurvey());
         event.setParticipants(
@@ -60,7 +60,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> loadAllEventsForAuthenticatedUser(@NotNull User authenticatedUser) {
+    public List<Event> loadAllEventsForAuthenticatedUser(final User authenticatedUser) {
         requireNonNullUser(authenticatedUser);
         return eventRepository.findAll(byUser(authenticatedUser));
     }

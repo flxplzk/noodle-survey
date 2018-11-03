@@ -37,7 +37,7 @@ public class OptionServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public void updateOptionsForSurvey(Survey survey) {
+    public void updateOptionsForSurvey(final Survey survey) {
         if (survey.getOptions() == null) {
             throw new MissingDataException("User must provide at least one Option for a survey; aborted update!");
         }
@@ -60,7 +60,8 @@ public class OptionServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public void saveOptionsForSurvey(Set<Option> options, Survey survey) {
+    public void saveOptionsForSurvey(final Set<Option> options,
+                                     final Survey survey) {
         options.forEach(option -> option.setSurvey(survey));
         optionRepository.saveAll(options);
     }
@@ -69,7 +70,7 @@ public class OptionServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public void deleteAllOptionsForSurvey(Survey existentSurvey) {
+    public void deleteAllOptionsForSurvey(final Survey existentSurvey) {
         List<Option> persisted = findOptionsBySurvey(existentSurvey);
         optionRepository.deleteAll(persisted);
     }
@@ -78,7 +79,8 @@ public class OptionServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public List<Option> loadAllOptionsOfSurveyForUser(Long surveyId, User authenticatedUser) {
+    public List<Option> loadAllOptionsOfSurveyForUser(final Long surveyId,
+                                                      final User authenticatedUser) {
         final Survey survey = getSurveyVisibleForUser(surveyId, authenticatedUser);
         return Lists.newArrayList(optionRepository.findAll(OptionSpecifications.hasSurvey(survey)));
     }

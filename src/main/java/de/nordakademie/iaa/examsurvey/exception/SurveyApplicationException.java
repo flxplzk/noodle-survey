@@ -5,23 +5,11 @@ package de.nordakademie.iaa.examsurvey.exception;
  *
  * @author Felix Plazek
  */
-public class SurveyApplicationException extends RuntimeException {
-    public SurveyApplicationException() {
+abstract class SurveyApplicationException extends RuntimeException {
+    SurveyApplicationException() {
     }
 
-    public SurveyApplicationException(String message) {
+    SurveyApplicationException(String message) {
         super(message);
-    }
-
-    public SurveyApplicationException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public SurveyApplicationException(Throwable cause) {
-        super(cause);
-    }
-
-    public SurveyApplicationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
     }
 }
