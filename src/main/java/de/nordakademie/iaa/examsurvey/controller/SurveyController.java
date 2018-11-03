@@ -1,7 +1,7 @@
 package de.nordakademie.iaa.examsurvey.controller;
 
 import com.google.common.collect.Sets;
-import de.nordakademie.iaa.examsurvey.controller.filtercriterion.FilterCriterion;
+import de.nordakademie.iaa.examsurvey.controller.filtercriterion.FilterCriteria;
 import de.nordakademie.iaa.examsurvey.domain.Option;
 import de.nordakademie.iaa.examsurvey.domain.Participation;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
@@ -18,8 +18,12 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author Felix Plazek
- * @author Robert Peters
+ * Controller for resources concerning {@link Survey}
+ *
+ * @author felix plazek
+ * @author robert peters
+ * @author bengt-lasse arndt
+ * @author sascha pererva
  */
 @RestController
 public class SurveyController {
@@ -45,6 +49,12 @@ public class SurveyController {
         this.participationService = participationService;
     }
 
+    /**
+     * creates and returns Survey.
+     *
+     * @param survey to create
+     * @return persisted Survey
+     */
     @RequestMapping(value = PATH_SURVEYS,
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
@@ -53,6 +63,13 @@ public class SurveyController {
         return surveyService.createSurvey(survey, getAuthenticatedUser());
     }
 
+    /**
+     * updates Survey.
+     *
+     * @param id     of survey
+     * @param survey to update
+     * @return updated Survey
+     */
     @RequestMapping(value = PATH_SURVEYS + "/{" + PATH_V_IDENTIFIER + "}",
             method = RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
@@ -63,50 +80,95 @@ public class SurveyController {
         return surveyService.update(survey, getAuthenticatedUser());
     }
 
+    /**
+     * deletes Survey with {@param id}
+     *
+     * @param id of survey to delete
+     */
     @RequestMapping(value = PATH_SURVEYS + "/{" + PATH_V_IDENTIFIER + "}",
             method = RequestMethod.DELETE)
     public void deleteSurvey(@PathVariable(name = PATH_V_IDENTIFIER) Long id) {
         surveyService.deleteSurvey(id, getAuthenticatedUser());
     }
 
+    /**
+     * Loads all Surveys matching optional {@param filterParams}.
+     *
+     * @param filterParams to filter result with
+     * @return retrieved surveys
+     */
     @RequestMapping(value = PATH_SURVEYS,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Survey> loadSurveys(@RequestParam(name = "filter", required = false) final List<String> filterParams) {
-        Set<FilterCriterion> filterCriteria = FilterCriterion.of(
+        Set<FilterCriteria> filterCriteria = FilterCriteria.of(
                 filterParams != null ? Sets.newHashSet(filterParams) : Sets.newHashSet());
         return surveyService.loadAllSurveysWithFilterCriteriaAndUser(filterCriteria, getAuthenticatedUser());
     }
 
+    /**
+     * finds and returns Survey with id equals {@param id}
+     *
+     * @param id of survey to load
+     * @return survey with id {@param id}
+     */
     @RequestMapping(value = PATH_SURVEYS_IDENTIFIER,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Survey loadSurvey(@PathVariable(value = PATH_V_IDENTIFIER) final Long identifier) {
-        return surveyService.loadSurveyWithUser(identifier, getAuthenticatedUser());
+    public Survey loadSurvey(@PathVariable(value = PATH_V_IDENTIFIER) final Long id) {
+        return surveyService.loadSurveyWithUser(id, getAuthenticatedUser());
     }
 
+    /**
+     * loads all options for survey with {@param id}
+     *
+     * @param id of survey to load the options
+     * @return options for the survey
+     */
     @RequestMapping(value = PATH_SURVEY_OPTIONS,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Option> loadOptions(@PathVariable(value = PATH_V_IDENTIFIER) Long identifier) {
-        return optionService.loadAllOptionsOfSurveyForUser(identifier, getAuthenticatedUser());
+    public List<Option> loadOptions(@PathVariable(value = PATH_V_IDENTIFIER) Long id) {
+        return optionService.loadAllOptionsOfSurveyForUser(id, getAuthenticatedUser());
     }
 
+    /**
+     * loads all participations for survey with {@param id}
+     *
+     * @param id of survey to load the participations
+     * @return participations for the survey
+     */
     @RequestMapping(value = PATH_SURVEY_PARTICIPATIONS,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Participation> loadParticipations(@PathVariable(name = PATH_V_IDENTIFIER) Long identifier) {
-        return participationService.loadAllParticipationsOfSurveyForUser(identifier, getAuthenticatedUser());
+    public List<Participation> loadParticipations(@PathVariable(name = PATH_V_IDENTIFIER) Long id) {
+        return participationService.loadAllParticipationsOfSurveyForUser(id, getAuthenticatedUser());
     }
 
+    /**
+     * crates a new Participation for a survey
+     *
+     * @param participation    to create
+     * @param surveyIdentifier of participation
+     * @return created Participation
+     */
     @RequestMapping(value = PATH_SURVEY_PARTICIPATIONS,
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Participation createParticipationForSurvey(@RequestBody Participation participation,
                                                       @PathVariable(name = PATH_V_IDENTIFIER) Long surveyIdentifier) {
-        return participationService.saveParticipationForSurveyWithAuthenticatedUser(participation, surveyIdentifier, getAuthenticatedUser());
+        return participationService.saveParticipationForSurveyWithAuthenticatedUser(participation, surveyIdentifier,
+                getAuthenticatedUser());
     }
 
+    /**
+     * saves existent participation.
+     *
+     * @param participation to update
+     * @param surveyIdentifier of participation
+     * @param participationIdentifier of participation
+     * @return updated participation
+     */
     @RequestMapping(value = PATH_SURVEY_PARTICIPATIONS + "/{participation}",
             method = RequestMethod.PUT,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

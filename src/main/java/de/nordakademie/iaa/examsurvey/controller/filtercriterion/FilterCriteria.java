@@ -5,10 +5,15 @@ import com.google.common.collect.Sets;
 
 import java.util.Set;
 
-public class FilterCriterion {
+/**
+ * UtilClass for enabling easy queries of surveys.
+ *
+ * @author felix plazek
+ */
+public class FilterCriteria {
     private final FilterType filterType;
 
-    private FilterCriterion(FilterType type) {
+    private FilterCriteria(FilterType type) {
         this.filterType = type;
     }
 
@@ -16,17 +21,24 @@ public class FilterCriterion {
         return filterType;
     }
 
-    public static Set<FilterCriterion> of(final Set<String> filterExpressions) {
-        final Set<FilterCriterion> criteria = Sets.newHashSet();
+    /**
+     * @param filterExpressions to filter with
+     * @return Set of supported Filters for given {@param filterExpressions}
+     */
+    public static Set<FilterCriteria> of(final Set<String> filterExpressions) {
+        final Set<FilterCriteria> criteria = Sets.newHashSet();
         filterExpressions.forEach(filterString -> {
             final FilterType type = FilterType.of(filterString);
             if (type != null) {
-                criteria.add(new FilterCriterion(type));
+                criteria.add(new FilterCriteria(type));
             }
         });
         return criteria;
     }
 
+    /**
+     * enum for supported filter types
+     */
     public enum FilterType {
         OWN("own"),
         OPEN("open"),

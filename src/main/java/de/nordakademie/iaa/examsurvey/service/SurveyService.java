@@ -1,6 +1,6 @@
 package de.nordakademie.iaa.examsurvey.service;
 
-import de.nordakademie.iaa.examsurvey.controller.filtercriterion.FilterCriterion;
+import de.nordakademie.iaa.examsurvey.controller.filtercriterion.FilterCriteria;
 import de.nordakademie.iaa.examsurvey.domain.Participation;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
@@ -45,7 +45,7 @@ public interface SurveyService {
      * @param requestingUser which requests
      * @return all surveys relevant for given {@link User}
      */
-    List<Survey> loadAllSurveysWithFilterCriteriaAndUser(Set<FilterCriterion> filterCriteria, @NotNull final User requestingUser);
+    List<Survey> loadAllSurveysWithFilterCriteriaAndUser(Set<FilterCriteria> filterCriteria, @NotNull final User requestingUser);
 
     /**
      * Loads the requested Survey with id = {@param identifier} for

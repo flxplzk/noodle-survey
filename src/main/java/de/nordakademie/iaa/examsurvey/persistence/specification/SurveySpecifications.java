@@ -1,6 +1,6 @@
 package de.nordakademie.iaa.examsurvey.persistence.specification;
 
-import de.nordakademie.iaa.examsurvey.controller.filtercriterion.FilterCriterion;
+import de.nordakademie.iaa.examsurvey.controller.filtercriterion.FilterCriteria;
 import de.nordakademie.iaa.examsurvey.domain.Participation;
 import de.nordakademie.iaa.examsurvey.domain.Participation_;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
@@ -9,15 +9,12 @@ import de.nordakademie.iaa.examsurvey.domain.Survey_;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Specifications for {@link Survey}.
@@ -67,10 +64,10 @@ public class SurveySpecifications {
      * @return specification for surveys visible for the passed user
      */
     public static Specification<Survey> isVisibleForUserWithFilterCriteria(final User requestingUser,
-                                                                           final Set<FilterCriterion> filterCriteria) {
+                                                                           final Set<FilterCriteria> filterCriteria) {
         return (Specification<Survey>) (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = filterCriteria.stream()
-                    .map((FilterCriterion filterCriterion) -> getPredicateFor(filterCriterion, requestingUser))
+                    .map((FilterCriteria filterCriterion) -> getPredicateFor(filterCriterion, requestingUser))
                     .filter(Objects::nonNull)
                     .map(surveySpecification -> surveySpecification.toPredicate(root, query, criteriaBuilder))
                     .collect(Collectors.toList());
@@ -80,7 +77,7 @@ public class SurveySpecifications {
     }
 
 
-    private static Specification<Survey> getPredicateFor(FilterCriterion filterCriterion, User user) {
+    private static Specification<Survey> getPredicateFor(FilterCriteria filterCriterion, User user) {
         Specification<Survey> specification = null;
         switch (filterCriterion.getFilterType()) {
             case OPEN:

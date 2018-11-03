@@ -1,13 +1,13 @@
 package de.nordakademie.iaa.examsurvey.service.impl;
 
-import de.nordakademie.iaa.examsurvey.controller.filtercriterion.FilterCriterion;
+import de.nordakademie.iaa.examsurvey.controller.filtercriterion.FilterCriteria;
 import de.nordakademie.iaa.examsurvey.domain.NotificationType;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.SurveyStatus;
 import de.nordakademie.iaa.examsurvey.domain.User;
 import de.nordakademie.iaa.examsurvey.exception.PermissionDeniedException;
-import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
 import de.nordakademie.iaa.examsurvey.exception.ResourceNotFoundException;
+import de.nordakademie.iaa.examsurvey.exception.SurveyAlreadyExistsException;
 import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
 import de.nordakademie.iaa.examsurvey.service.NotificationService;
 import de.nordakademie.iaa.examsurvey.service.OptionService;
@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Set;
 
 import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.hasTitle;
-import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.isVisibleForUser;
 import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpecifications.isVisibleForUserWithFilterCriteria;
 
 /**
@@ -63,9 +62,9 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
     @Override
     public Survey update(Survey survey, User authenticatedUser) {
         final Survey persistedSurvey = findModifiableSurveyWithInitiator(survey, authenticatedUser);
+        notificationService.notifyUsersWithNotificationType(NotificationType.SURVEY_CHANGE, survey);
         participationService.deleteAllParticipationsForSurvey(survey);
         optionService.updateOptionsForSurvey(survey);
-        notificationService.notifyUsersWithNotificationType(NotificationType.SURVEY_CHANGE, survey);
         // For not getting trouble with JPA, only modifiable field values are copied to the persisted survey
         persistedSurvey.setDescription(survey.getDescription());
         persistedSurvey.setSurveyStatus(survey.getSurveyStatus());
@@ -98,7 +97,7 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
      * {@inheritDoc}
      */
     @Override
-    public List<Survey> loadAllSurveysWithFilterCriteriaAndUser(Set<FilterCriterion> filterCriteria, User requestingUser) {
+    public List<Survey> loadAllSurveysWithFilterCriteriaAndUser(Set<FilterCriteria> filterCriteria, User requestingUser) {
         requireNonNullUser(requestingUser);
         return surveyRepository.findAll(isVisibleForUserWithFilterCriteria(requestingUser, filterCriteria));
     }
