@@ -82,7 +82,7 @@
             DASHBOARD_SIDE_NAV_NOTIFICATION_TYPE_DESC_EVENT_PLANNED: "Der Ersteller hat die Umfrage geschlossen und das Event geplant. Falls Du für die ausgewählte Option abgestimmt hast, guck in Deine anstehenden Events!",
             DASHBOARD_SIDE_NAV_SHOW: "Details ansehen",
             DASHBOARD_SIDE_NAV_NEW_EVENT: "Neue Events für Dich!",
-            DASHBOARD_SIDE_NAV_NEW_Notification: "Neue Benachrichtigung! :)",
+            DASHBOARD_SIDE_NAV_NEW_NOTIFICATION: "Neue Benachrichtigung! :)",
 
             EDITOR_TITLE: "Neue Umfrage erstellen",
             EDITOR_TITLE_NEW: "Neue Umfrage erstellen",
