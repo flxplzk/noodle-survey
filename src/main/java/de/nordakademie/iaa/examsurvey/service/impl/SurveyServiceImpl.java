@@ -54,7 +54,6 @@ public class SurveyServiceImpl extends AbstractAuditModelService implements Surv
         survey.setInitiator(initiator);
         Survey createdSurvey = surveyRepository.save(survey);
         optionService.saveOptionsForSurvey(survey.getOptions(), createdSurvey);
-        notificationService.notifyAll();
         return createdSurvey;
     }
 
