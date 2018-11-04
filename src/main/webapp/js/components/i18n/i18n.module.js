@@ -118,7 +118,7 @@
             DETAIL_SAVE_SUCCESS: "Änderungen wurden gespeichert!",
             DETAIL_SUM: "Summe",
             ERROR_HEADING: "Ups, das hätte nicht passieren sollen. Es sei denn, Du wolltest hierhin. In diesem Fall: Herzlichen Glückwunsch!",
-            ERROR_HEADING_404: "Ups, da warst Du zu gierig: Die Gewünschte Entität konnte nicht geladen werden, da sie nicht exisiert",
+            ERROR_HEADING_404: "Ups, da warst Du zu gierig: Die gewünschte Entität konnte nicht geladen werden, da sie nicht (mehr) existiert!",
             ERROR_HEADING_NETWORK: "Ups, es sieht so aus, als bestünde keine Verbindung zum Server.",
             ERROR_SUB_HEADING: "Um Dich etwas aufzumuntern, haben wir unseren guten Freund Nicolas gefragt, was er davon hält: "
         });
