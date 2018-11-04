@@ -21,7 +21,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "options")
-public class Option extends AuditModel implements Comparable{
+public class Option extends AuditModel{
     private Date dateTime;
     private Survey survey;
 
@@ -63,12 +63,5 @@ public class Option extends AuditModel implements Comparable{
     @Override
     public int hashCode() {
         return Objects.hashCode(super.hashCode(), dateTime, survey);
-    }
-
-
-    @Override
-    public int compareTo(Object o) {
-        Option other = (Option) o;
-        return this.dateTime.compareTo(other.dateTime);
     }
 }
