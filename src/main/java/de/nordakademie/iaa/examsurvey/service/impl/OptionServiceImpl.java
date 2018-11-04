@@ -1,6 +1,5 @@
 package de.nordakademie.iaa.examsurvey.service.impl;
 
-import com.google.common.collect.Lists;
 import de.nordakademie.iaa.examsurvey.domain.Option;
 import de.nordakademie.iaa.examsurvey.domain.Survey;
 import de.nordakademie.iaa.examsurvey.domain.User;
@@ -9,6 +8,7 @@ import de.nordakademie.iaa.examsurvey.persistence.OptionRepository;
 import de.nordakademie.iaa.examsurvey.persistence.SurveyRepository;
 import de.nordakademie.iaa.examsurvey.persistence.specification.OptionSpecifications;
 import de.nordakademie.iaa.examsurvey.service.OptionService;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Set;
@@ -82,7 +82,7 @@ public class OptionServiceImpl
     public List<Option> loadAllOptionsOfSurveyForUser(final Long surveyId,
                                                       final User authenticatedUser) {
         final Survey survey = getSurveyVisibleForUser(surveyId, authenticatedUser);
-        return Lists.newArrayList(optionRepository.findAll(OptionSpecifications.hasSurvey(survey)));
+        return optionRepository.findAll(OptionSpecifications.hasSurvey(survey), Sort.by(Sort.Order.asc("dateTime")));
     }
 
     private List<Option> findOptionsBySurvey(final Survey survey) {
