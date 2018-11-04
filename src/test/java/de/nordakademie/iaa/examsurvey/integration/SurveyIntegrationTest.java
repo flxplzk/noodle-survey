@@ -46,9 +46,9 @@ public class SurveyIntegrationTest {
     private static final Type TYPE_LIST_OF_PARTICIPATIONS =
             new TypeToken<List<Participation>>() {
             }.getType();
-    private static final String SURVEYS_API_PATH = "/surveys";
-    private static final String SURVEYS_OPTIONS_API_PATH = "/surveys/%s/options";
-    private static final String SURVEYS_PARTICIPATIONS_API_PATH = "/surveys/%s/participations";
+    private static final String SURVEYS_API_PATH = "/api/surveys";
+    private static final String SURVEYS_OPTIONS_API_PATH = "/api/surveys/%s/options";
+    private static final String SURVEYS_PARTICIPATIONS_API_PATH = "/api/surveys/%s/participations";
     private static final String USER_FELIX = "felix@plazek.de";
     private static final String USER_STEFAN = "stefan@reichert.de";
     private static final SurveyStatus[] ALLOWED_FOR_INITIATOR = SurveyStatus.values();

@@ -5,11 +5,11 @@
 
 	<groupId>de.nordakademie.iaa</groupId>
 	<artifactId>exam-survey</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0.RELEASE</version>
 	<packaging>jar</packaging>
 
 	<name>exam-survey</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Project for IAA exam</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

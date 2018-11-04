@@ -1,13 +1,7 @@
 {
   "name": "angular-survey-frontend",
   "description": "Dependency management for survey frontend application",
-  "version": "0.0.1",
-  "author": [
-    "Felix Plazek",
-    "Robert Peters",
-    "Bengt-Lasse Arndt",
-    "Sascha Pererva"
-  ],
+  "version": "1.0.0.RELEASE",
   "dependencies": {
     "angular": "^1.7.5",
     "angular-animate": "^1.7.5",
