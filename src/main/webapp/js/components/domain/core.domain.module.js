@@ -42,7 +42,7 @@
 
     function SurveyResourceFactory($resource) {
         var resource = $resource(
-            "./surveys/:survey",
+            "./api/surveys/:survey",
             {survey: "@survey"},
             {
                 query: requestWithResponseTransformation("GET", true, transformSurveys, $resource),
@@ -56,7 +56,7 @@
 
     function ParticipationResourceFactory($resource) {
         var resource = $resource(
-            "./surveys/:survey/participations/:participation",
+            "./api/surveys/:survey/participations/:participation",
             {survey: "@survey", participation: "@participation"},
             {
                 query: requestWithResponseTransformation("GET", true, transformParticipations, $resource),
@@ -71,7 +71,7 @@
 
     function OptionResourceFactory($resource) {
         var resource = $resource(
-            "./surveys/:survey/options",
+            "./api/surveys/:survey/options",
             {survey: "@survey"},
             {
                 query: requestWithResponseTransformation("GET", true, transformOptions, $resource),
@@ -83,13 +83,13 @@
     }
 
     function NotificationResourceFactory($resource) {
-        var resource = $resource("./users/me/notifications/:notification", {notification: "@notification"});
+        var resource = $resource("./api/users/me/notifications/:notification", {notification: "@notification"});
         angular.extend(resource.prototype, notification);
         return resource
     }
 
     function EventResourceFactory($resource) {
-        var resource = $resource("./users/me/events/:event", {event: "@event"});
+        var resource = $resource("./api/users/me/events/:event", {event: "@event"});
         angular.extend(resource.prototype, event);
         return resource
     }
@@ -117,7 +117,9 @@
         },
         equals: function (other) {
             return other !== null &&
-                this._id === other._id
+                (angular.isDefined(this._id) && angular.isDefined(other._id) && this._id === other._id
+                    || angular.isDefined(this.dateTime) && angular.isDefined(other.dateTime)
+                    && this.dateTime === other.dateTime)
         }
     };
 
@@ -167,6 +169,9 @@
 
     function transform(resource, data, isArray, transformer) {
         var transformedJson = angular.fromJson(data);
+        if (transformedJson.status && transformedJson.status !== 200) {
+            return transformedJson;
+        }
         return transformer(transformedJson, resource, isArray);
     }
 

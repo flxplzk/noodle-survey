@@ -56,7 +56,7 @@ public class HttpSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // permitting required resources
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, UserController.PATH_USERS).permitAll()
+                .antMatchers(HttpMethod.POST, "/api"+ UserController.PATH_USERS).permitAll()
                 .antMatchers(HttpMethod.GET, ANT_INDEX_HTML, ANT_ROOT, ANT_CSS, ANT_JS,
                         ANT_FRONTEND_DEPENDENCIES).permitAll()
                 .anyRequest().authenticated()

@@ -40,6 +40,11 @@
         this.authenticatedUser = null;
         this.$authenticated = new rx.BehaviorSubject(isAuthenticated);
 
+        /**
+         * Using {@link BroadcastChannel} events can be broadcasted accres different application threads in multiple
+         * browser tabs Doing so, the app can respond to logout events.
+         * @type {BroadcastChannel}
+         */
         var channel = new BroadcastChannel("de.nordakademie.iaa.survey.logout");
         channel.onmessage = function (ev) {
             if (!isAuthenticated || "user-logout-requested" !== ev.data) return;
@@ -125,7 +130,7 @@
             // Try to log in
             var encodedCredentials = encoder.encode(username + ":" + password);
             setAuthorizationHeaders("Basic " + encodedCredentials);
-            return $http.get("./users/me");
+            return $http.get("./api/users/me");
         };
         this.removeAuthorization = function () {
             setAuthorizationHeaders(null);
@@ -134,11 +139,14 @@
 
         this.logout = function () {
             this.removeAuthorization();
+            /**
+             * with posting to ./logout jsSession cookies will be removed.
+             */
             $http.post("logout");
         };
 
         this.testAuth = function (success, reject) {
-            $http.get("./users/me").then(success, reject);
+            $http.get("./api/users/me").then(success, reject);
         };
 
         function setAuthorizationHeaders(header) {

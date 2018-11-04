@@ -24,6 +24,7 @@ import java.util.List;
  * @author Felix Plazek
  */
 @RestController
+@RequestMapping(value = "/api")
 public class UserController {
     public static final String PATH_USERS = "/users";
     private static final String PATH_USERS_NOTIFICATIONS = "/users/me/notifications";

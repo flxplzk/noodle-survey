@@ -31,6 +31,7 @@ import java.util.Set;
  * @author sascha pererva
  */
 @RestController
+@RequestMapping(value = "/api")
 public class SurveyController {
     private static final String PATH_V_IDENTIFIER = "identifier";
     private static final String PATH_SURVEYS = "/surveys";

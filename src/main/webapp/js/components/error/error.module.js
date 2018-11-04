@@ -22,12 +22,16 @@
 
     var ERROR_STATE = 'error';
     error.directive("error", ["ROUTE_STATES", ErrorDirective]);
+    error.controller("errorPageController", ["$scope", "$stateParams", ErrorPageController]);
+
     function ErrorDirective(ROUTE_STATES) {
         return {
             restrict: "E",
+            controller: "errorPageController",
+            controllerAs: "errorCrtl",
             template:
                "<div layout='column' layout-align='center center' flex>\n" +
-                "    <h1>{{'ERROR_HEADING'|translate}}</h1>\n" +
+                "    <h1>{{heading|translate}}</h1>\n" +
                 "    <h4>{{'ERROR_SUB_HEADING'|translate}}</h4>\n" +
                 "    <what-would-nicolas-say></what-would-nicolas-say>\n" +
                 "<md-button class='md-icon-button md-raised' ui-sref=" + ROUTE_STATES.DASHBOARD_STATE +">" +
@@ -37,16 +41,19 @@
         }
     }
 
+    function ErrorPageController($scope, $stateParams){
+        $scope.heading = $stateParams.reason === "500" ? "ERROR_HEADING" :
+            $stateParams.reason === "404" ? "ERROR_HEADING_404" : "ERROR_HEADING_NETWORK";
+    }
     /**
      * show error page in case of 500
      */
-    error.factory('errorInterceptor', function ($q, $state) {
+    error.factory('errorInterceptor', function ($q, $state, ROUTE_STATES) {
         return {
             request: function (config) {
                 return config || $q.when(config);
             },
             requestError: function (request) {
-                $state.go(ERROR_STATE);
                 return $q.reject(request);
             },
             response: function (response) {
@@ -54,7 +61,13 @@
             },
             responseError: function (response) {
                 if (response && response.status === 500 || response && response.status < 0) {
-                    $state.go(ERROR_STATE);
+                    $state.go(ERROR_STATE, {reason: response.status});
+                }
+                if (response && response.status === 404) {
+                    $state.go(ERROR_STATE, {reason: 404})
+                }
+                if (response && response.status === 401) {
+                    $state.go(ROUTE_STATES.LOGIN_STATE)
                 }
                 return $q.reject(response);
             }
@@ -68,7 +81,7 @@
         $httpProvider.interceptors.push('errorInterceptor');
         var errorState = {
             name: ERROR_STATE,
-            url: "/oops",
+            url: "/oops/:reason",
             template: "<error></error>"
         };
         $stateProvider.state(errorState);

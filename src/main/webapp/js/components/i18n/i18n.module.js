@@ -26,8 +26,9 @@
             controllerAs: "languageCrtl",
             template: "<div>" +
                 "<md-select style='padding-top: 7px' name=\"favoriteColor\" ng-model=\"preferredLanguage\" " +
-                "ng-change='languageCrtl.updateLanguage()' required>\n" +
-                "          <md-option ng-repeat='language in supportedLanguages' ng-selected='language.isDefault' value=\"{{language}}\">" +
+                "aria-label='language-selector' ng-change='languageCrtl.updateLanguage()' required>\n" +
+                "          <md-option ng-repeat='language in supportedLanguages' " +
+                "           ng-selected='language.isDefault' value=\"{{language}}\">" +
                 "               {{language.value}}" +
                 "           </md-option>\n" +
                 "        </md-select>" +
@@ -117,6 +118,8 @@
             DETAIL_SAVE_SUCCESS: "Änderungen wurden gespeichert!",
             DETAIL_SUM: "Summe",
             ERROR_HEADING: "Ups, das hätte nicht passieren sollen. Es sei denn, Du wolltest hierhin. In diesem Fall: Herzlichen Glückwunsch!",
+            ERROR_HEADING_404: "Ups, da warst Du zu gierig: Die Gewünschte Entität konnte nicht geladen werden, da sie nicht exisiert",
+            ERROR_HEADING_NETWORK: "Ups, es sieht so aus, als bestünde keine Verbindung zum Server.",
             ERROR_SUB_HEADING: "Um Dich etwas aufzumuntern, haben wir unseren guten Freund Nicolas gefragt, was er davon hält: "
         });
 
@@ -196,6 +199,8 @@
             DETAIL_SUM: "Sum",
 
             ERROR_HEADING: "Oops, this error should not occur. Unless you wanted to see this. In this case: Congratulations!",
+            ERROR_HEADING_404: "Oops, you naughty thing tried to load a resource which does not exist.",
+            ERROR_HEADING_NETWORK: "Oops, seems like you have no server connection.",
             ERROR_SUB_HEADING: "In order too cheer you up a bit, we asked our beloved Nicolas what he would say:"
 
         });
