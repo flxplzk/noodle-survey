@@ -20,9 +20,6 @@ import static de.nordakademie.iaa.examsurvey.persistence.specification.Participa
 
 /**
  * @author felix plazek
- * @author robert peters
- * @author bengt-lasse arndt
- * @author sascha pererva
  */
 public class NotificationServiceImpl implements NotificationService {
     private final NotificationRepository notificationRepository;

@@ -9,9 +9,6 @@
      * as standalone app or plugn with very less effort.
      *
      * @author Felix Plazek
-     * @author Bengt-Lasse Arndt
-     * @author Robert Peters
-     * @author Sascha Pererva
      *
      * @type {angular.Module}
      */

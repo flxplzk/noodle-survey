@@ -4,7 +4,6 @@
      *
      * EditorModule
      * @author Felix Plazek
-     * @author Sascha Pererva
      *
      * @type {angular.Module}
      */

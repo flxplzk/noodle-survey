@@ -7,9 +7,6 @@
      * Core functionalities of the frontend
      *
      * @author Felix Plazek
-     * @author Bengt-Lasse Arndt
-     * @author Robert Peters
-     * @author Sascha Pererva
      *
      * @type {angular.Module}
      */

@@ -14,8 +14,7 @@ import javax.persistence.Table;
 /**
  * Base Entity for notifications.
  *
- * @author Bengt-Lasse Arndt
- * @author Robert Peters
+ * @author felix plazek
  */
 
 @Entity

@@ -24,9 +24,6 @@ import static de.nordakademie.iaa.examsurvey.persistence.specification.SurveySpe
  * UserService implementation.
  *
  * @author felix plazek
- * @author robert peters
- * @author bengt-lasse arndt
- * @author sascha pererva
  */
 public class SurveyServiceImpl extends AbstractAuditModelService implements SurveyService {
     private final NotificationService notificationService;

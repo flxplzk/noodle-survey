@@ -15,9 +15,6 @@
      *      {@link EventResource}
      *
      * @author Felix Plazek
-     * @author Bengt-Lasse Arndt
-     * @author Robert Peters
-     * @author Sascha Pererva
      *
      * @type {angular.Module}
      */
@@ -35,7 +32,7 @@
     // ########################## FACTORY FUNCTIONS #####################################
 
     function UserServiceFactory($resource) {
-        var resource = $resource("./users");
+        var resource = $resource("./api/users");
         angular.extend(resource.prototype, user);
         return resource;
     }

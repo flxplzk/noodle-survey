@@ -7,8 +7,6 @@ import de.nordakademie.iaa.examsurvey.domain.User;
 import org.springframework.data.jpa.domain.Specification;
 
 /**
- * @author Bengt-Lasse Arndt
- * @author Robert Peters
  * @author Felix Plazek
  */
 public class EventSpecifications {
