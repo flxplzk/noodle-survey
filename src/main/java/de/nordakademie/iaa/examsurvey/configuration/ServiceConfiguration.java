@@ -29,10 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 /**
  * Bean Service Configuration
  *
- * @author Felix Plazek
- * @author robert peters
- * @author bengt-lasse arndt
- * @author sascha pererva
+ * @author felix plazek
  */
 @Configuration
 public class ServiceConfiguration {

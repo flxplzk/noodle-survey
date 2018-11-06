@@ -18,9 +18,6 @@ import static de.nordakademie.iaa.examsurvey.persistence.specification.OptionSpe
 
 /**
  * @author felix plazek
- * @author robert peters
- * @author bengt-lasse arndt
- * @author sascha pererva
  */
 public class OptionServiceImpl
         extends AbstractAuditModelService

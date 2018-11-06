@@ -7,9 +7,6 @@
      * Module for reacting to unexpected server errors.
      *
      * @author Felix Plazek
-     * @author Bengt-Lasse Arndt
-     * @author Robert Peters
-     * @author Sascha Pererva
      *
      * @type {angular.Module}
      */

@@ -1,9 +1,9 @@
 (function () {
 
     /**
-     * @name "de.nordakademie.iaa.survey.detail"
+     * @name "de.nordakademie.iaa.survey.authentication"
      *
-     * ToolBarModule
+     * AuthenticationModule
      * @author Felix Plazek
      *
      * @type {angular.Module}

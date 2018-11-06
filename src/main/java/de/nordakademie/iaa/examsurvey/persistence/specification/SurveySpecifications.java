@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
  * Specifications for {@link Survey}.
  *
  * @author Felix Plazek
- * @author Bengt-Lasse Arndt
- * @author Robert Peters
  */
 public class SurveySpecifications {
     private SurveySpecifications() {

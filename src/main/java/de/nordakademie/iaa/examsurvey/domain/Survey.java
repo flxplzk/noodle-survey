@@ -24,8 +24,7 @@ import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
 /**
  * Base Entity for Survey, containing basic information.
  *
- * @author Bengt-Lasse Arndt
- * @author Robert Peters
+ * @author felix plazek
  */
 @Entity
 @Table(name = "surveys")

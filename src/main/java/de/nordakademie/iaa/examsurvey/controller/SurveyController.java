@@ -26,9 +26,6 @@ import java.util.Set;
  * Controller for resources concerning {@link Survey}
  *
  * @author felix plazek
- * @author robert peters
- * @author bengt-lasse arndt
- * @author sascha pererva
  */
 @RestController
 @RequestMapping(value = "/api")

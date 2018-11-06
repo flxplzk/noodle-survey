@@ -12,9 +12,6 @@ import java.util.List;
 
 /**
  * @author felix plazek
- * @author robert peters
- * @author bengt-lasse arndt
- * @author sascha pererva
  */
 @Transactional(propagation = Propagation.REQUIRED)
 public interface NotificationService {

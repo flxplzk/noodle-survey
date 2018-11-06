@@ -3,8 +3,6 @@ package de.nordakademie.iaa.examsurvey.domain;
 /**
  * Enum for Survey Status.
  *
- * @author Bengt-Lasse Arndt
- * @author Robert Peters
  * @author Felix Plazek
  */
 public enum SurveyStatus {
